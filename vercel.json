@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/", "destination": "/CadeauLuc.html" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
