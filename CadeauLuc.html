@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Puzzle cadeau — La Réunion</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:#0f0f1a;
+  color:#e8e8f0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ── Setup ────────────────────────────────────────────── */
+#setup{
+  background:#16213e;
+  border-radius:20px;
+  padding:44px 40px;
+  width:460px;
+  max-width:calc(100vw - 32px);
+  box-shadow:0 28px 80px rgba(0,0,0,.65);
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+.app-title{
+  text-align:center;
+  font-size:2.1rem;
+  font-weight:800;
+  letter-spacing:-.03em;
+  background:linear-gradient(135deg,#e94560 0%,#a855f7 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.step-lbl{
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:#a855f7;
+  margin-bottom:10px;
+  font-weight:700;
+}
+/* Cadeau cliquable — pulse léger pour attirer l’œil */
+.gift-zone{
+  border:2px solid rgba(233,69,96,.35);
+  border-radius:18px;
+  padding:36px 24px 32px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+  transition:border-color .2s,background .2s,transform .15s;
+  background:rgba(233,69,96,.06);
+}
+.gift-zone:hover{
+  border-color:#e94560;
+  background:rgba(233,69,96,.12);
+}
+.gift-zone:active{transform:scale(.98)}
+.gift-emoji{
+  line-height:0;
+  display:block;
+  margin:0 auto 14px;
+  user-select:none;
+  animation:giftPulse 1.35s ease-in-out infinite;
+  filter:drop-shadow(0 8px 20px rgba(233,69,96,.35));
+}
+.gift-emoji svg{
+  width:4.75rem;
+  height:4.75rem;
+  display:block;
+  margin:0 auto;
+}
+@keyframes giftPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
+.gift-hint{
+  font-size:.95rem;
+  color:#a0a0c0;
+  line-height:1.55;
+}
+.gift-hint strong{color:#e94560}
+#preview{
+  max-height:100px;max-width:100%;
+  border-radius:10px;margin-top:14px;
+  object-fit:cover;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+#preview[hidden]{display:none!important}
+#btnCreate{
+  background:linear-gradient(135deg,#e94560,#c0185e);
+  border:none;border-radius:12px;
+  padding:16px;
+  color:#fff;font-size:1.05rem;font-weight:700;
+  cursor:pointer;letter-spacing:.02em;
+  box-shadow:0 6px 26px rgba(233,69,96,.45);
+  transition:transform .12s,box-shadow .15s,opacity .15s;
+}
+#btnCreate:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 32px rgba(233,69,96,.55)}
+#btnCreate:active:not(:disabled){transform:none;box-shadow:0 4px 16px rgba(233,69,96,.4)}
+#btnCreate:disabled{opacity:.32;cursor:default;box-shadow:none}
+
+/* ── Game ─────────────────────────────────────────────── */
+#game{
+  display:none;
+  position:fixed;inset:0;
+  flex-direction:column;
+  background:#0b0b17;
+}
+#toolbar{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 14px;
+  background:#12122a;
+  border-bottom:1px solid rgba(168,85,247,.18);
+  flex-shrink:0;z-index:5;
+  flex-wrap:wrap;
+  min-height:44px;
+}
+#toolbar h2{font-size:.9rem;font-weight:600;flex:1;min-width:60px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#c0c0e0}
+.hint{
+  font-size:.7rem;color:#555;
+  display:flex;align-items:center;gap:3px;
+  white-space:nowrap;
+}
+kbd{
+  background:#0f3460;border-radius:4px;
+  padding:1px 6px;font-size:.67rem;
+  color:#9090c0;font-family:monospace;
+  border:1px solid rgba(168,85,247,.25);
+}
+#progress-wrap{
+  width:90px;height:5px;
+  background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;flex-shrink:0;
+}
+#progress{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#e94560,#a855f7);
+  border-radius:3px;transition:width .4s;
+}
+#piece-count{font-size:.7rem;color:#555;white-space:nowrap;min-width:60px}
+#btnRestart{
+  background:rgba(168,85,247,.12);
+  border:1px solid rgba(168,85,247,.25);
+  border-radius:7px;padding:5px 11px;
+  color:#9090b8;font-size:.78rem;cursor:pointer;
+  transition:background .15s,color .15s;white-space:nowrap;
+}
+#btnRestart:hover{background:rgba(168,85,247,.28);color:#e8e8f0}
+
+#canvas{
+  flex:1;display:block;
+  cursor:default;
+  /* dot grid via CSS – no JS draw cost */
+  background-image:radial-gradient(rgba(168,85,247,.07) 1.5px, transparent 1.5px);
+  background-size:40px 40px;
+  background-position:20px 20px;
+}
+
+/* snap flash overlay drawn by JS */
+
+/* ── Victoire : message géant + feux d’artifice ───────── */
+#winCelebration{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+}
+#winCelebration.on{display:flex}
+#fireworksCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 50% 120%,rgba(20,10,40,.5),transparent 55%);
+}
+.win-celebration-inner{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(20px,4vh,40px);
+  max-width:min(96vw,920px);
+  padding:12px;
+  pointer-events:none;
+}
+.win-headline{
+  font-size:clamp(1.35rem,5.2vw,3.85rem);
+  font-weight:900;
+  line-height:1.12;
+  text-align:center;
+  letter-spacing:-.02em;
+  text-wrap:balance;
+  padding:0 8px;
+  background:linear-gradient(
+    105deg,
+    #ff006e 0%,
+    #ffbe0b 18%,
+    #8338ec 38%,
+    #3a86ff 55%,
+    #06ffa5 72%,
+    #e94560 88%,
+    #ff006e 100%
+  );
+  background-size:280% 100%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 4px 28px rgba(168,85,247,.55)) drop-shadow(0 0 40px rgba(233,69,96,.35));
+  animation:winGradient 5s linear infinite,winHeadlineIn .85s cubic-bezier(.34,1.4,.64,1) both;
+}
+@keyframes winGradient{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+@keyframes winHeadlineIn{
+  from{opacity:0;transform:scale(.88) translateY(24px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.win-celebration-btns{
+  pointer-events:auto;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+}
+.wp-btn{
+  min-width:140px;
+  padding:12px 20px;border:none;border-radius:12px;
+  font-size:.88rem;font-weight:700;cursor:pointer;
+  transition:transform .12s,box-shadow .15s;letter-spacing:.02em;
+}
+.wp-btn:hover{transform:translateY(-2px)}
+.wp-btn.p{
+  background:linear-gradient(135deg,#e94560,#c0185e);color:#fff;
+  box-shadow:0 6px 22px rgba(233,69,96,.5);
+}
+.wp-btn.p:hover{box-shadow:0 10px 28px rgba(233,69,96,.6)}
+.wp-btn.s{background:#0f3460;color:#b0b0d0;border:1px solid rgba(168,85,247,.28)}
+</style>
+</head>
+<body>
+
+<!-- ── Setup ──────────────────────────────────────────── -->
+<div id="setup">
+  <h1 class="app-title">🧩 Puzzle cadeau</h1>
+
+  <div>
+    <p class="step-lbl">1 — Ouvre ton cadeau</p>
+    <div class="gift-zone" id="giftZone" role="button" tabindex="0" aria-label="Ouvrir le cadeau et lancer le puzzle">
+      <span class="gift-emoji" aria-hidden="true">
+        <!-- Icône plate type Flaticon (cadeau + ruban) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path fill="#9d174d" d="M10 30h44v26a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3V30Z"/>
+          <path fill="#e94560" d="M7 24h50a3 3 0 0 1 3 3v3H4v-3a3 3 0 0 1 3-3Z"/>
+          <path fill="#fff5f7" d="M29 30h6v26h-6V30ZM10 41h44v6H10v-6Z"/>
+          <ellipse cx="25" cy="17" fill="#a855f7" rx="9" ry="7" transform="rotate(-32 25 17)"/>
+          <ellipse cx="39" cy="17" fill="#a855f7" rx="9" ry="7" transform="rotate(32 39 17)"/>
+          <circle cx="32" cy="19" r="4" fill="#7c3aed"/>
+        </svg>
+      </span>
+      <p class="gift-hint"><strong>Clique sur le cadeau</strong> pour lancer le puzzle avec la photo surprise&nbsp;!</p>
+      <img id="preview" alt="Aperçu du puzzle" hidden>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Game ───────────────────────────────────────────── -->
+<div id="game">
+  <div id="toolbar">
+    <h2 id="toolTitle">Puzzle</h2>
+    <span class="hint"><kbd>Molette</kbd>&nbsp;Rotation</span>
+    <span class="hint"><kbd>Glisser</kbd>&nbsp;Déplacer</span>
+    <span class="hint"><kbd>2 clics</kbd>&nbsp;Connecter</span>
+    <span class="hint"><kbd>Dbl-clic</kbd>&nbsp;Sens de la photo</span>
+    <div id="progress-wrap"><div id="progress"></div></div>
+    <span id="piece-count"></span>
+    <button id="btnRestart">↩ Recommencer</button>
+  </div>
+  <canvas id="canvas"></canvas>
+</div>
+
+<!-- ── Victoire : feux d’artifice + message ───────────── -->
+<div id="winCelebration" aria-live="polite" aria-hidden="true">
+  <canvas id="fireworksCanvas" aria-hidden="true"></canvas>
+  <div class="win-celebration-inner">
+    <h1 class="win-headline">TU PARS À LA RÉUNION<br>AVEC TOUTE LA FAMILLE&nbsp;!</h1>
+    <div class="win-celebration-btns">
+      <button type="button" class="wp-btn p" id="winReplay">↺ Rejouer</button>
+      <button type="button" class="wp-btn s" id="winNew">🏠 Accueil</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/game-config.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════════
+const ASSETS = window.GAME_ASSETS || {
+  image: 'reunion.png',
+  soundVolume: 0.75,
+  connectSounds: { dir: 'assets/sounds', ext: '.m4a' },
+  sounds: { win: '' }
+};
+const DEFAULT_IMAGE = ASSETS.image;
+
+/** Taille d’une cellule (px) — recalculée selon la fenêtre (grand écran / projecteur). */
+let PS = 100;
+let JIG_PAD = 36;
+const SNAP_ANG   = Math.PI / 7;      // ~25.7° angle tolerance
+const ROT_STEP   = Math.PI / 4;      // 45° (1/8 tour) per wheel notch
+/** Part de min(largeur,hauteur) occupée par le côté du puzzle résolu (hors barre). */
+const PUZZLE_SCREEN_FRACTION = 0.5;
+const PS_MIN = 36;
+const PS_MAX = 280;
+/** Profondeur relative des languettes (fraction du côté). */
+const TAB_DEPTH  = 0.2;
+const TAB_HALF_W = 0.24;
+
+let tabR = []; // tabR[r][c] = ±1 entre (r,c) et (r,c+1), c ∈ [0, N-2]
+let tabD = []; // tabD[r][c] = ±1 entre (r,c) et (r+1,c], r ∈ [0, N-2]
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+const gridN  = 3;
+let srcImg = null;
+let tiles  = [];    // tiles[row][col] → <canvas> pièce puzzle découpée + hitPath
+
+let pieces = [];    // [{id, row, col, groupId}]
+let groups = {};    // {gid → {id, x, y, angle, members:[{pid,lx,ly}]}}
+let gidSeq = 0;
+
+let selId  = null;  // id of currently selected piece
+let drag   = null;  // {gid, sx, sy, ox, oy, moved}
+let winState = false; // true once puzzle is solved
+
+// snap flash: [{cx,cy,t}] short-lived visual feedback
+let connectMergeCount = 0;
+
+function playSound(url) {
+  if (!url || typeof url !== 'string') return;
+  const a = new Audio(url);
+  const v = ASSETS.soundVolume;
+  a.volume = typeof v === 'number' && v >= 0 && v <= 1 ? v : 0.75;
+  a.play().catch(() => {});
+}
+
+function playConnectSound() {
+  const cs = ASSETS.connectSounds || { dir: 'assets/sounds', ext: '.m4a' };
+  const maxN = gridN * gridN - 1;
+  connectMergeCount = Math.min(connectMergeCount + 1, maxN);
+  playSound(cs.dir + '/' + connectMergeCount + 'connect' + cs.ext);
+}
+
+function playWinSound() {
+  playSound(ASSETS.sounds && ASSETS.sounds.win);
+}
+let flashes = [];
+
+let canvas, ctx, W, H;
+let rafId = null;
+let canvasListenersBound = false;
+let defaultImageReady = false;
+let windowResizeBound = false;
+
+// ═══════════════════════════════════════════════════════════
+//  FEUX D’ARTIFICE (canvas plein écran, victoire)
+// ═══════════════════════════════════════════════════════════
+let fwCanvas, fwCtx, fwParticles = [], fwRunning = false, fwRaf = null, fwLastSpawn = 0;
+const FW_COLORS = ['#e94560','#ff006e','#ffbe0b','#8338ec','#3a86ff','#06ffa5','#ffffff','#a855f7','#fb923c','#22d3ee'];
+
+function resizeFireworksCanvas() {
+  if (!fwCanvas) return;
+  fwCanvas.width = window.innerWidth;
+  fwCanvas.height = window.innerHeight;
+}
+
+function spawnBurst(x, y) {
+  if (!fwCtx) return;
+  const n = 52 + (Math.random() * 48 | 0);
+  for (let i = 0; i < n; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 2 + Math.random() * 6;
+    fwParticles.push({
+      x, y,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd,
+      life: 1,
+      decay: 0.009 + Math.random() * 0.014,
+      color: FW_COLORS[(Math.random() * FW_COLORS.length) | 0],
+      size: 1.6 + Math.random() * 3.2
+    });
+  }
+}
+
+function tickFireworks(ts) {
+  if (!fwRunning || !fwCtx) return;
+  if (ts - fwLastSpawn > 400 + Math.random() * 500) {
+    fwLastSpawn = ts;
+    const w = fwCanvas.width, h = fwCanvas.height;
+    spawnBurst(w * (0.08 + Math.random() * 0.84), h * (0.08 + Math.random() * 0.42));
+  }
+  fwCtx.fillStyle = 'rgba(11,11,23,0.2)';
+  fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+  const keep = [];
+  for (const p of fwParticles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.11;
+    p.life -= p.decay;
+    if (p.life <= 0) continue;
+    keep.push(p);
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    fwCtx.fillStyle = p.color;
+    fwCtx.globalAlpha = Math.min(1, p.life);
+    fwCtx.fill();
+  }
+  fwCtx.globalAlpha = 1;
+  fwParticles = keep;
+  fwRaf = requestAnimationFrame(tickFireworks);
+}
+
+function startFireworks() {
+  fwCanvas = document.getElementById('fireworksCanvas');
+  if (!fwCanvas) return;
+  fwCtx = fwCanvas.getContext('2d');
+  resizeFireworksCanvas();
+  fwParticles = [];
+  fwRunning = true;
+  fwLastSpawn = performance.now();
+  const w = fwCanvas.width, h = fwCanvas.height;
+  for (let i = 0; i < 7; i++) {
+    const delay = i * (70 + (Math.random() * 90 | 0));
+    setTimeout(() => {
+      if (!fwRunning) return;
+      spawnBurst(w * (0.12 + Math.random() * 0.76), h * (0.08 + Math.random() * 0.36));
+    }, delay);
+  }
+  cancelAnimationFrame(fwRaf);
+  fwRaf = requestAnimationFrame(tickFireworks);
+}
+
+function stopFireworks() {
+  fwRunning = false;
+  cancelAnimationFrame(fwRaf);
+  fwRaf = null;
+  fwParticles = [];
+  if (fwCtx && fwCanvas)
+    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MATH
+// ═══════════════════════════════════════════════════════════
+function toWorld(g, lx, ly) {
+  const c = Math.cos(g.angle), s = Math.sin(g.angle);
+  return { x: g.x + lx*c - ly*s, y: g.y + lx*s + ly*c };
+}
+function toLocal(g, wx, wy) {
+  const dx = wx - g.x, dy = wy - g.y;
+  const c = Math.cos(g.angle), s = Math.sin(g.angle);
+  return { x: dx*c + dy*s, y: -dx*s + dy*c };
+}
+function angDiff(a, b) {
+  let d = ((a - b) % (2*Math.PI) + 3*Math.PI) % (2*Math.PI) - Math.PI;
+  return Math.abs(d);
+}
+
+/** Côté d’une cellule pour que le puzzle résolu occupe ~PUZZLE_SCREEN_FRACTION de la zone utile. */
+function computePieceSize() {
+  if (!W || !H) return Math.max(PS_MIN, Math.min(PS_MAX, Math.floor(520 / gridN)));
+  const avail = Math.min(W, H);
+  const targetSide = avail * PUZZLE_SCREEN_FRACTION;
+  return Math.max(PS_MIN, Math.min(PS_MAX, Math.floor(targetSide / gridN)));
+}
+
+/**
+ * Met à jour PS / JIG_PAD. Si rescaleExisting et qu’une partie est en cours,
+ * met à l’échelle positions des groupes pour garder la géométrie après resize.
+ */
+function applyPieceSizeFromViewport(rescaleExisting) {
+  const newPS = computePieceSize();
+  if (rescaleExisting && pieces.length > 0) {
+    const oldPS = PS;
+    if (oldPS > 0 && Math.abs(newPS - oldPS) > 0.01) {
+      const r = newPS / oldPS;
+      for (const gid of Object.keys(groups)) {
+        const g = groups[gid];
+        g.x *= r;
+        g.y *= r;
+        for (const m of g.members) {
+          m.lx *= r;
+          m.ly *= r;
+        }
+      }
+      for (const f of flashes) {
+        f.x *= r;
+        f.y *= r;
+      }
+    }
+  }
+  PS = newPS;
+  JIG_PAD = Math.ceil(PS * 0.36);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PIECE HELPERS
+// ═══════════════════════════════════════════════════════════
+function getMember(g, pid) { return g.members.find(m => m.pid === pid); }
+
+function pieceCenter(p) {
+  const g = groups[p.groupId];
+  const m = getMember(g, p.id);
+  return toWorld(g, m.lx, m.ly);
+}
+
+function pieceHit(p, wx, wy) {
+  const c = pieceCenter(p);
+  const a = groups[p.groupId].angle;
+  const dx = wx - c.x, dy = wy - c.y;
+  const ca = Math.cos(-a), sa = Math.sin(-a);
+  const lx = dx*ca - dy*sa, ly = dx*sa + dy*ca;
+  const path = tiles[p.row] && tiles[p.row][p.col] && tiles[p.row][p.col]._hitPath;
+  if (path && ctx && typeof ctx.isPointInPath === 'function')
+    return ctx.isPointInPath(path, lx, ly);
+  const h = PS / 2;
+  return Math.abs(lx) <= h && Math.abs(ly) <= h;
+}
+
+function pieceAt(wx, wy) {
+  for (let i = pieces.length - 1; i >= 0; i--)
+    if (pieceHit(pieces[i], wx, wy)) return pieces[i];
+  return null;
+}
+
+function bringToTop(gid) {
+  const mine = pieces.filter(p => p.groupId === gid);
+  const rest = pieces.filter(p => p.groupId !== gid);
+  pieces = [...rest, ...mine];
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SNAP & MERGE
+// ═══════════════════════════════════════════════════════════
+
+// Merge group B into group A, snapping so that pieceBId
+// sits at the correct neighbor position of pieceAId.
+// dc/dr: direction from A to B in grid space.
+function mergeInto(aGid, aPid, bGid, bPid, dc, dr) {
+  const gA = groups[aGid], gB = groups[bGid];
+  if (!gA || !gB) return;
+
+  const mA = getMember(gA, aPid);
+  const pw = toWorld(gA, mA.lx, mA.ly);
+  const cA = Math.cos(gA.angle), sA = Math.sin(gA.angle);
+
+  // Target world position where pBid center should land
+  const tx = pw.x + dc*PS*cA - dr*PS*sA;
+  const ty = pw.y + dc*PS*sA + dr*PS*cA;
+
+  // New gB origin so that pBid maps to (tx,ty) at angle gA.angle
+  const mB = getMember(gB, bPid);
+  const nx = tx - (mB.lx*cA - mB.ly*sA);
+  const ny = ty - (mB.lx*sA + mB.ly*cA);
+
+  // Reproject all gB members into gA local space
+  for (const {pid, lx, ly} of gB.members) {
+    const wx = nx + lx*cA - ly*sA;
+    const wy = ny + lx*sA + ly*cA;
+    const loc = toLocal(gA, wx, wy);
+    gA.members.push({ pid, lx: loc.x, ly: loc.y });
+    const pc = pieces.find(p => p.id === pid);
+    if (pc) pc.groupId = aGid;
+  }
+  delete groups[bGid];
+
+  // Snap flash at merge point
+  flashes.push({ x: tx, y: ty, t: 1.0 });
+
+  playConnectSound();
+
+  updateHUD();
+  checkWin();
+}
+
+// Try one snap for a group; return true if something snapped.
+function trySingleSnap(gid) {
+  const g = groups[gid];
+  if (!g) return false;
+  for (const { pid } of [...g.members]) {
+    const p = pieces.find(pc => pc.id === pid);
+    if (!p) continue;
+    for (const [dr, dc] of [[0,1],[0,-1],[1,0],[-1,0]]) {
+      const nb = pieces.find(pc => pc.row === p.row+dr && pc.col === p.col+dc);
+      if (!nb || nb.groupId === gid) continue;
+      const ng = groups[nb.groupId];
+      if (!ng) continue;
+      if (angDiff(g.angle, ng.angle) > SNAP_ANG) continue;
+      const pc = pieceCenter(p);
+      const cg = Math.cos(g.angle), sg = Math.sin(g.angle);
+      const ex = pc.x + dc*PS*cg - dr*PS*sg;
+      const ey = pc.y + dc*PS*sg + dr*PS*cg;
+      const nc = pieceCenter(nb);
+      if (Math.hypot(nc.x - ex, nc.y - ey) < PS * 0.42) {
+        mergeInto(gid, p.id, nb.groupId, nb.id, dc, dr);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// Chain snaps until no more are found.
+function snapAll(gid) {
+  while (groups[gid] && trySingleSnap(gid)) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+//  HUD & WIN
+// ═══════════════════════════════════════════════════════════
+function updateHUD() {
+  const n = Object.keys(groups).length;
+  const t = gridN * gridN;
+  const conn = t - n;
+  document.getElementById('piece-count').textContent = `${conn} / ${t-1}`;
+  document.getElementById('progress').style.width =
+    (t <= 1 ? 100 : conn / (t - 1) * 100) + '%';
+}
+
+function checkWin() {
+  if (Object.keys(groups).length === 1) {
+    setTimeout(showWin, 420);
+  }
+}
+
+function showWin() {
+  winState = true;
+  selId = null; drag = null;
+  centerPuzzle();
+  playWinSound();
+  const cel = document.getElementById('winCelebration');
+  cel.classList.add('on');
+  cel.setAttribute('aria-hidden', 'false');
+  startFireworks();
+}
+
+// Animate the assembled group smoothly to the canvas center.
+function centerPuzzle() {
+  const gid = Object.keys(groups)[0];
+  const g   = groups[gid];
+  const p00 = pieces.find(p => p.row === 0 && p.col === 0);
+  if (!p00) return;
+  const m00 = getMember(g, p00.id);
+
+  // Center of the full image in local space
+  const localCx = m00.lx + (gridN / 2 - 0.5) * PS;
+  const localCy = m00.ly + (gridN / 2 - 0.5) * PS;
+
+  // Current world position of that point
+  const wc = toWorld(g, localCx, localCy);
+
+  // Target: move group origin so the image center lands on canvas center
+  const tx = g.x + (W / 2 - wc.x);
+  const ty = g.y + (H / 2 - wc.y);
+  animateGroupTo(g, tx, ty);
+}
+
+function animateGroupTo(g, tx, ty) {
+  const sx = g.x, sy = g.y;
+  let f = 0;
+  const total = 48;
+  function step() {
+    f++;
+    const t  = f / total;
+    const ease = 1 - Math.pow(1 - t, 3); // cubic ease-out
+    g.x = sx + (tx - sx) * ease;
+    g.y = sy + (ty - sy) * ease;
+    if (f < total) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// Draw the completed puzzle as a single seamless image (no tile borders).
+function drawFullImage() {
+  const gid = Object.keys(groups)[0];
+  const g   = groups[gid];
+  const p00 = pieces.find(p => p.row === 0 && p.col === 0);
+  if (!p00) return;
+  const m00 = getMember(g, p00.id);
+
+  const tlx = m00.lx - PS / 2;   // top-left of image in group local space
+  const tly = m00.ly - PS / 2;
+  const sz  = gridN * PS;
+
+  // Cover-crop source image to a square (same logic as buildTiles)
+  const iw = srcImg.naturalWidth, ih = srcImg.naturalHeight;
+  const scale = Math.max(sz / iw, sz / ih);
+  const sw = sz / scale, sh = sz / scale;
+  const sxc = (iw - sw) / 2, syc = (ih - sh) / 2;
+
+  ctx.save();
+  ctx.translate(g.x, g.y);
+  ctx.rotate(g.angle);
+
+  // Gentle glow
+  ctx.shadowColor  = 'rgba(168,85,247,.45)';
+  ctx.shadowBlur   = 40;
+
+  ctx.drawImage(srcImg, sxc, syc, sw, sh, tlx, tly, sz, sz);
+
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+
+  // Thin elegant border
+  ctx.strokeStyle = 'rgba(168,85,247,.5)';
+  ctx.lineWidth   = 2.5;
+  ctx.strokeRect(tlx, tly, sz, sz);
+
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════════
+function render() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw snap flashes
+  const now = performance.now();
+  flashes = flashes.filter(f => f.t > 0);
+  for (const f of flashes) {
+    const r = (1 - f.t) * PS * 1.5;
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, r, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(168,85,247,${f.t * 0.8})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    f.t -= 0.04;
+  }
+
+  for (const p of pieces) drawPiece(p);
+
+  // Once solved: draw the seamless full image on top
+  if (winState) drawFullImage();
+}
+
+function drawPiece(p) {
+  const g   = groups[p.groupId];
+  if (!g) return;
+  const m   = getMember(g, p.id);
+  const ctr = toWorld(g, m.lx, m.ly);
+  const ang = g.angle;
+  const sel     = selId === p.id;
+  const dragged = drag && drag.gid === p.groupId;
+  const h = PS / 2;
+  const pad = JIG_PAD;
+  const tc = tiles[p.row][p.col];
+
+  ctx.save();
+  ctx.translate(ctr.x, ctr.y);
+  ctx.rotate(ang);
+
+  ctx.shadowColor = dragged ? 'rgba(233,69,96,.6)'
+                  : sel     ? 'rgba(168,85,247,.55)'
+                  :           'rgba(0,0,0,.55)';
+  ctx.shadowBlur     = dragged ? 30 : sel ? 24 : 10;
+  ctx.shadowOffsetX  = dragged ? 0  : 3;
+  ctx.shadowOffsetY  = dragged ? 0  : 3;
+
+  ctx.drawImage(tc, -(pad + h), -(pad + h));
+
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = ctx.shadowOffsetX = ctx.shadowOffsetY = 0;
+
+  const path = tc._hitPath;
+  if (path) {
+    ctx.strokeStyle = sel     ? 'rgba(168,85,247,.85)'
+                    : dragged ? 'rgba(233,69,96,.95)'
+                    :           'rgba(255,255,255,.28)';
+    ctx.lineWidth   = sel ? 2.8 : dragged ? 2.2 : 1.2;
+    ctx.stroke(path);
+    if (sel) {
+      ctx.strokeStyle = 'rgba(168,85,247,.35)';
+      ctx.lineWidth = 6;
+      ctx.stroke(path);
+    }
+  }
+
+  ctx.restore();
+}
+
+function loop() { render(); rafId = requestAnimationFrame(loop); }
+
+// ═══════════════════════════════════════════════════════════
+//  POINTER EVENTS
+// ═══════════════════════════════════════════════════════════
+function cp(e) {
+  const r = canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function onDown(e) {
+  if (e.button || winState) return;
+  const pos = cp(e);
+  const p = pieceAt(pos.x, pos.y);
+  if (!p) { selId = null; return; }
+  bringToTop(p.groupId);
+  const g = groups[p.groupId];
+  drag = { gid: p.groupId, sx: pos.x, sy: pos.y, ox: g.x, oy: g.y, moved: false };
+  canvas.style.cursor = 'grabbing';
+}
+
+function onMove(e) {
+  const pos = cp(e);
+  if (!drag) {
+    canvas.style.cursor = pieceAt(pos.x, pos.y) ? 'grab' : 'default';
+    return;
+  }
+  const dx = pos.x - drag.sx, dy = pos.y - drag.sy;
+  if (!drag.moved && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+    drag.moved = true;
+    selId = null;
+  }
+  if (drag.moved && groups[drag.gid]) {
+    groups[drag.gid].x = drag.ox + dx;
+    groups[drag.gid].y = drag.oy + dy;
+  }
+}
+
+function onUp(e) {
+  if (!drag) return;
+  if (!drag.moved) {
+    const pos = cp(e);
+    const p = pieceAt(pos.x, pos.y);
+    if (p) handleClick(p);
+  } else {
+    snapAll(drag.gid);
+  }
+  drag = null;
+  canvas.style.cursor = 'default';
+}
+
+// Click: select or connect two neighboring pieces.
+function handleClick(p) {
+  if (selId === null) {
+    selId = p.id;
+    return;
+  }
+  if (selId === p.id) {
+    selId = null;
+    return;
+  }
+  const prev = pieces.find(q => q.id === selId);
+  if (!prev || prev.groupId === p.groupId) {
+    selId = p.id;
+    return;
+  }
+  const dr = p.row - prev.row, dc = p.col - prev.col;
+  if (Math.abs(dr) + Math.abs(dc) === 1) {
+    const gA = groups[prev.groupId], gB = groups[p.groupId];
+    if (gA && gB && angDiff(gA.angle, gB.angle) <= SNAP_ANG) {
+      mergeInto(prev.groupId, prev.id, p.groupId, p.id, dc, dr);
+      snapAll(prev.groupId);
+      selId = null;
+      return;
+    }
+  }
+  // Not connectable – just change selection
+  selId = p.id;
+}
+
+function onWheel(e) {
+  e.preventDefault();
+  if (winState) return;
+  const pos = cp(e);
+  const p = pieceAt(pos.x, pos.y);
+  if (!p) return;
+  groups[p.groupId].angle += e.deltaY > 0 ? ROT_STEP : -ROT_STEP;
+}
+
+function onDblClick(e) {
+  e.preventDefault();
+  if (winState) return;
+  const pos = cp(e);
+  const p = pieceAt(pos.x, pos.y);
+  if (!p) return;
+  bringToTop(p.groupId);
+  const g = groups[p.groupId];
+  if (!g) return;
+  /* Même orientation que l’image source (découpe tête en haut). */
+  g.angle = 0;
+  selId = null;
+  snapAll(p.groupId);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  JIGSAW  (languettes mâle / femelle complémentaires)
+// ═══════════════════════════════════════════════════════════
+function generateTabs() {
+  tabR = []; tabD = [];
+  for (let r = 0; r < gridN; r++) {
+    tabR[r] = [];
+    for (let c = 0; c < gridN - 1; c++)
+      tabR[r][c] = Math.random() < 0.5 ? 1 : -1;
+  }
+  for (let r = 0; r < gridN - 1; r++) {
+    tabD[r] = [];
+    for (let c = 0; c < gridN; c++)
+      tabD[r][c] = Math.random() < 0.5 ? 1 : -1;
+  }
+}
+
+/**
+ * Ajoute un côté au path : tab = 0 plat, +1 bosse (mâle), -1 encoche (femelle).
+ * (nx,ny) normale unitaire pointant vers l'extérieur de la pièce.
+ */
+function addJigsawSide(path, ax, ay, bx, by, nx, ny, tab) {
+  if (!tab) {
+    path.lineTo(bx, by);
+    return;
+  }
+  const midx = (ax + bx) / 2, midy = (ay + by) / 2;
+  const dx = bx - ax, dy = by - ay;
+  const len = Math.hypot(dx, dy) || 1;
+  const tx = dx / len, ty = dy / len;
+  const ox = nx * tab, oy = ny * tab;
+  const depth = len * TAB_DEPTH;
+  const halfW = len * TAB_HALF_W;
+  const p0x = midx - tx * halfW, p0y = midy - ty * halfW;
+  const p3x = midx + tx * halfW, p3y = midy + ty * halfW;
+  const c1x = p0x + ox * depth, c1y = p0y + oy * depth;
+  const c2x = p3x + ox * depth, c2y = p3y + oy * depth;
+  path.lineTo(p0x, p0y);
+  path.bezierCurveTo(c1x, c1y, c2x, c2y, p3x, p3y);
+  path.lineTo(bx, by);
+}
+
+/** Même lecture des tabs que buildPiecePath (pour bornes image / path). */
+function pieceTabs(row, col) {
+  return {
+    topT:    row > 0           ? -tabD[row - 1][col] : 0,
+    rightT:  col < gridN - 1   ?  tabR[row][col]     : 0,
+    bottomT: row < gridN - 1   ?  tabD[row][col]     : 0,
+    leftT:   col > 0           ? -tabR[row][col - 1] : 0
+  };
+}
+
+/**
+ * Rectangle en coords locales (centre = centre cellule) couvrant la pièce
+ * y compris les languettes mâles — pour mapper la bonne zone de l’image source.
+ */
+function pieceImageBounds(row, col) {
+  const h = PS / 2;
+  /* Un peu plus que TAB_DEPTH : les Bézier dépassent légèrement les points de contrôle */
+  const bump = PS * (TAB_DEPTH * 1.28 + TAB_HALF_W * 0.08);
+  let minX = -h, maxX = h, minY = -h, maxY = h;
+  const t = pieceTabs(row, col);
+  if (t.topT > 0)    minY -= bump;
+  if (t.rightT > 0)  maxX += bump;
+  if (t.bottomT > 0) maxY += bump;
+  if (t.leftT > 0)   minX -= bump;
+  return { minX, maxX, minY, maxY };
+}
+
+/** Path centré sur la pièce (origine = centre de la cellule). Sens horaire. */
+function buildPiecePath(row, col) {
+  const h = PS / 2;
+  const t = pieceTabs(row, col);
+
+  const path = new Path2D();
+  path.moveTo(-h, -h);
+  addJigsawSide(path, -h, -h,  h, -h,  0, -1, t.topT);
+  addJigsawSide(path,  h, -h,  h,  h,  1,  0, t.rightT);
+  addJigsawSide(path,  h,  h, -h,  h,  0,  1, t.bottomT);
+  addJigsawSide(path, -h,  h, -h, -h, -1,  0, t.leftT);
+  path.closePath();
+  return path;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TILE SLICING + découpe puzzle
+// ═══════════════════════════════════════════════════════════
+function buildTiles() {
+  generateTabs();
+
+  const sz = gridN * PS;
+  const tmp = document.createElement('canvas');
+  tmp.width = sz; tmp.height = sz;
+  const tctx = tmp.getContext('2d');
+
+  const iw = srcImg.naturalWidth, ih = srcImg.naturalHeight;
+  const scale = Math.max(sz / iw, sz / ih);
+  const sw = sz / scale, sh = sz / scale;
+  const sx = (iw - sw) / 2, sy = (ih - sh) / 2;
+  tctx.drawImage(srcImg, sx, sy, sw, sh, 0, 0, sz, sz);
+
+  const pad = JIG_PAD;
+  const h = PS / 2;
+  const cw = PS + 2 * pad;
+
+  tiles = [];
+  for (let r = 0; r < gridN; r++) {
+    tiles[r] = [];
+    for (let c = 0; c < gridN; c++) {
+      const hitPath = buildPiecePath(r, c);
+      const out = document.createElement('canvas');
+      out.width = cw; out.height = cw;
+      const o = out.getContext('2d');
+      o.translate(pad + h, pad + h);
+      o.save();
+      o.clip(hitPath);
+      // Étendre le morceau d’image au-delà du carré PS×PS pour remplir les languettes mâles
+      const b = pieceImageBounds(r, c);
+      let srcX = c * PS + h + b.minX;
+      let srcY = r * PS + h + b.minY;
+      const srcW = b.maxX - b.minX;
+      const srcH = b.maxY - b.minY;
+      const sx0 = Math.max(0, Math.min(sz, srcX));
+      const sy0 = Math.max(0, Math.min(sz, srcY));
+      const sx1 = Math.max(0, Math.min(sz, srcX + srcW));
+      const sy1 = Math.max(0, Math.min(sz, srcY + srcH));
+      const drwW = sx1 - sx0;
+      const drwH = sy1 - sy0;
+      if (drwW > 0 && drwH > 0) {
+        const dstX = b.minX + (sx0 - srcX);
+        const dstY = b.minY + (sy0 - srcY);
+        o.drawImage(tmp, sx0, sy0, drwW, drwH, dstX, dstY, drwW, drwH);
+      }
+      o.restore();
+      o.strokeStyle = 'rgba(0,0,0,.22)';
+      o.lineWidth = 1;
+      o.stroke(hitPath);
+      out._hitPath = hitPath;
+      tiles[r][c] = out;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SCATTER  (create fresh pieces + groups, random positions)
+// ═══════════════════════════════════════════════════════════
+function scatter() {
+  pieces = []; groups = {}; gidSeq = 0;
+  selId = null; drag = null; flashes = [];
+  connectMergeCount = 0;
+  const margin = PS * 0.5 + JIG_PAD + 24;
+  const ANGLES  = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
+  for (let r = 0; r < gridN; r++) {
+    for (let c = 0; c < gridN; c++) {
+      const pid = r * gridN + c;
+      const piece = { id: pid, row: r, col: c, groupId: null };
+      pieces.push(piece);
+      const gid = gidSeq++;
+      const x = margin + Math.random() * (W - 2 * margin);
+      const y = margin + Math.random() * (H - 2 * margin);
+      const angle = ANGLES[Math.floor(Math.random() * 4)];
+      groups[gid] = { id: gid, x, y, angle, members: [{ pid, lx: 0, ly: 0 }] };
+      piece.groupId = gid;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  GAME LIFECYCLE
+// ═══════════════════════════════════════════════════════════
+function startGame() {
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('game').style.display = 'flex';
+
+  canvas = document.getElementById('canvas');
+  ctx    = canvas.getContext('2d');
+
+  const tb = document.getElementById('toolbar');
+  function resizeCanvas() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight - tb.offsetHeight;
+  }
+
+  function onWindowResize() {
+    resizeCanvas();
+    const c = document.getElementById('winCelebration');
+    if (c && c.classList.contains('on')) resizeFireworksCanvas();
+    const inGame = document.getElementById('game').style.display === 'flex';
+    if (inGame && canvas && tiles.length) {
+      applyPieceSizeFromViewport(true);
+      buildTiles();
+    }
+  }
+
+  // Wait one frame so flex layout has resolved, then measure
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    if (!windowResizeBound) {
+      windowResizeBound = true;
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    applyPieceSizeFromViewport(false);
+    buildTiles();
+    scatter();
+    updateHUD();
+
+    if (!canvasListenersBound) {
+      canvasListenersBound = true;
+      canvas.addEventListener('mousedown',  onDown);
+      canvas.addEventListener('mousemove',  onMove);
+      canvas.addEventListener('mouseup',    onUp);
+      canvas.addEventListener('mouseleave', onUp);
+      canvas.addEventListener('dblclick',   onDblClick);
+      canvas.addEventListener('wheel',      onWheel, { passive: false });
+      canvas.addEventListener('contextmenu', e => e.preventDefault());
+    }
+
+    cancelAnimationFrame(rafId);
+    loop();
+  });
+}
+
+function restartGame() {
+  winState = false;
+  stopFireworks();
+  const cel = document.getElementById('winCelebration');
+  cel.classList.remove('on');
+  cel.setAttribute('aria-hidden', 'true');
+  const tb = document.getElementById('toolbar');
+  if (canvas && tb) {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight - tb.offsetHeight;
+  }
+  applyPieceSizeFromViewport(false);
+  buildTiles();
+  scatter();
+  updateHUD();
+  cancelAnimationFrame(rafId);
+  loop();
+}
+
+function newPuzzle() {
+  winState = false;
+  cancelAnimationFrame(rafId);
+  stopFireworks();
+  const cel = document.getElementById('winCelebration');
+  cel.classList.remove('on');
+  cel.setAttribute('aria-hidden', 'true');
+  document.getElementById('game').style.display = 'none';
+  document.getElementById('setup').style.display = 'flex';
+  const prev = document.getElementById('preview');
+  if (srcImg && srcImg.src) {
+    prev.src = srcImg.src;
+    prev.hidden = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SETUP UI — image fixe + cadeau pour lancer
+// ═══════════════════════════════════════════════════════════
+function loadDefaultImage() {
+  const img = new Image();
+  img.onload = () => {
+    srcImg = img;
+    defaultImageReady = true;
+  };
+  img.onerror = () => {
+    console.error('Image introuvable :', DEFAULT_IMAGE);
+    document.querySelector('.gift-hint').innerHTML =
+      '<strong>Erreur :</strong> image introuvable&nbsp;: <code>' + DEFAULT_IMAGE + '</code> (vérifie le chemin dans <code>assets/game-config.js</code>).';
+  };
+  img.src = DEFAULT_IMAGE;
+}
+
+function openGiftAndStart() {
+  if (!defaultImageReady || !srcImg) return;
+  startGame();
+}
+
+const giftZone = document.getElementById('giftZone');
+giftZone.addEventListener('click', openGiftAndStart);
+giftZone.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    openGiftAndStart();
+  }
+});
+
+document.getElementById('btnRestart').addEventListener('click', restartGame);
+document.getElementById('winReplay').addEventListener('click', restartGame);
+document.getElementById('winNew').addEventListener('click', newPuzzle);
+
+loadDefaultImage();
+</script>
+</body>
+</html>

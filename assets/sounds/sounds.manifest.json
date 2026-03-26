@@ -1,0 +1,13 @@
+{
+  "naming": "À la racine de assets/sounds/ : 1connect.m4a, 2connect.m4a, … (8 fichiers pour un puzzle 3×3).",
+  "files": [
+    { "n": 1, "filename": "1connect.m4a" },
+    { "n": 2, "filename": "2connect.m4a" },
+    { "n": 3, "filename": "3connect.m4a" },
+    { "n": 4, "filename": "4connect.m4a" },
+    { "n": 5, "filename": "5connect.m4a" },
+    { "n": 6, "filename": "6connect.m4a" },
+    { "n": 7, "filename": "7connect.m4a" },
+    { "n": 8, "filename": "8connect.m4a" }
+  ]
+}
