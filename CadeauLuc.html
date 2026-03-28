@@ -18,6 +18,100 @@ body{
   justify-content:center;
 }
 
+/* ── Intro vidéo (avant le cadeau) ─────────────────────── */
+#introScreen{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:250;
+  background:#0b0b17;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px 16px;
+  gap:20px;
+}
+#introScreen.intro-visible{display:flex}
+body.intro-blocking #setup{display:none!important}
+.intro-screen-inner{
+  width:min(100%,720px);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.intro-video-wrap{
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  border:2px solid rgba(168,85,247,.35);
+  box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(233,69,96,.12);
+  background:#000;
+  aspect-ratio:16/9;
+  max-height:min(56vh,520px);
+}
+#introVideo{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.intro-video-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  cursor:pointer;
+  background:rgba(15,15,26,.72);
+  transition:opacity .35s,visibility .35s;
+  color:#e8e8f0;
+  text-align:center;
+  padding:16px;
+}
+.intro-video-overlay.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.intro-play-icon{
+  width:72px;height:72px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#e94560,#a855f7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.6rem;
+  padding-left:6px;
+  box-shadow:0 8px 32px rgba(233,69,96,.45);
+}
+.intro-overlay-title{
+  display:block;
+  font-size:1rem;
+  font-weight:600;
+  max-width:280px;
+  line-height:1.45;
+}
+.intro-video-overlay .intro-sub{
+  font-size:.8rem;
+  font-weight:500;
+  color:#9090b8;
+}
+.intro-skip{
+  align-self:center;
+  background:rgba(168,85,247,.14);
+  border:1px solid rgba(168,85,247,.35);
+  border-radius:10px;
+  padding:10px 22px;
+  color:#b8b8d8;
+  font-size:.85rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.intro-skip:hover{background:rgba(168,85,247,.28);color:#e8e8f0}
+
 /* ── Setup ────────────────────────────────────────────── */
 #setup{
   background:#16213e;
@@ -254,6 +348,22 @@ kbd{
 </head>
 <body>
 
+<!-- ── Intro vidéo (optionnelle, voir assets/game-config.js) ── -->
+<div id="introScreen" aria-hidden="true">
+  <div class="intro-screen-inner">
+    <p class="step-lbl" style="margin-bottom:0;text-align:center">Avant le cadeau</p>
+    <div class="intro-video-wrap">
+      <video id="introVideo" preload="auto" playsinline></video>
+      <div class="intro-video-overlay" id="introVideoOverlay" role="button" tabindex="0" aria-label="Lancer la vidéo">
+        <span class="intro-play-icon" aria-hidden="true">▶</span>
+        <span class="intro-overlay-title">Lance la vidéo quand tu es prêt</span>
+        <span class="intro-sub">Son activé après ton clic</span>
+      </div>
+    </div>
+    <button type="button" class="intro-skip" id="btnSkipIntro">Passer → cadeau</button>
+  </div>
+</div>
+
 <!-- ── Setup ──────────────────────────────────────────── -->
 <div id="setup">
   <h1 class="app-title">🧩 Puzzle cadeau</h1>
@@ -312,6 +422,7 @@ kbd{
 //  CONFIG
 // ═══════════════════════════════════════════════════════════
 const ASSETS = window.GAME_ASSETS || {
+  introVideo: '',
   image: 'reunion.png',
   soundVolume: 0.75,
   connectSounds: { dir: 'assets/sounds', ext: '.m4a' },
@@ -1220,6 +1331,85 @@ function newPuzzle() {
 }
 
 // ═══════════════════════════════════════════════════════════
+//  INTRO VIDÉO — preload, lecture au clic uniquement (pas d’autoplay)
+// ═══════════════════════════════════════════════════════════
+function hasIntroVideo() {
+  const u = ASSETS.introVideo;
+  return typeof u === 'string' && u.trim().length > 0;
+}
+
+function finishIntro() {
+  const introScreen = document.getElementById('introScreen');
+  const video = document.getElementById('introVideo');
+  const overlay = document.getElementById('introVideoOverlay');
+  document.body.classList.remove('intro-blocking');
+  introScreen.classList.remove('intro-visible');
+  introScreen.setAttribute('aria-hidden', 'true');
+  if (video) {
+    video.pause();
+    overlay && overlay.classList.remove('is-hidden');
+  }
+  const setup = document.getElementById('setup');
+  if (setup) setup.style.display = 'flex';
+}
+
+function startIntroVideoPlayback() {
+  const video = document.getElementById('introVideo');
+  const overlay = document.getElementById('introVideoOverlay');
+  if (!video) return;
+  overlay && overlay.classList.add('is-hidden');
+  video.play().catch(() => {
+    overlay && overlay.classList.remove('is-hidden');
+  });
+}
+
+function initIntroVideoFlow() {
+  const introScreen = document.getElementById('introScreen');
+  const video = document.getElementById('introVideo');
+  const overlay = document.getElementById('introVideoOverlay');
+  const setup = document.getElementById('setup');
+  const skipBtn = document.getElementById('btnSkipIntro');
+  const giftLbl = document.querySelector('#setup .step-lbl');
+
+  if (!hasIntroVideo()) {
+    introScreen.classList.remove('intro-visible');
+    introScreen.setAttribute('aria-hidden', 'true');
+    if (setup) setup.style.display = 'flex';
+    return;
+  }
+
+  const url = ASSETS.introVideo.trim();
+  video.preload = 'auto';
+  video.playsInline = true;
+  video.setAttribute('playsinline', '');
+  video.src = url;
+
+  document.body.classList.add('intro-blocking');
+  introScreen.classList.add('intro-visible');
+  introScreen.setAttribute('aria-hidden', 'false');
+  if (setup) setup.style.display = 'none';
+
+  if (giftLbl && giftLbl.textContent.indexOf('Ouvre ton cadeau') !== -1)
+    giftLbl.textContent = '2 — Ouvre ton cadeau';
+
+  overlay.addEventListener('click', () => startIntroVideoPlayback());
+  overlay.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      startIntroVideoPlayback();
+    }
+  });
+
+  skipBtn.addEventListener('click', finishIntro);
+
+  video.addEventListener('ended', finishIntro);
+  video.addEventListener('error', () => {
+    console.warn('Vidéo d’intro introuvable ou illisible :', url);
+    finishIntro();
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
 //  SETUP UI — image fixe + cadeau pour lancer
 // ═══════════════════════════════════════════════════════════
 function loadDefaultImage() {
@@ -1254,6 +1444,7 @@ document.getElementById('btnRestart').addEventListener('click', restartGame);
 document.getElementById('winReplay').addEventListener('click', restartGame);
 document.getElementById('winNew').addEventListener('click', newPuzzle);
 
+initIntroVideoFlow();
 loadDefaultImage();
 </script>
 </body>

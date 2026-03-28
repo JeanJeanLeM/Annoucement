@@ -4,6 +4,11 @@
  * En 3×3 il y a au plus 8 connexions → fichiers 1 à 8.
  */
 window.GAME_ASSETS = {
+  /**
+   * Vidéo d’ouverture : préchargée (preload), lecture seulement après un clic (pas d’autoplay).
+   * Ex. 'assets/video/intro.mp4' — laisser '' pour aller directement au cadeau.
+   */
+  introVideo: 'assets/video/videolucpaysage.mp4',
   image: 'reunion.png',
   soundVolume: 0.75,
   connectSounds: {
