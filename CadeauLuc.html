@@ -427,7 +427,6 @@ body{
 }
 .drop-zone:hover,.drop-zone:focus-within{border-color:#a855f7;background:rgba(168,85,247,.1)}
 .drop-zone.dragover{border-color:#e94560;background:rgba(233,69,96,.1)}
-.drop-zone-hint{font-size:.88rem;color:#9090b8;line-height:1.45;margin-top:8px}
 .builder-row{display:flex;flex-direction:column;gap:6px}
 .builder-row input,.builder-row textarea,.builder-row select{
   background:#0f3460;
@@ -684,10 +683,8 @@ kbd{
           <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
           <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
           <img id="preview" alt="Aperçu du puzzle" hidden>
-          <p class="drop-zone-hint">Astuce : bouton « Parcourir (explorateur) » si ton navigateur le propose.</p>
           <div class="builder-actions" style="margin-top:14px">
             <button type="button" class="wp-btn s" id="btnBrowse">Parcourir…</button>
-            <button type="button" class="wp-btn s" id="btnBrowseFs" hidden>Parcourir (explorateur)</button>
           </div>
         </div>
       </div>
@@ -713,15 +710,7 @@ kbd{
       </div>
 
       <div>
-        <p class="step-lbl">3 — Titre de la barre</p>
-        <div class="builder-row">
-          <label class="field-hint" for="inputToolTitle">Affiché en haut pendant le jeu (optionnel)</label>
-          <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire" autocomplete="off">
-        </div>
-      </div>
-
-      <div>
-        <p class="step-lbl">4 — Écran de victoire</p>
+        <p class="step-lbl">3 — Écran de victoire</p>
         <div class="builder-row">
           <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
           <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
@@ -900,7 +889,6 @@ function applyWinHeadlineStyles() {
 }
 
 function readFormToScenario() {
-  scenario.toolTitle = (document.getElementById('inputToolTitle') || {}).value || '';
   scenario.winText = (document.getElementById('textareaWinText') || {}).value || 'Bravo !';
   scenario.winEffect = (document.getElementById('selectWinEffect') || {}).value || 'fireworks';
   scenario.winFontKey = (document.getElementById('selectWinFont') || {}).value || 'system';
@@ -916,7 +904,6 @@ function readFormToScenario() {
 }
 
 function syncFormFromScenario() {
-  const t = document.getElementById('inputToolTitle');
   const w = document.getElementById('textareaWinText');
   const e = document.getElementById('selectWinEffect');
   const f = document.getElementById('selectWinFont');
@@ -924,7 +911,6 @@ function syncFormFromScenario() {
   const g = document.getElementById('checkWinGradient');
   const ic = document.getElementById('inputGridCols');
   const ir = document.getElementById('inputGridRows');
-  if (t) t.value = scenario.toolTitle || '';
   if (w) w.value = scenario.winText || '';
   if (e) e.value = scenario.winEffect || 'fireworks';
   if (f) f.value = scenario.winFontKey || 'system';
@@ -958,14 +944,12 @@ function getPreviewCropNote(gc, gr, prevEl) {
 }
 
 function updateBuilderPreviews() {
-  const toolEl = document.getElementById('inputToolTitle');
   const winTextEl = document.getElementById('textareaWinText');
   const effectEl = document.getElementById('selectWinEffect');
   const fontEl = document.getElementById('selectWinFont');
   const colorEl = document.getElementById('inputWinColor');
   const gradEl = document.getElementById('checkWinGradient');
 
-  const toolTitle = (toolEl && toolEl.value) || '';
   let winText = (winTextEl && winTextEl.value) || '';
   if (!String(winText).trim()) winText = 'Bravo !';
   const effect = (effectEl && effectEl.value) || 'fireworks';
@@ -974,7 +958,7 @@ function updateBuilderPreviews() {
   const gradient = !!(gradEl && gradEl.checked);
 
   const tb = document.getElementById('previewToolbarTitle');
-  if (tb) tb.textContent = toolTitle.trim() || 'Puzzle';
+  if (tb) tb.textContent = (scenario.toolTitle && scenario.toolTitle.trim()) || 'Puzzle';
 
   const gcEl = document.getElementById('inputGridCols');
   const grEl = document.getElementById('inputGridRows');
@@ -2218,7 +2202,6 @@ function initDropZone() {
   const zone = document.getElementById('dropZone');
   const input = document.getElementById('fileInput');
   const browse = document.getElementById('btnBrowse');
-  const browseFs = document.getElementById('btnBrowseFs');
   if (!zone || !input) return;
 
   function pickFromList(files) {
@@ -2256,27 +2239,10 @@ function initDropZone() {
     });
   });
   zone.addEventListener('drop', (e) => pickFromList(e.dataTransfer && e.dataTransfer.files));
-
-  if (browseFs && window.showOpenFilePicker) {
-    browseFs.hidden = false;
-    browseFs.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      try {
-        const [handle] = await window.showOpenFilePicker({
-          types: [{ accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.gif'] } }],
-          multiple: false
-        });
-        const f = await handle.getFile();
-        pickFromList([f]);
-      } catch (err) {
-        if (err && err.name !== 'AbortError') setSetupError('Impossible d’ouvrir le fichier.');
-      }
-    });
-  }
 }
 
 function initBuilderPreviewListeners() {
-  ['inputToolTitle', 'textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
+  ['textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', updateBuilderPreviews);

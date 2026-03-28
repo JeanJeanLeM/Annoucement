@@ -160,7 +160,17 @@ module.exports = async (req, res) => {
         res.status(200).json({ id, shareUrl });
       } catch (e) {
         console.error(e);
-        res.status(500).json({ error: 'Upload failed' });
+        const msg = e && e.message ? String(e.message) : '';
+        if (/private store|Cannot use public access/i.test(msg)) {
+          res.status(503).json({
+            error:
+              'Le store Blob est privé : ce projet exige un store en accès public pour les images partagées.',
+            hint:
+              'Vercel → Storage → ton store Blob → passe en accès public, ou crée un store Blob public et mets à jour BLOB_READ_WRITE_TOKEN sur le projet.',
+          });
+        } else {
+          res.status(500).json({ error: 'Upload failed' });
+        }
       }
       done();
     });

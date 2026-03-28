@@ -12,6 +12,7 @@ Outil de puzzle dans le navigateur : tu choisis une image, personnalises le text
 1. Connecte-toi sur [vercel.com](https://vercel.com) et ouvre ton **projet** (ou crée-en un à partir de ce dépôt).
 2. Va dans **Storage** (ou **Store**), puis **Create** → choisis **Blob**.
 3. Donne un nom au store, valide la création, puis **connecte** le store à ton projet si Vercel le propose.
+4. Le store doit être en **accès public** : les images et le `scenario.json` sont lus directement par le navigateur via l’URL renvoyée par Blob. Si tu vois une erreur du type *« Cannot use public access on a private store »*, ouvre le store dans **Storage**, passe-le en **public** (ou crée un **nouveau** store Blob configuré en public) et rattache le token **Read and Write** mis à jour au projet.
 
 La doc détaillée : [Using Vercel Blob](https://vercel.com/docs/storage/vercel-blob).
 
