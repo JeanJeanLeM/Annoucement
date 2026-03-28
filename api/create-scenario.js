@@ -3,6 +3,23 @@ const { put } = require('@vercel/blob');
 const { randomUUID } = require('crypto');
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+/** Multipart overhead + meta JSON; keep below typical platform limits where possible */
+const MAX_BODY_BYTES = Math.min(MAX_IMAGE_BYTES + 2 * 1024 * 1024, 12 * 1024 * 1024);
+
+async function readRequestBody(req) {
+  const chunks = [];
+  let total = 0;
+  for await (const chunk of req) {
+    total += chunk.length;
+    if (total > MAX_BODY_BYTES) {
+      const err = new Error('BODY_TOO_LARGE');
+      err.code = 'BODY_TOO_LARGE';
+      throw err;
+    }
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -14,6 +31,32 @@ module.exports = async (req, res) => {
     return res.status(503).json({ error: 'Storage not configured (BLOB_READ_WRITE_TOKEN)' });
   }
 
+  let rawBody;
+  try {
+    rawBody = await readRequestBody(req);
+  } catch (e) {
+    if (e.code === 'BODY_TOO_LARGE') {
+      return res.status(413).json({ error: 'Payload too large' });
+    }
+    console.error('readRequestBody', e);
+    return res.status(400).json({ error: 'Could not read request body' });
+  }
+
+  if (!rawBody.length) {
+    return res.status(400).json({ error: 'Empty body' });
+  }
+
+  let bb;
+  try {
+    bb = Busboy({
+      headers: req.headers,
+      limits: { fileSize: MAX_IMAGE_BYTES, files: 1 },
+    });
+  } catch (e) {
+    console.error('Busboy', e);
+    return res.status(400).json({ error: 'Invalid multipart request (Content-Type)' });
+  }
+
   return new Promise((resolve) => {
     let finished = false;
     const done = () => {
@@ -21,11 +64,6 @@ module.exports = async (req, res) => {
       finished = true;
       resolve();
     };
-
-    const bb = Busboy({
-      headers: req.headers,
-      limits: { fileSize: MAX_IMAGE_BYTES, files: 1 },
-    });
 
     let metaJson = '';
     const chunks = [];
@@ -127,6 +165,6 @@ module.exports = async (req, res) => {
       done();
     });
 
-    req.pipe(bb);
+    bb.end(rawBody);
   });
 };

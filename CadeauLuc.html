@@ -74,6 +74,14 @@ body{
   gap:18px;
   min-width:0;
 }
+/* Colonne gauche : les aperçus restent visibles en scrollant le formulaire (même ligne de grille). */
+@media (min-width:901px){
+  .setup-previews{
+    position:sticky;
+    top:16px;
+    align-self:start;
+  }
+}
 .preview-col-title{
   font-size:.68rem;
   text-transform:uppercase;
@@ -302,6 +310,71 @@ body{
   color:#a855f7;
   margin-bottom:10px;
   font-weight:700;
+}
+.step-lbl-with-info{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+.step-lbl-with-info .step-lbl{margin-bottom:0}
+.info-tip-anchor{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  flex-shrink:0;
+}
+.info-icon-btn{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  border:1px solid rgba(168,85,247,.45);
+  background:rgba(168,85,247,.1);
+  color:#b8a0e0;
+  font-size:.68rem;
+  font-weight:700;
+  font-style:italic;
+  line-height:1;
+  padding:0;
+  cursor:help;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.info-icon-btn:hover,.info-icon-btn:focus-visible{
+  border-color:#a855f7;
+  color:#e8e8f0;
+  background:rgba(168,85,247,.18);
+  outline:none;
+}
+.info-tooltip{
+  position:absolute;
+  z-index:30;
+  left:50%;
+  top:calc(100% + 10px);
+  transform:translateX(-50%);
+  width:min(340px,calc(100vw - 48px));
+  padding:12px 14px;
+  font-size:.72rem;
+  line-height:1.55;
+  font-weight:400;
+  letter-spacing:normal;
+  text-transform:none;
+  text-align:left;
+  color:#c8c8e0;
+  background:#16162a;
+  border:1px solid rgba(168,85,247,.38);
+  border-radius:10px;
+  box-shadow:0 10px 28px rgba(0,0,0,.5);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .15s,visibility .15s;
+}
+.info-tooltip strong{color:#e0e0f0;font-weight:600}
+.info-tip-anchor:hover .info-tooltip,
+.info-tip-anchor:focus-within .info-tooltip{
+  opacity:1;
+  visibility:visible;
 }
 /* Cadeau cliquable — pulse léger pour attirer l’œil */
 .gift-zone{
@@ -620,7 +693,13 @@ kbd{
       </div>
 
       <div>
-        <p class="step-lbl">2 — Grille du puzzle</p>
+        <div class="step-lbl-with-info">
+          <p class="step-lbl">2 — Grille du puzzle</p>
+          <div class="info-tip-anchor">
+            <button type="button" class="info-icon-btn" aria-label="Informations sur la grille du puzzle" aria-describedby="gridHelpTooltip">i</button>
+            <div id="gridHelpTooltip" class="info-tooltip" role="tooltip">Ex. <strong>4×3</strong> = 12 pièces. Maximum <strong>64</strong> pièces (colonnes × lignes). La photo est affichée en <strong>« remplissage »</strong> : elle couvre toute la grille puis les bandes qui dépassent sont <strong>coupées au centre</strong> (à gauche et à droite si la photo est trop large, en haut et en bas si elle est trop haute).</div>
+          </div>
+        </div>
         <div class="builder-row-inline" style="gap:14px;align-items:flex-end;flex-wrap:wrap">
           <div class="builder-row" style="flex:1;min-width:108px">
             <label class="field-hint" for="inputGridCols">Colonnes</label>
@@ -631,7 +710,6 @@ kbd{
             <input type="number" id="inputGridRows" min="2" max="12" value="3" inputmode="numeric">
           </div>
         </div>
-        <p class="field-hint" style="margin-top:10px;line-height:1.5">Ex. <strong>4×3</strong> = 12 pièces. Maximum <strong>64</strong> pièces (colonnes × lignes). La photo est affichée en <strong>« remplissage »</strong> : elle couvre toute la grille puis les bandes qui dépassent sont <strong>coupées au centre</strong> (à gauche et à droite si la photo est trop large, en haut et en bas si elle est trop haute).</p>
       </div>
 
       <div>
