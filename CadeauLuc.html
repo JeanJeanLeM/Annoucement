@@ -99,11 +99,12 @@ body{
   display:flex;
   flex-direction:column;
   min-height:200px;
-  max-height:240px;
+  max-height:268px;
 }
 .mock-toolbar{
   display:flex;
   align-items:center;
+  justify-content:space-between;
   gap:8px;
   flex-wrap:wrap;
   padding:6px 10px;
@@ -111,16 +112,21 @@ body{
   border-bottom:1px solid rgba(168,85,247,.15);
   min-height:38px;
 }
-.mock-toolbar h3{
+.mock-game-banner{
+  margin:0;
+  padding:6px 10px 7px;
   font-size:.72rem;
   font-weight:600;
   color:#c0c0e0;
-  flex:1;
-  min-width:0;
-  white-space:nowrap;
+  text-align:center;
+  line-height:1.35;
+  border-bottom:1px solid rgba(168,85,247,.12);
+  flex-shrink:0;
   overflow:hidden;
-  text-overflow:ellipsis;
-  margin:0;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  word-break:break-word;
 }
 .mock-toolbar .mock-hint{
   font-size:.58rem;
@@ -646,10 +652,10 @@ kbd{
         <p class="step-lbl">Pendant le jeu</p>
         <div class="mock-game">
           <div class="mock-toolbar">
-            <h3 id="previewToolbarTitle">Puzzle</h3>
             <span class="mock-grid-dims" id="previewGridDims">3×3</span>
             <span class="mock-hint">Molette · Glisser · 2 clics</span>
           </div>
+          <p class="mock-game-banner" id="previewGameBanner">Puzzle</p>
           <div class="mock-canvas">
             <div class="mock-crop-frame" id="mockCropFrame">
               <img class="mock-crop-img" id="previewGameBoardImg" alt="" hidden>
@@ -710,7 +716,15 @@ kbd{
       </div>
 
       <div>
-        <p class="step-lbl">3 — Écran de victoire</p>
+        <p class="step-lbl">3 — Message au-dessus du puzzle</p>
+        <div class="builder-row">
+          <label class="field-hint" for="inputToolTitle">Affiché au-dessus de la zone de jeu pendant la partie (optionnel)</label>
+          <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire — laisse vide pour « Puzzle »" autocomplete="off">
+        </div>
+      </div>
+
+      <div>
+        <p class="step-lbl">4 — Écran de victoire</p>
         <div class="builder-row">
           <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
           <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
@@ -889,6 +903,7 @@ function applyWinHeadlineStyles() {
 }
 
 function readFormToScenario() {
+  scenario.toolTitle = (document.getElementById('inputToolTitle') || {}).value || '';
   scenario.winText = (document.getElementById('textareaWinText') || {}).value || 'Bravo !';
   scenario.winEffect = (document.getElementById('selectWinEffect') || {}).value || 'fireworks';
   scenario.winFontKey = (document.getElementById('selectWinFont') || {}).value || 'system';
@@ -904,6 +919,7 @@ function readFormToScenario() {
 }
 
 function syncFormFromScenario() {
+  const t = document.getElementById('inputToolTitle');
   const w = document.getElementById('textareaWinText');
   const e = document.getElementById('selectWinEffect');
   const f = document.getElementById('selectWinFont');
@@ -911,6 +927,7 @@ function syncFormFromScenario() {
   const g = document.getElementById('checkWinGradient');
   const ic = document.getElementById('inputGridCols');
   const ir = document.getElementById('inputGridRows');
+  if (t) t.value = scenario.toolTitle || '';
   if (w) w.value = scenario.winText || '';
   if (e) e.value = scenario.winEffect || 'fireworks';
   if (f) f.value = scenario.winFontKey || 'system';
@@ -944,6 +961,7 @@ function getPreviewCropNote(gc, gr, prevEl) {
 }
 
 function updateBuilderPreviews() {
+  const toolEl = document.getElementById('inputToolTitle');
   const winTextEl = document.getElementById('textareaWinText');
   const effectEl = document.getElementById('selectWinEffect');
   const fontEl = document.getElementById('selectWinFont');
@@ -957,8 +975,10 @@ function updateBuilderPreviews() {
   const color = (colorEl && colorEl.value) || '#e8e8f0';
   const gradient = !!(gradEl && gradEl.checked);
 
-  const tb = document.getElementById('previewToolbarTitle');
-  if (tb) tb.textContent = (scenario.toolTitle && scenario.toolTitle.trim()) || 'Puzzle';
+  const toolInput = toolEl ? toolEl.value.trim() : '';
+  const titleShown = toolInput || (scenario.toolTitle && scenario.toolTitle.trim()) || 'Puzzle';
+  const ban = document.getElementById('previewGameBanner');
+  if (ban) ban.textContent = titleShown;
 
   const gcEl = document.getElementById('inputGridCols');
   const grEl = document.getElementById('inputGridRows');
@@ -2247,7 +2267,7 @@ function initDropZone() {
 }
 
 function initBuilderPreviewListeners() {
-  ['textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
+  ['inputToolTitle', 'textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', updateBuilderPreviews);
