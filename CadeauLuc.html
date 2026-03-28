@@ -739,20 +739,37 @@ function drawFullImage() {
 //  RENDER
 // ═══════════════════════════════════════════════════════════
 /** Texte affiché en haut à droite du canvas (jeu + victoire). */
-const CORNER_ANNIVERSARY = '70 ans';
+const CORNER_ANNIVERSARY = '70+ ans';
 
 function drawCornerAnniversary() {
   if (!ctx || W < 40) return;
-  const pad = 16;
+  const padTop = 16;
+  const edgePad = 14;
+  const borderGap = 14;
   const fontSize = Math.max(28, Math.min(88, Math.min(W, H) * 0.1));
   const text = CORNER_ANNIVERSARY;
   ctx.save();
   ctx.font = `900 ${fontSize}px "Segoe UI",system-ui,sans-serif`;
   ctx.textAlign = 'right';
   ctx.textBaseline = 'top';
-  const x = W - pad;
-  const y = pad;
+  const y = padTop;
+  const lineX = W - edgePad;
+  const x = lineX - borderGap;
   const tw = ctx.measureText(text).width;
+  const y0 = y - 6;
+  const y1 = y + fontSize * 1.22 + 6;
+  const borderW = Math.max(3, fontSize * 0.055);
+  const lg = ctx.createLinearGradient(lineX, y0, lineX, y1);
+  lg.addColorStop(0, '#e94560');
+  lg.addColorStop(0.5, '#f472b6');
+  lg.addColorStop(1, '#a855f7');
+  ctx.beginPath();
+  ctx.moveTo(lineX, y0);
+  ctx.lineTo(lineX, y1);
+  ctx.strokeStyle = lg;
+  ctx.lineWidth = borderW;
+  ctx.lineCap = 'round';
+  ctx.stroke();
   const g = ctx.createLinearGradient(x - tw, y, x, y + fontSize);
   g.addColorStop(0, '#e94560');
   g.addColorStop(0.5, '#f472b6');
