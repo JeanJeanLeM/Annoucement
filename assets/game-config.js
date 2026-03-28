@@ -13,7 +13,9 @@ window.GAME_ASSETS = {
   soundVolume: 0.75,
   connectSounds: {
     dir: 'assets/sounds',
-    ext: '.m4a'
+    ext: '.m4a',
+    /** Extensions par numéro (ex. 8 en .ogg, le reste = ext). */
+    extByIndex: { 8: '.ogg' }
   },
   sounds: {
     win: ''

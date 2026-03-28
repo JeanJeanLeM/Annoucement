@@ -421,7 +421,7 @@ kbd{
   </div>
 </div>
 
-<script src="assets/game-config.js?v=2"></script>
+<script src="assets/game-config.js?v=3"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 //  CONFIG
@@ -431,10 +431,12 @@ const ASSETS_DEFAULTS = {
   introVideo: 'assets/video/videolucpaysage.mp4',
   image: 'reunion.png',
   soundVolume: 0.75,
-  connectSounds: { dir: 'assets/sounds', ext: '.m4a' },
+  connectSounds: { dir: 'assets/sounds', ext: '.m4a', extByIndex: { 8: '.ogg' } },
   sounds: { win: '' }
 };
 const _cfg = window.GAME_ASSETS || {};
+const _dcS = ASSETS_DEFAULTS.connectSounds;
+const _ccS = _cfg.connectSounds || {};
 const ASSETS = {
   /** false ou null = pas d’intro ; chaîne non vide = URL ; absent / '' = vidéo par défaut (évite cache Vercel avec ancien config vide). */
   introVideo: (_cfg.introVideo === false || _cfg.introVideo === null)
@@ -444,7 +446,11 @@ const ASSETS = {
       : ASSETS_DEFAULTS.introVideo,
   image: (typeof _cfg.image === 'string' && _cfg.image.trim()) ? _cfg.image.trim() : ASSETS_DEFAULTS.image,
   soundVolume: typeof _cfg.soundVolume === 'number' ? _cfg.soundVolume : ASSETS_DEFAULTS.soundVolume,
-  connectSounds: Object.assign({}, ASSETS_DEFAULTS.connectSounds, _cfg.connectSounds || {}),
+  connectSounds: {
+    dir: typeof _ccS.dir === 'string' ? _ccS.dir : _dcS.dir,
+    ext: typeof _ccS.ext === 'string' ? _ccS.ext : _dcS.ext,
+    extByIndex: Object.assign({}, _dcS.extByIndex || {}, _ccS.extByIndex || {})
+  },
   sounds: Object.assign({}, ASSETS_DEFAULTS.sounds, _cfg.sounds || {})
 };
 const DEFAULT_IMAGE = ASSETS.image;
@@ -491,10 +497,12 @@ function playSound(url) {
 }
 
 function playConnectSound() {
-  const cs = ASSETS.connectSounds || { dir: 'assets/sounds', ext: '.m4a' };
+  const cs = ASSETS.connectSounds || { dir: 'assets/sounds', ext: '.m4a', extByIndex: {} };
   const maxN = gridN * gridN - 1;
   connectMergeCount = Math.min(connectMergeCount + 1, maxN);
-  playSound(cs.dir + '/' + connectMergeCount + 'connect' + cs.ext);
+  const n = connectMergeCount;
+  const ext = (cs.extByIndex && cs.extByIndex[n]) || cs.ext;
+  playSound(cs.dir + '/' + n + 'connect' + ext);
 }
 
 function playWinSound() {
