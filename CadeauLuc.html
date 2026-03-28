@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Puzzle cadeau — La Réunion</title>
+<title>Puzzle personnalisable</title>
 <link rel="icon" href="cadeau.avif" type="image/avif">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -18,116 +18,44 @@ body{
   justify-content:center;
 }
 
-/* ── Intro vidéo (avant le cadeau) ─────────────────────── */
-#introScreen{
+/* ── Partage chargé : écran d’accueil minimal ─────────── */
+#shareGate{
   display:none;
   position:fixed;
   inset:0;
-  z-index:250;
+  z-index:260;
   background:#0b0b17;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding:20px 16px;
+  padding:24px 16px;
+  text-align:center;
   gap:20px;
 }
-#introScreen.intro-visible{display:flex}
-body.intro-blocking #setup{display:none!important}
-.intro-screen-inner{
-  /* Laptop ~ tablette : raisonnable ; projecteur / 4K : jusqu’à ~1200px de large */
-  width:min(100%,min(94vw,1200px));
-  max-width:100%;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-.intro-video-wrap{
-  position:relative;
+#shareGate.on{display:flex}
+.share-gate-card{
+  background:#16213e;
+  border-radius:20px;
+  padding:32px 28px;
+  max-width:420px;
   width:100%;
-  max-width:100%;
-  border-radius:16px;
-  overflow:hidden;
-  border:2px solid rgba(168,85,247,.35);
-  box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(233,69,96,.12);
-  background:#000;
-  aspect-ratio:16/9;
-  /* Grand écran / projecteur : plus de hauteur utile */
-  max-height:min(82dvh,82vh,720px);
+  box-shadow:0 28px 80px rgba(0,0,0,.65);
+  border:1px solid rgba(168,85,247,.2);
 }
-#introVideo{
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-.intro-video-overlay{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  cursor:pointer;
-  background:rgba(15,15,26,.72);
-  transition:opacity .35s,visibility .35s;
-  color:#e8e8f0;
-  text-align:center;
-  padding:16px;
-}
-.intro-video-overlay.is-hidden{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-.intro-play-icon{
-  width:72px;height:72px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#e94560,#a855f7);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.6rem;
-  padding-left:6px;
-  box-shadow:0 8px 32px rgba(233,69,96,.45);
-}
-.intro-overlay-title{
-  display:block;
-  font-size:1rem;
-  font-weight:600;
-  max-width:280px;
-  line-height:1.45;
-}
-.intro-video-overlay .intro-sub{
-  font-size:.8rem;
-  font-weight:500;
-  color:#9090b8;
-}
-.intro-skip{
-  align-self:center;
-  background:rgba(168,85,247,.14);
-  border:1px solid rgba(168,85,247,.35);
-  border-radius:10px;
-  padding:10px 22px;
-  color:#b8b8d8;
-  font-size:.85rem;
-  font-weight:600;
-  cursor:pointer;
-  transition:background .15s,color .15s;
-}
-.intro-skip:hover{background:rgba(168,85,247,.28);color:#e8e8f0}
+.share-gate-card p{color:#a0a0c0;font-size:.95rem;line-height:1.5}
+#shareGateError{color:#f472b6;font-size:.9rem;min-height:1.2em}
 
-/* ── Setup ────────────────────────────────────────────── */
+/* ── Setup / créateur ─────────────────────────────────── */
 #setup{
   background:#16213e;
   border-radius:20px;
-  padding:44px 40px;
-  width:460px;
+  padding:36px 28px 40px;
+  width:min(520px,calc(100vw - 32px));
   max-width:calc(100vw - 32px);
   box-shadow:0 28px 80px rgba(0,0,0,.65);
   display:flex;
   flex-direction:column;
-  gap:30px;
+  gap:22px;
 }
 .app-title{
   text-align:center;
@@ -187,13 +115,47 @@ body.intro-blocking #setup{display:none!important}
   line-height:1.55;
 }
 .gift-hint strong{color:#e94560}
+.drop-zone{
+  border:2px dashed rgba(168,85,247,.45);
+  border-radius:16px;
+  padding:22px 16px;
+  text-align:center;
+  background:rgba(168,85,247,.06);
+  transition:border-color .2s,background .2s;
+  cursor:pointer;
+}
+.drop-zone:hover,.drop-zone:focus-within{border-color:#a855f7;background:rgba(168,85,247,.1)}
+.drop-zone.dragover{border-color:#e94560;background:rgba(233,69,96,.1)}
+.drop-zone-hint{font-size:.88rem;color:#9090b8;line-height:1.45;margin-top:8px}
+.builder-row{display:flex;flex-direction:column;gap:6px}
+.builder-row input,.builder-row textarea,.builder-row select{
+  background:#0f3460;
+  border:1px solid rgba(168,85,247,.28);
+  border-radius:10px;
+  padding:10px 12px;
+  color:#e8e8f0;
+  font-size:.9rem;
+  font-family:inherit;
+}
+.builder-row textarea{min-height:72px;resize:vertical}
+.builder-row-inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.builder-row-inline input[type="color"]{
+  width:44px;height:36px;padding:2px;cursor:pointer;border-radius:8px;border:1px solid rgba(168,85,247,.35);
+}
+.field-hint{font-size:.72rem;color:#6b6b8a}
 #preview{
-  max-height:100px;max-width:100%;
-  border-radius:10px;margin-top:14px;
-  object-fit:cover;
+  max-height:120px;max-width:100%;
+  border-radius:10px;margin-top:12px;
+  object-fit:contain;
   box-shadow:0 4px 16px rgba(0,0,0,.4);
 }
 #preview[hidden]{display:none!important}
+.builder-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.builder-actions button{flex:1;min-width:140px}
+#shareResult{display:none;margin-top:12px;padding:12px;background:rgba(0,0,0,.25);border-radius:10px;border:1px solid rgba(168,85,247,.2)}
+#shareResult.on{display:block}
+#shareResultInput{width:100%;box-sizing:border-box;margin-top:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(168,85,247,.25);background:#0b0b17;color:#c0c0e0;font-size:.78rem}
+#setupError{color:#f472b6;font-size:.85rem;min-height:1.1em}
 #btnCreate{
   background:linear-gradient(135deg,#e94560,#c0185e);
   border:none;border-radius:12px;
@@ -349,49 +311,103 @@ kbd{
 }
 .wp-btn.p:hover{box-shadow:0 10px 28px rgba(233,69,96,.6)}
 .wp-btn.s{background:#0f3460;color:#b0b0d0;border:1px solid rgba(168,85,247,.28)}
+#winCelebration.win-effect-minimal #fireworksCanvas{opacity:.35}
+.win-headline.plain{
+  background:none!important;
+  -webkit-text-fill-color:unset!important;
+  color:var(--win-text-color,#e8e8f0);
+  animation:winHeadlineIn .85s cubic-bezier(.34,1.4,.64,1) both;
+}
+.win-headline.plain.no-anim{animation:none}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="assets/game-config.js?v=4"></script>
 </head>
 <body>
 
-<!-- ── Intro vidéo (optionnelle, voir assets/game-config.js) ── -->
-<div id="introScreen" aria-hidden="true">
-  <div class="intro-screen-inner">
-    <p class="step-lbl" style="margin-bottom:0;text-align:center">Avant le cadeau</p>
-    <div class="intro-video-wrap">
-      <video id="introVideo" preload="auto" playsinline></video>
-      <div class="intro-video-overlay" id="introVideoOverlay" role="button" tabindex="0" aria-label="Lancer la vidéo">
-        <span class="intro-play-icon" aria-hidden="true">▶</span>
-        <span class="intro-overlay-title">Lance la vidéo quand tu es prêt</span>
-        <span class="intro-sub">Son activé après ton clic</span>
-      </div>
-    </div>
-    <button type="button" class="intro-skip" id="btnSkipIntro">Passer → cadeau</button>
+<div id="shareGate" aria-hidden="true">
+  <div class="share-gate-card">
+    <p class="step-lbl" style="margin-bottom:8px;text-align:center">Puzzle partagé</p>
+    <p>Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+    <p id="shareGateError" role="alert"></p>
+    <button type="button" class="wp-btn p" id="btnShareStart" style="width:100%;margin-top:8px">Commencer</button>
   </div>
 </div>
 
-<!-- ── Setup ──────────────────────────────────────────── -->
 <div id="setup">
-  <h1 class="app-title">🧩 Puzzle cadeau</h1>
+  <h1 class="app-title">🧩 Puzzle personnalisable</h1>
 
   <div>
-    <p class="step-lbl">1 — Ouvre ton cadeau</p>
-    <div class="gift-zone" id="giftZone" role="button" tabindex="0" aria-label="Ouvrir le cadeau et lancer le puzzle">
-      <span class="gift-emoji" aria-hidden="true">
-        <!-- Icône plate type Flaticon (cadeau + ruban) -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <path fill="#9d174d" d="M10 30h44v26a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3V30Z"/>
-          <path fill="#e94560" d="M7 24h50a3 3 0 0 1 3 3v3H4v-3a3 3 0 0 1 3-3Z"/>
-          <path fill="#fff5f7" d="M29 30h6v26h-6V30ZM10 41h44v6H10v-6Z"/>
-          <ellipse cx="25" cy="17" fill="#a855f7" rx="9" ry="7" transform="rotate(-32 25 17)"/>
-          <ellipse cx="39" cy="17" fill="#a855f7" rx="9" ry="7" transform="rotate(32 39 17)"/>
-          <circle cx="32" cy="19" r="4" fill="#7c3aed"/>
-        </svg>
-      </span>
-      <p class="gift-hint"><strong>Clique sur le cadeau</strong> pour lancer le puzzle avec la photo surprise&nbsp;!</p>
+    <p class="step-lbl">1 — Image du puzzle</p>
+    <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Choisir une image : glisser-déposer ou cliquer">
+      <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
       <img id="preview" alt="Aperçu du puzzle" hidden>
+      <p class="drop-zone-hint">Astuce : bouton « Parcourir (explorateur) » si ton navigateur le propose.</p>
+      <div class="builder-actions" style="margin-top:14px">
+        <button type="button" class="wp-btn s" id="btnBrowse">Parcourir…</button>
+        <button type="button" class="wp-btn s" id="btnBrowseFs" hidden>Parcourir (explorateur)</button>
+      </div>
     </div>
   </div>
 
+  <div>
+    <p class="step-lbl">2 — Textes &amp; barre</p>
+    <div class="builder-row">
+      <label class="field-hint" for="inputToolTitle">Titre dans la barre du jeu (optionnel)</label>
+      <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire" autocomplete="off">
+    </div>
+    <div class="builder-row" style="margin-top:10px">
+      <label class="field-hint" for="inputCornerText">Texte en haut à droite sur le puzzle (optionnel)</label>
+      <input type="text" id="inputCornerText" maxlength="40" placeholder="Ex. 2026" autocomplete="off">
+    </div>
+  </div>
+
+  <div>
+    <p class="step-lbl">3 — Écran de victoire</p>
+    <div class="builder-row">
+      <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
+      <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
+    </div>
+    <div class="builder-row" style="margin-top:10px">
+      <label class="field-hint" for="selectWinEffect">Effet d’arrière-plan</label>
+      <select id="selectWinEffect">
+        <option value="fireworks">Feux d’artifice</option>
+        <option value="confetti">Confettis</option>
+        <option value="minimal">Minimal (sobre)</option>
+      </select>
+    </div>
+    <div class="builder-row" style="margin-top:10px">
+      <label class="field-hint" for="selectWinFont">Police du message</label>
+      <select id="selectWinFont">
+        <option value="system">Système (Segoe UI)</option>
+        <option value="bebas">Bebas Neue</option>
+        <option value="pacifico">Pacifico</option>
+        <option value="dancing">Dancing Script</option>
+        <option value="playfair">Playfair Display</option>
+        <option value="rubik">Rubik</option>
+      </select>
+    </div>
+    <div class="builder-row-inline" style="margin-top:10px">
+      <label class="field-hint" for="inputWinColor">Couleur du texte</label>
+      <input type="color" id="inputWinColor" value="#e8e8f0" title="Couleur du texte">
+      <label class="field-hint" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <input type="checkbox" id="checkWinGradient" checked> Dégradé animé (arc-en-ciel)
+      </label>
+    </div>
+  </div>
+
+  <p id="setupError" role="alert"></p>
+  <div class="builder-actions">
+    <button type="button" class="wp-btn p" id="btnStartGame">Lancer le puzzle</button>
+    <button type="button" class="wp-btn s" id="btnShareLink">Générer le lien de partage</button>
+  </div>
+  <div id="shareResult">
+    <p class="field-hint">Lien permanent (image + réglages conservés sur le stockage) :</p>
+    <input type="text" id="shareResultInput" readonly aria-label="Lien de partage">
+    <button type="button" class="wp-btn s" id="btnCopyShare" style="width:100%;margin-top:10px">Copier le lien</button>
+  </div>
 </div>
 
 <!-- ── Game ───────────────────────────────────────────── -->
@@ -413,47 +429,230 @@ kbd{
 <div id="winCelebration" aria-live="polite" aria-hidden="true">
   <canvas id="fireworksCanvas" aria-hidden="true"></canvas>
   <div class="win-celebration-inner">
-    <h1 class="win-headline">UNE SEMAINE INOUBLIABLE<br>T'ATTEND À LA RÉUNION&nbsp;!</h1>
+    <h1 class="win-headline" id="winHeadline"></h1>
     <div class="win-celebration-btns">
       <button type="button" class="wp-btn p" id="winReplay">↺ Rejouer</button>
-      <button type="button" class="wp-btn s" id="winNew">🏠 Accueil</button>
+      <button type="button" class="wp-btn s" id="winNew">➕ Nouveau puzzle</button>
     </div>
   </div>
 </div>
 
-<script src="assets/game-config.js?v=3"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
-//  CONFIG
+//  SCÉNARIO (formulaire + partage)
 // ═══════════════════════════════════════════════════════════
-/** Valeurs de secours si game-config.js ne charge pas (cache, 404, etc.). introVideo '' = désactiver l’intro. */
-const ASSETS_DEFAULTS = {
-  introVideo: 'assets/video/videolucpaysage.mp4',
-  image: 'reunion.png',
-  soundVolume: 0.75,
-  connectSounds: { dir: 'assets/sounds', ext: '.m4a', extByIndex: { 8: '.ogg' } },
-  sounds: { win: '' }
+const FONT_MAP = {
+  system: { stack: "'Segoe UI',system-ui,sans-serif", google: null },
+  bebas: { stack: "'Bebas Neue',sans-serif", google: 'Bebas+Neue' },
+  pacifico: { stack: "'Pacifico',cursive", google: 'Pacifico' },
+  dancing: { stack: "'Dancing Script',cursive", google: 'Dancing+Script' },
+  playfair: { stack: "'Playfair Display',serif", google: 'Playfair+Display' },
+  rubik: { stack: "'Rubik',sans-serif", google: 'Rubik:wght@400;700' }
 };
-const _cfg = window.GAME_ASSETS || {};
-const _dcS = ASSETS_DEFAULTS.connectSounds;
-const _ccS = _cfg.connectSounds || {};
-const ASSETS = {
-  /** false ou null = pas d’intro ; chaîne non vide = URL ; absent / '' = vidéo par défaut (évite cache Vercel avec ancien config vide). */
-  introVideo: (_cfg.introVideo === false || _cfg.introVideo === null)
-    ? ''
-    : (typeof _cfg.introVideo === 'string' && _cfg.introVideo.trim())
-      ? _cfg.introVideo.trim()
-      : ASSETS_DEFAULTS.introVideo,
-  image: (typeof _cfg.image === 'string' && _cfg.image.trim()) ? _cfg.image.trim() : ASSETS_DEFAULTS.image,
-  soundVolume: typeof _cfg.soundVolume === 'number' ? _cfg.soundVolume : ASSETS_DEFAULTS.soundVolume,
-  connectSounds: {
-    dir: typeof _ccS.dir === 'string' ? _ccS.dir : _dcS.dir,
-    ext: typeof _ccS.ext === 'string' ? _ccS.ext : _dcS.ext,
-    extByIndex: Object.assign({}, _dcS.extByIndex || {}, _ccS.extByIndex || {})
-  },
-  sounds: Object.assign({}, ASSETS_DEFAULTS.sounds, _cfg.sounds || {})
-};
-const DEFAULT_IMAGE = ASSETS.image;
+
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
+function defaultScenario() {
+  return {
+    toolTitle: '',
+    cornerText: '',
+    winText: 'Bravo !',
+    winEffect: 'fireworks',
+    winFontKey: 'system',
+    winTextColor: '#e8e8f0',
+    winTextGradient: true
+  };
+}
+
+let scenario = defaultScenario();
+let selectedImageFile = null;
+let previewObjectUrl = null;
+let shareLoadId = null;
+
+function fontStackForScenario() {
+  const key = scenario.winFontKey && FONT_MAP[scenario.winFontKey] ? scenario.winFontKey : 'system';
+  return FONT_MAP[key].stack;
+}
+
+function ensureGoogleFont(key) {
+  const k = key && FONT_MAP[key] ? key : 'system';
+  const g = FONT_MAP[k].google;
+  let link = document.getElementById('googleFontLink');
+  if (!g) {
+    if (link) link.remove();
+    return;
+  }
+  const href = 'https://fonts.googleapis.com/css2?family=' + g + '&display=swap';
+  if (!link) {
+    link = document.createElement('link');
+    link.id = 'googleFontLink';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+  link.href = href;
+}
+
+function setWinHeadlineContent(el, text) {
+  if (!el) return;
+  el.textContent = '';
+  const lines = String(text || '').split('\n');
+  lines.forEach((line, i) => {
+    if (i) el.appendChild(document.createElement('br'));
+    el.appendChild(document.createTextNode(line));
+  });
+}
+
+function applyWinHeadlineStyles() {
+  const el = document.getElementById('winHeadline');
+  if (!el) return;
+  ensureGoogleFont(scenario.winFontKey);
+  setWinHeadlineContent(el, scenario.winText);
+  el.style.fontFamily = fontStackForScenario();
+  const color = scenario.winTextColor || '#e8e8f0';
+  el.style.setProperty('--win-text-color', color);
+  if (scenario.winTextGradient) {
+    el.classList.remove('plain');
+    el.style.color = '';
+  } else {
+    el.classList.add('plain');
+    el.style.color = color;
+  }
+}
+
+function readFormToScenario() {
+  scenario.toolTitle = (document.getElementById('inputToolTitle') || {}).value || '';
+  scenario.cornerText = (document.getElementById('inputCornerText') || {}).value || '';
+  scenario.winText = (document.getElementById('textareaWinText') || {}).value || 'Bravo !';
+  scenario.winEffect = (document.getElementById('selectWinEffect') || {}).value || 'fireworks';
+  scenario.winFontKey = (document.getElementById('selectWinFont') || {}).value || 'system';
+  scenario.winTextColor = (document.getElementById('inputWinColor') || {}).value || '#e8e8f0';
+  scenario.winTextGradient = !!(document.getElementById('checkWinGradient') || {}).checked;
+}
+
+function syncFormFromScenario() {
+  const t = document.getElementById('inputToolTitle');
+  const c = document.getElementById('inputCornerText');
+  const w = document.getElementById('textareaWinText');
+  const e = document.getElementById('selectWinEffect');
+  const f = document.getElementById('selectWinFont');
+  const col = document.getElementById('inputWinColor');
+  const g = document.getElementById('checkWinGradient');
+  if (t) t.value = scenario.toolTitle || '';
+  if (c) c.value = scenario.cornerText || '';
+  if (w) w.value = scenario.winText || '';
+  if (e) e.value = scenario.winEffect || 'fireworks';
+  if (f) f.value = scenario.winFontKey || 'system';
+  if (col) col.value = scenario.winTextColor || '#e8e8f0';
+  if (g) g.checked = !!scenario.winTextGradient;
+}
+
+function metaForUpload() {
+  return {
+    toolTitle: scenario.toolTitle,
+    cornerText: scenario.cornerText,
+    winText: scenario.winText,
+    winEffect: scenario.winEffect,
+    winFontKey: scenario.winFontKey,
+    winTextColor: scenario.winTextColor,
+    winTextGradient: scenario.winTextGradient
+  };
+}
+
+function applyScenarioPayload(data) {
+  if (!data || typeof data !== 'object') return;
+  scenario.toolTitle = typeof data.toolTitle === 'string' ? data.toolTitle : '';
+  scenario.cornerText = typeof data.cornerText === 'string' ? data.cornerText : '';
+  scenario.winText = typeof data.winText === 'string' ? data.winText : 'Bravo !';
+  scenario.winEffect = ['fireworks', 'confetti', 'minimal'].includes(data.winEffect) ? data.winEffect : 'fireworks';
+  scenario.winFontKey = FONT_MAP[data.winFontKey] ? data.winFontKey : 'system';
+  scenario.winTextColor = typeof data.winTextColor === 'string' ? data.winTextColor : '#e8e8f0';
+  scenario.winTextGradient = !!data.winTextGradient;
+  syncFormFromScenario();
+  ensureGoogleFont(scenario.winFontKey);
+}
+
+function validateImageFile(file) {
+  if (!file || !file.type || !file.type.startsWith('image/')) return 'Choisis un fichier image (JPG, PNG, WebP, GIF).';
+  if (file.size > MAX_IMAGE_BYTES) return 'Image trop volumineuse (max 8 Mo).';
+  return '';
+}
+
+function clearLocalImage() {
+  if (previewObjectUrl) {
+    try { URL.revokeObjectURL(previewObjectUrl); } catch (e) {}
+    previewObjectUrl = null;
+  }
+  selectedImageFile = null;
+  const prev = document.getElementById('preview');
+  if (prev) {
+    prev.removeAttribute('src');
+    prev.hidden = true;
+  }
+  srcImg = null;
+  imageReady = false;
+}
+
+function assignImageFromFile(file, onDone) {
+  const err = validateImageFile(file);
+  if (err) {
+    if (onDone) onDone(err);
+    return;
+  }
+  clearLocalImage();
+  selectedImageFile = file;
+  previewObjectUrl = URL.createObjectURL(file);
+  const prev = document.getElementById('preview');
+  if (prev) {
+    prev.src = previewObjectUrl;
+    prev.hidden = false;
+  }
+  const img = new Image();
+  img.onload = () => {
+    srcImg = img;
+    imageReady = true;
+    if (onDone) onDone('');
+  };
+  img.onerror = () => {
+    clearLocalImage();
+    if (onDone) onDone('Impossible de lire cette image.');
+  };
+  img.src = previewObjectUrl;
+}
+
+function assignImageFromUrl(url, onDone) {
+  clearLocalImage();
+  const img = new Image();
+  img.onload = () => {
+    srcImg = img;
+    imageReady = true;
+    const prev = document.getElementById('preview');
+    if (prev) {
+      prev.src = url;
+      prev.hidden = false;
+    }
+    if (onDone) onDone('');
+  };
+  img.onerror = () => {
+    if (onDone) onDone('Image du puzzle introuvable.');
+  };
+  img.src = url;
+}
+
+function updateToolTitle() {
+  const h = document.getElementById('toolTitle');
+  if (!h) return;
+  const t = (scenario.toolTitle && scenario.toolTitle.trim()) || 'Puzzle';
+  h.textContent = t;
+}
+
+function getQueryScenarioId() {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    const s = p.get('s');
+    if (s && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s)) return s;
+  } catch (e) {}
+  return null;
+}
 
 /** Taille d’une cellule (px) — recalculée selon la fenêtre (grand écran / projecteur). */
 let PS = 100;
@@ -486,34 +685,12 @@ let drag   = null;  // {gid, sx, sy, ox, oy, moved}
 let winState = false; // true once puzzle is solved
 
 // snap flash: [{cx,cy,t}] short-lived visual feedback
-let connectMergeCount = 0;
-
-function playSound(url) {
-  if (!url || typeof url !== 'string') return;
-  const a = new Audio(url);
-  const v = ASSETS.soundVolume;
-  a.volume = typeof v === 'number' && v >= 0 && v <= 1 ? v : 0.75;
-  a.play().catch(() => {});
-}
-
-function playConnectSound() {
-  const cs = ASSETS.connectSounds || { dir: 'assets/sounds', ext: '.m4a', extByIndex: {} };
-  const maxN = gridN * gridN - 1;
-  connectMergeCount = Math.min(connectMergeCount + 1, maxN);
-  const n = connectMergeCount;
-  const ext = (cs.extByIndex && cs.extByIndex[n]) || cs.ext;
-  playSound(cs.dir + '/' + n + 'connect' + ext);
-}
-
-function playWinSound() {
-  playSound(ASSETS.sounds && ASSETS.sounds.win);
-}
 let flashes = [];
 
 let canvas, ctx, W, H;
 let rafId = null;
 let canvasListenersBound = false;
-let defaultImageReady = false;
+let imageReady = false;
 let windowResizeBound = false;
 
 // ═══════════════════════════════════════════════════════════
@@ -601,6 +778,103 @@ function stopFireworks() {
   fwParticles = [];
   if (fwCtx && fwCanvas)
     fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CONFETTIS (canvas victoire)
+// ═══════════════════════════════════════════════════════════
+let cfParticles = [], cfRunning = false, cfRaf = null, cfLast = 0;
+
+function tickConfetti(ts) {
+  if (!cfRunning || !fwCtx) return;
+  if (ts - cfLast > 55) {
+    cfLast = ts;
+    const w = fwCanvas.width, h = fwCanvas.height;
+    for (let i = 0; i < 14; i++) {
+      cfParticles.push({
+        x: Math.random() * w,
+        y: -8 - Math.random() * 40,
+        vx: (Math.random() - 0.5) * 3,
+        vy: 2 + Math.random() * 5,
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.2,
+        w: 6 + Math.random() * 8,
+        h: 4 + Math.random() * 6,
+        color: FW_COLORS[(Math.random() * FW_COLORS.length) | 0],
+        life: 1
+      });
+    }
+  }
+  fwCtx.fillStyle = 'rgba(11,11,23,0.18)';
+  fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+  const keep = [];
+  for (const p of cfParticles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.04;
+    p.rot += p.vr;
+    p.life -= 0.004;
+    if (p.life <= 0 || p.y > fwCanvas.height + 20) continue;
+    keep.push(p);
+    fwCtx.save();
+    fwCtx.translate(p.x, p.y);
+    fwCtx.rotate(p.rot);
+    fwCtx.fillStyle = p.color;
+    fwCtx.globalAlpha = Math.min(1, p.life);
+    fwCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    fwCtx.restore();
+  }
+  fwCtx.globalAlpha = 1;
+  cfParticles = keep;
+  cfRaf = requestAnimationFrame(tickConfetti);
+}
+
+function startConfetti() {
+  fwCanvas = document.getElementById('fireworksCanvas');
+  if (!fwCanvas) return;
+  fwCtx = fwCanvas.getContext('2d');
+  resizeFireworksCanvas();
+  cfParticles = [];
+  cfRunning = true;
+  cfLast = performance.now();
+  cancelAnimationFrame(cfRaf);
+  cfRaf = requestAnimationFrame(tickConfetti);
+}
+
+function stopConfetti() {
+  cfRunning = false;
+  cancelAnimationFrame(cfRaf);
+  cfRaf = null;
+  cfParticles = [];
+  if (fwCtx && fwCanvas)
+    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+}
+
+function stopAllWinEffects() {
+  stopFireworks();
+  stopConfetti();
+}
+
+function startWinEffect(kind) {
+  stopAllWinEffects();
+  const cel = document.getElementById('winCelebration');
+  cel.classList.remove('win-effect-minimal');
+  if (kind === 'minimal') {
+    cel.classList.add('win-effect-minimal');
+    fwCanvas = document.getElementById('fireworksCanvas');
+    if (fwCanvas) {
+      fwCtx = fwCanvas.getContext('2d');
+      resizeFireworksCanvas();
+      fwCtx.fillStyle = 'rgba(11,11,23,.92)';
+      fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+    }
+    return;
+  }
+  if (kind === 'confetti') {
+    startConfetti();
+    return;
+  }
+  startFireworks();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -742,8 +1016,6 @@ function mergeInto(aGid, aPid, bGid, bPid, dc, dr) {
   // Snap flash at merge point
   flashes.push({ x: tx, y: ty, t: 1.0 });
 
-  playConnectSound();
-
   updateHUD();
   checkWin();
 }
@@ -802,11 +1074,11 @@ function showWin() {
   winState = true;
   selId = null; drag = null;
   centerPuzzle();
-  playWinSound();
+  applyWinHeadlineStyles();
   const cel = document.getElementById('winCelebration');
   cel.classList.add('on');
   cel.setAttribute('aria-hidden', 'false');
-  startFireworks();
+  startWinEffect(scenario.winEffect || 'fireworks');
 }
 
 // Animate the assembled group smoothly to the canvas center.
@@ -886,18 +1158,17 @@ function drawFullImage() {
 // ═══════════════════════════════════════════════════════════
 //  RENDER
 // ═══════════════════════════════════════════════════════════
-/** Texte affiché en haut à droite du canvas (jeu + victoire). */
-const CORNER_ANNIVERSARY = '70+ ans';
-
 function drawCornerAnniversary() {
   if (!ctx || W < 40) return;
+  const text = (scenario.cornerText && String(scenario.cornerText).trim()) || '';
+  if (!text) return;
   const padTop = 16;
   const edgePad = 14;
   const borderGap = 14;
   const fontSize = Math.max(28, Math.min(88, Math.min(W, H) * 0.1));
-  const text = CORNER_ANNIVERSARY;
   ctx.save();
-  ctx.font = `900 ${fontSize}px "Segoe UI",system-ui,sans-serif`;
+  const fam = fontStackForScenario();
+  ctx.font = `900 ${fontSize}px ${fam}`;
   ctx.textAlign = 'right';
   ctx.textBaseline = 'top';
   const y = padTop;
@@ -1258,7 +1529,6 @@ function buildTiles() {
 function scatter() {
   pieces = []; groups = {}; gidSeq = 0;
   selId = null; drag = null; flashes = [];
-  connectMergeCount = 0;
   const margin = PS * 0.5 + JIG_PAD + 24;
   const ANGLES  = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
   for (let r = 0; r < gridN; r++) {
@@ -1280,6 +1550,7 @@ function scatter() {
 //  GAME LIFECYCLE
 // ═══════════════════════════════════════════════════════════
 function startGame() {
+  updateToolTitle();
   document.getElementById('setup').style.display = 'none';
   document.getElementById('game').style.display = 'flex';
 
@@ -1295,7 +1566,13 @@ function startGame() {
   function onWindowResize() {
     resizeCanvas();
     const c = document.getElementById('winCelebration');
-    if (c && c.classList.contains('on')) resizeFireworksCanvas();
+    if (c && c.classList.contains('on')) {
+      resizeFireworksCanvas();
+      if (scenario.winEffect === 'minimal' && fwCtx && fwCanvas) {
+        fwCtx.fillStyle = 'rgba(11,11,23,.92)';
+        fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+      }
+    }
     const inGame = document.getElementById('game').style.display === 'flex';
     if (inGame && canvas && tiles.length) {
       applyPieceSizeFromViewport(true);
@@ -1334,9 +1611,9 @@ function startGame() {
 
 function restartGame() {
   winState = false;
-  stopFireworks();
+  stopAllWinEffects();
   const cel = document.getElementById('winCelebration');
-  cel.classList.remove('on');
+  cel.classList.remove('on', 'win-effect-minimal');
   cel.setAttribute('aria-hidden', 'true');
   const tb = document.getElementById('toolbar');
   if (canvas && tb) {
@@ -1354,135 +1631,246 @@ function restartGame() {
 function newPuzzle() {
   winState = false;
   cancelAnimationFrame(rafId);
-  stopFireworks();
+  stopAllWinEffects();
   const cel = document.getElementById('winCelebration');
-  cel.classList.remove('on');
+  cel.classList.remove('on', 'win-effect-minimal');
   cel.setAttribute('aria-hidden', 'true');
   document.getElementById('game').style.display = 'none';
   document.getElementById('setup').style.display = 'flex';
-  const prev = document.getElementById('preview');
-  if (srcImg && srcImg.src) {
-    prev.src = srcImg.src;
-    prev.hidden = false;
+  if (shareLoadId) {
+    try {
+      window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+    } catch (e) {}
+    shareLoadId = null;
+    scenario = defaultScenario();
+    syncFormFromScenario();
+    clearLocalImage();
+    const sr = document.getElementById('shareResult');
+    if (sr) { sr.classList.remove('on'); }
+    const sri = document.getElementById('shareResultInput');
+    if (sri) sri.value = '';
+  } else {
+    const prev = document.getElementById('preview');
+    if (srcImg && srcImg.src && previewObjectUrl) {
+      prev.src = previewObjectUrl;
+      prev.hidden = false;
+    } else if (srcImg && srcImg.src) {
+      prev.src = srcImg.src;
+      prev.hidden = false;
+    }
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-//  INTRO VIDÉO — preload, lecture au clic uniquement (pas d’autoplay)
+//  SETUP UI — dépôt fichier, partage, chargement ?s=
 // ═══════════════════════════════════════════════════════════
-function hasIntroVideo() {
-  const u = ASSETS.introVideo;
-  return typeof u === 'string' && u.trim().length > 0;
+function setSetupError(msg) {
+  const el = document.getElementById('setupError');
+  if (el) el.textContent = msg || '';
 }
 
-function finishIntro() {
-  const introScreen = document.getElementById('introScreen');
-  const video = document.getElementById('introVideo');
-  const overlay = document.getElementById('introVideoOverlay');
-  document.body.classList.remove('intro-blocking');
-  introScreen.classList.remove('intro-visible');
-  introScreen.setAttribute('aria-hidden', 'true');
-  if (video) {
-    video.pause();
-    overlay && overlay.classList.remove('is-hidden');
-  }
-  const setup = document.getElementById('setup');
-  if (setup) setup.style.display = 'flex';
-}
-
-function startIntroVideoPlayback() {
-  const video = document.getElementById('introVideo');
-  const overlay = document.getElementById('introVideoOverlay');
-  if (!video) return;
-  overlay && overlay.classList.add('is-hidden');
-  video.play().catch(() => {
-    overlay && overlay.classList.remove('is-hidden');
-  });
-}
-
-function initIntroVideoFlow() {
-  const introScreen = document.getElementById('introScreen');
-  const video = document.getElementById('introVideo');
-  const overlay = document.getElementById('introVideoOverlay');
-  const setup = document.getElementById('setup');
-  const skipBtn = document.getElementById('btnSkipIntro');
-  const giftLbl = document.querySelector('#setup .step-lbl');
-
-  if (!hasIntroVideo()) {
-    introScreen.classList.remove('intro-visible');
-    introScreen.setAttribute('aria-hidden', 'true');
-    if (setup) setup.style.display = 'flex';
+function onLocalStartClick() {
+  setSetupError('');
+  readFormToScenario();
+  if (!imageReady || !srcImg) {
+    setSetupError('Ajoute d’abord une image (glisser-déposer ou Parcourir).');
     return;
   }
-
-  const url = ASSETS.introVideo.trim();
-  video.preload = 'auto';
-  video.playsInline = true;
-  video.setAttribute('playsinline', '');
-  video.src = url;
-
-  document.body.classList.add('intro-blocking');
-  introScreen.classList.add('intro-visible');
-  introScreen.setAttribute('aria-hidden', 'false');
-  if (setup) setup.style.display = 'none';
-
-  if (giftLbl && giftLbl.textContent.indexOf('Ouvre ton cadeau') !== -1)
-    giftLbl.textContent = '2 — Ouvre ton cadeau';
-
-  overlay.addEventListener('click', () => startIntroVideoPlayback());
-  overlay.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      startIntroVideoPlayback();
-    }
-  });
-
-  skipBtn.addEventListener('click', finishIntro);
-
-  video.addEventListener('ended', finishIntro);
-  video.addEventListener('error', () => {
-    console.warn('Vidéo d’intro introuvable ou illisible :', url);
-    finishIntro();
-  });
-}
-
-// ═══════════════════════════════════════════════════════════
-//  SETUP UI — image fixe + cadeau pour lancer
-// ═══════════════════════════════════════════════════════════
-function loadDefaultImage() {
-  const img = new Image();
-  img.onload = () => {
-    srcImg = img;
-    defaultImageReady = true;
-  };
-  img.onerror = () => {
-    console.error('Image introuvable :', DEFAULT_IMAGE);
-    document.querySelector('.gift-hint').innerHTML =
-      '<strong>Erreur :</strong> image introuvable&nbsp;: <code>' + DEFAULT_IMAGE + '</code> (vérifie le chemin dans <code>assets/game-config.js</code>).';
-  };
-  img.src = DEFAULT_IMAGE;
-}
-
-function openGiftAndStart() {
-  if (!defaultImageReady || !srcImg) return;
   startGame();
 }
 
-const giftZone = document.getElementById('giftZone');
-giftZone.addEventListener('click', openGiftAndStart);
-giftZone.addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    openGiftAndStart();
+async function onShareLinkClick() {
+  setSetupError('');
+  readFormToScenario();
+  if (!selectedImageFile) {
+    setSetupError('Pour créer un lien, choisis une image sur ton appareil (fichier local).');
+    return;
   }
-});
+  const err = validateImageFile(selectedImageFile);
+  if (err) {
+    setSetupError(err);
+    return;
+  }
+  const fd = new FormData();
+  fd.append('meta', JSON.stringify(metaForUpload()));
+  fd.append('image', selectedImageFile, selectedImageFile.name || 'puzzle.jpg');
+  const btn = document.getElementById('btnShareLink');
+  if (btn) btn.disabled = true;
+  try {
+    const res = await fetch('/api/create-scenario', { method: 'POST', body: fd });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setSetupError(data.error || 'Échec de l’envoi (vérifie le déploiement et BLOB_READ_WRITE_TOKEN).');
+      return;
+    }
+    const box = document.getElementById('shareResult');
+    const inp = document.getElementById('shareResultInput');
+    if (data.shareUrl && inp) {
+      inp.value = data.shareUrl;
+      box && box.classList.add('on');
+    }
+  } catch (e) {
+    setSetupError('Réseau ou serveur indisponible. En local, lance avec Vercel dev ou déploie sur Vercel.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+function onCopyShareClick() {
+  const inp = document.getElementById('shareResultInput');
+  if (!inp || !inp.value) return;
+  inp.select();
+  document.execCommand('copy');
+}
+
+function openShareGateLoading() {
+  const gate = document.getElementById('shareGate');
+  const setup = document.getElementById('setup');
+  const errEl = document.getElementById('shareGateError');
+  const startBtn = document.getElementById('btnShareStart');
+  if (startBtn) startBtn.disabled = true;
+  if (setup) setup.style.display = 'none';
+  if (gate) {
+    gate.classList.add('on');
+    gate.setAttribute('aria-hidden', 'false');
+  }
+  if (errEl) errEl.textContent = 'Chargement du puzzle partagé…';
+}
+
+function hideShareGate() {
+  const gate = document.getElementById('shareGate');
+  if (gate) {
+    gate.classList.remove('on');
+    gate.setAttribute('aria-hidden', 'true');
+  }
+  const errEl = document.getElementById('shareGateError');
+  if (errEl) errEl.textContent = '';
+}
+
+function initDropZone() {
+  const zone = document.getElementById('dropZone');
+  const input = document.getElementById('fileInput');
+  const browse = document.getElementById('btnBrowse');
+  const browseFs = document.getElementById('btnBrowseFs');
+  if (!zone || !input) return;
+
+  function pickFromList(files) {
+    const f = files && files[0];
+    if (!f) return;
+    assignImageFromFile(f, (err) => setSetupError(err));
+  }
+
+  if (browse && input) {
+    browse.addEventListener('click', (e) => { e.stopPropagation(); input.click(); });
+  }
+  if (zone && input) {
+    zone.addEventListener('click', () => input.click());
+    zone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        input.click();
+      }
+    });
+  }
+  input.addEventListener('change', () => pickFromList(input.files));
+
+  ['dragenter', 'dragover'].forEach((ev) => {
+    zone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      zone.classList.add('dragover');
+    });
+  });
+  ['dragleave', 'drop'].forEach((ev) => {
+    zone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      zone.classList.remove('dragover');
+    });
+  });
+  zone.addEventListener('drop', (e) => pickFromList(e.dataTransfer && e.dataTransfer.files));
+
+  if (browseFs && window.showOpenFilePicker) {
+    browseFs.hidden = false;
+    browseFs.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.gif'] } }],
+          multiple: false
+        });
+        const f = await handle.getFile();
+        pickFromList([f]);
+      } catch (err) {
+        if (err && err.name !== 'AbortError') setSetupError('Impossible d’ouvrir le fichier.');
+      }
+    });
+  }
+}
+
+function backToBuilderFromShareError(message) {
+  try {
+    window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+  } catch (e) {}
+  shareLoadId = null;
+  hideShareGate();
+  const setup = document.getElementById('setup');
+  if (setup) setup.style.display = 'flex';
+  setSetupError(message || '');
+}
+
+async function loadSharedScenario(id) {
+  openShareGateLoading();
+  const errEl = document.getElementById('shareGateError');
+  try {
+    const res = await fetch('/api/scenario/' + encodeURIComponent(id));
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      backToBuilderFromShareError(data.error || 'Ce puzzle n’existe pas ou a été supprimé.');
+      return;
+    }
+    shareLoadId = id;
+    applyScenarioPayload(data);
+    const url = data.imageUrl;
+    if (!url) {
+      backToBuilderFromShareError('Scénario invalide (pas d’image).');
+      return;
+    }
+    const startBtn = document.getElementById('btnShareStart');
+    if (startBtn) startBtn.disabled = true;
+    assignImageFromUrl(url, (err) => {
+      if (err) {
+        backToBuilderFromShareError(err);
+        return;
+      }
+      if (errEl) errEl.textContent = '';
+      if (startBtn) startBtn.disabled = false;
+    });
+  } catch (e) {
+    backToBuilderFromShareError('Impossible de joindre le serveur (API / réseau).');
+  }
+}
+
+function onShareStartClick() {
+  if (!imageReady || !srcImg) return;
+  hideShareGate();
+  startGame();
+}
 
 document.getElementById('btnRestart').addEventListener('click', restartGame);
 document.getElementById('winReplay').addEventListener('click', restartGame);
 document.getElementById('winNew').addEventListener('click', newPuzzle);
+document.getElementById('btnStartGame').addEventListener('click', onLocalStartClick);
+document.getElementById('btnShareLink').addEventListener('click', onShareLinkClick);
+document.getElementById('btnCopyShare').addEventListener('click', onCopyShareClick);
+document.getElementById('btnShareStart').addEventListener('click', onShareStartClick);
 
-initIntroVideoFlow();
-loadDefaultImage();
+syncFormFromScenario();
+ensureGoogleFont('system');
+initDropZone();
+
+const sid = getQueryScenarioId();
+if (sid) loadSharedScenario(sid);
 </script>
 </body>
 </html>
