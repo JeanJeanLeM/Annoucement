@@ -5,8 +5,8 @@
  */
 window.GAME_ASSETS = {
   /**
-   * Vidéo d’ouverture : préchargée (preload), lecture seulement après un clic (pas d’autoplay).
-   * Ex. 'assets/video/intro.mp4' — laisser '' pour aller directement au cadeau.
+   * Vidéo d’ouverture : préchargée (preload), lecture au clic (pas d’autoplay).
+   * Mettre false pour sauter l’intro. Chaîne vide = même effet que l’absence de clé (vidéo par défaut dans le HTML).
    */
   introVideo: 'assets/video/videolucpaysage.mp4',
   image: 'reunion.png',

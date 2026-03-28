@@ -416,17 +416,31 @@ kbd{
   </div>
 </div>
 
-<script src="assets/game-config.js"></script>
+<script src="assets/game-config.js?v=2"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════════════════
-const ASSETS = window.GAME_ASSETS || {
-  introVideo: '',
+/** Valeurs de secours si game-config.js ne charge pas (cache, 404, etc.). introVideo '' = désactiver l’intro. */
+const ASSETS_DEFAULTS = {
+  introVideo: 'assets/video/videolucpaysage.mp4',
   image: 'reunion.png',
   soundVolume: 0.75,
   connectSounds: { dir: 'assets/sounds', ext: '.m4a' },
   sounds: { win: '' }
+};
+const _cfg = window.GAME_ASSETS || {};
+const ASSETS = {
+  /** false ou null = pas d’intro ; chaîne non vide = URL ; absent / '' = vidéo par défaut (évite cache Vercel avec ancien config vide). */
+  introVideo: (_cfg.introVideo === false || _cfg.introVideo === null)
+    ? ''
+    : (typeof _cfg.introVideo === 'string' && _cfg.introVideo.trim())
+      ? _cfg.introVideo.trim()
+      : ASSETS_DEFAULTS.introVideo,
+  image: (typeof _cfg.image === 'string' && _cfg.image.trim()) ? _cfg.image.trim() : ASSETS_DEFAULTS.image,
+  soundVolume: typeof _cfg.soundVolume === 'number' ? _cfg.soundVolume : ASSETS_DEFAULTS.soundVolume,
+  connectSounds: Object.assign({}, ASSETS_DEFAULTS.connectSounds, _cfg.connectSounds || {}),
+  sounds: Object.assign({}, ASSETS_DEFAULTS.sounds, _cfg.sounds || {})
 };
 const DEFAULT_IMAGE = ASSETS.image;
 
