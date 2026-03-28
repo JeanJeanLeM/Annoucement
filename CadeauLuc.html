@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Puzzle personnalisable</title>
-<link rel="icon" href="cadeau.avif" type="image/avif">
+<link rel="icon" href="assets/cadeau.avif" type="image/avif">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
@@ -49,13 +49,241 @@ body{
 #setup{
   background:#16213e;
   border-radius:20px;
-  padding:36px 28px 40px;
-  width:min(520px,calc(100vw - 32px));
-  max-width:calc(100vw - 32px);
+  padding:28px 24px 32px;
+  width:min(1080px,calc(100vw - 24px));
+  max-width:calc(100vw - 24px);
   box-shadow:0 28px 80px rgba(0,0,0,.65);
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:18px;
+  align-self:center;
+}
+.setup-title-full{text-align:center;margin-bottom:2px}
+.setup-layout{
+  display:grid;
+  grid-template-columns:minmax(280px,1fr) minmax(300px,400px);
+  gap:24px 28px;
+  align-items:start;
+}
+@media (max-width:900px){
+  .setup-layout{grid-template-columns:1fr}
+}
+.setup-previews{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  min-width:0;
+}
+.preview-col-title{
+  font-size:.68rem;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:#6b6b8a;
+  font-weight:700;
+  margin-bottom:-6px;
+}
+.preview-block .step-lbl{margin-bottom:8px}
+.mock-game{
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.22);
+  background:#0b0b17;
+  display:flex;
+  flex-direction:column;
+  min-height:200px;
+  max-height:240px;
+}
+.mock-toolbar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:6px 10px;
+  background:#12122a;
+  border-bottom:1px solid rgba(168,85,247,.15);
+  min-height:38px;
+}
+.mock-toolbar h3{
+  font-size:.72rem;
+  font-weight:600;
+  color:#c0c0e0;
+  flex:1;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin:0;
+}
+.mock-toolbar .mock-hint{
+  font-size:.58rem;
+  color:#4a4a62;
+  white-space:nowrap;
+}
+.mock-canvas{
+  flex:1;
+  position:relative;
+  min-height:120px;
+  background-image:radial-gradient(rgba(168,85,247,.08) 1.5px, transparent 1.5px);
+  background-size:20px 20px;
+  background-position:10px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.mock-crop-frame{
+  position:relative;
+  width:min(92%,240px);
+  max-height:min(150px,42vw);
+  aspect-ratio:1;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.35);
+  box-shadow:0 4px 18px rgba(0,0,0,.45);
+  background:#12121f;
+}
+.mock-crop-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+.mock-crop-img[hidden]{display:none!important}
+.mock-grid-overlay{
+  position:absolute;
+  inset:0;
+  display:grid;
+  gap:0;
+  pointer-events:none;
+  z-index:2;
+}
+.mock-grid-overlay span{
+  border:1px solid rgba(255,255,255,.42);
+  box-sizing:border-box;
+}
+.mock-board-placeholder{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10px;
+  color:#5a5a78;
+  font-size:.72rem;
+  line-height:1.35;
+  background:rgba(18,18,31,.75);
+}
+.mock-board-placeholder[hidden]{display:none!important}
+.preview-crop-note{
+  margin-top:10px;
+  line-height:1.45;
+  color:#8b8ba8!important;
+  font-size:.72rem!important;
+}
+.mock-toolbar .mock-grid-dims{
+  font-size:.58rem;
+  color:#a855f7;
+  font-weight:700;
+  white-space:nowrap;
+}
+.mock-win{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.22);
+  min-height:180px;
+  max-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.mock-win-bg{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.preview-effect-fireworks{
+  background:radial-gradient(ellipse at 50% 120%,rgba(233,69,96,.15),transparent 50%),
+    radial-gradient(circle at 20% 30%,rgba(168,85,247,.2) 0,transparent 35%),
+    radial-gradient(circle at 80% 25%,rgba(6,255,165,.12) 0,transparent 30%),
+    #0b0b17;
+  animation:previewFwPulse 3s ease-in-out infinite;
+}
+@keyframes previewFwPulse{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.08)}
+}
+.preview-effect-confetti{
+  background-color:#0b0b17;
+  background-image:
+    radial-gradient(circle at 10% 20%,#e94560 2px,transparent 2px),
+    radial-gradient(circle at 90% 15%,#ffbe0b 2px,transparent 2px),
+    radial-gradient(circle at 30% 80%,#3a86ff 2px,transparent 2px),
+    radial-gradient(circle at 70% 70%,#8338ec 2px,transparent 2px),
+    radial-gradient(circle at 50% 50%,#06ffa5 1.5px,transparent 1.5px);
+  background-size:100% 100%;
+  opacity:.95;
+}
+.preview-effect-minimal{
+  background:radial-gradient(ellipse at 50% 100%,rgba(30,20,50,.4),#0b0b17 55%);
+}
+.mock-win-inner{
+  position:relative;
+  z-index:2;
+  padding:14px 12px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  max-width:100%;
+}
+.mock-win .preview-win-headline{
+  font-size:clamp(.68rem,2.4vw,1.05rem);
+  font-weight:900;
+  line-height:1.15;
+  text-align:center;
+  letter-spacing:-.02em;
+  max-width:100%;
+  word-break:break-word;
+}
+.mock-win .preview-win-headline:not(.plain){
+  background:linear-gradient(
+    105deg,#ff006e 0%,#ffbe0b 18%,#8338ec 38%,#3a86ff 55%,#06ffa5 72%,#e94560 88%,#ff006e 100%);
+  background-size:280% 100%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:winGradient 5s linear infinite;
+}
+.mock-win .preview-win-headline.plain{
+  background:none!important;
+  -webkit-text-fill-color:unset!important;
+  color:var(--pv-win-color,#e8e8f0);
+}
+.mock-win-fake-btns{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+  pointer-events:none;
+  opacity:.85;
+}
+.mock-win-fake-btns .mock-fake{
+  font-size:.62rem!important;
+  padding:6px 12px!important;
+  min-width:0!important;
+  cursor:default;
+}
+.setup-customize{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  min-width:0;
 }
 .app-title{
   text-align:center;
@@ -336,77 +564,129 @@ kbd{
 </div>
 
 <div id="setup">
-  <h1 class="app-title">🧩 Puzzle personnalisable</h1>
+  <h1 class="app-title setup-title-full">🧩 Puzzle personnalisable</h1>
 
-  <div>
-    <p class="step-lbl">1 — Image du puzzle</p>
-    <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Choisir une image : glisser-déposer ou cliquer">
-      <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
-      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
-      <img id="preview" alt="Aperçu du puzzle" hidden>
-      <p class="drop-zone-hint">Astuce : bouton « Parcourir (explorateur) » si ton navigateur le propose.</p>
-      <div class="builder-actions" style="margin-top:14px">
-        <button type="button" class="wp-btn s" id="btnBrowse">Parcourir…</button>
-        <button type="button" class="wp-btn s" id="btnBrowseFs" hidden>Parcourir (explorateur)</button>
+  <div class="setup-layout">
+    <aside class="setup-previews" aria-label="Aperçus des écrans">
+      <p class="preview-col-title">Aperçu en direct</p>
+
+      <div class="preview-block">
+        <p class="step-lbl">Pendant le jeu</p>
+        <div class="mock-game">
+          <div class="mock-toolbar">
+            <h3 id="previewToolbarTitle">Puzzle</h3>
+            <span class="mock-grid-dims" id="previewGridDims">3×3</span>
+            <span class="mock-hint">Molette · Glisser · 2 clics</span>
+          </div>
+          <div class="mock-canvas">
+            <div class="mock-crop-frame" id="mockCropFrame">
+              <img class="mock-crop-img" id="previewGameBoardImg" alt="" hidden>
+              <div class="mock-grid-overlay" id="mockGridOverlay" aria-hidden="true"></div>
+              <div class="mock-board-placeholder" id="previewGamePlaceholder">Ajoute une image à droite pour voir la zone utilisée et la grille.</div>
+            </div>
+          </div>
+        </div>
+        <p class="preview-crop-note field-hint" id="previewCropNote"></p>
+      </div>
+
+      <div class="preview-block">
+        <p class="step-lbl">Écran de victoire</p>
+        <div class="mock-win" id="previewWinRoot">
+          <div class="mock-win-bg preview-effect-fireworks" id="previewWinBg" aria-hidden="true"></div>
+          <div class="mock-win-inner">
+            <div class="preview-win-headline" id="previewWinHeadline">Bravo !</div>
+            <div class="mock-win-fake-btns">
+              <span class="wp-btn p mock-fake">↺ Rejouer</span>
+              <span class="wp-btn s mock-fake">➕ Nouveau puzzle</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="setup-customize">
+      <div>
+        <p class="step-lbl">1 — Image du puzzle</p>
+        <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Choisir une image : glisser-déposer ou cliquer">
+          <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
+          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+          <img id="preview" alt="Aperçu du puzzle" hidden>
+          <p class="drop-zone-hint">Astuce : bouton « Parcourir (explorateur) » si ton navigateur le propose.</p>
+          <div class="builder-actions" style="margin-top:14px">
+            <button type="button" class="wp-btn s" id="btnBrowse">Parcourir…</button>
+            <button type="button" class="wp-btn s" id="btnBrowseFs" hidden>Parcourir (explorateur)</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="step-lbl">2 — Grille du puzzle</p>
+        <div class="builder-row-inline" style="gap:14px;align-items:flex-end;flex-wrap:wrap">
+          <div class="builder-row" style="flex:1;min-width:108px">
+            <label class="field-hint" for="inputGridCols">Colonnes</label>
+            <input type="number" id="inputGridCols" min="2" max="12" value="3" inputmode="numeric">
+          </div>
+          <div class="builder-row" style="flex:1;min-width:108px">
+            <label class="field-hint" for="inputGridRows">Lignes</label>
+            <input type="number" id="inputGridRows" min="2" max="12" value="3" inputmode="numeric">
+          </div>
+        </div>
+        <p class="field-hint" style="margin-top:10px;line-height:1.5">Ex. <strong>4×3</strong> = 12 pièces. Maximum <strong>64</strong> pièces (colonnes × lignes). La photo est affichée en <strong>« remplissage »</strong> : elle couvre toute la grille puis les bandes qui dépassent sont <strong>coupées au centre</strong> (à gauche et à droite si la photo est trop large, en haut et en bas si elle est trop haute).</p>
+      </div>
+
+      <div>
+        <p class="step-lbl">3 — Titre de la barre</p>
+        <div class="builder-row">
+          <label class="field-hint" for="inputToolTitle">Affiché en haut pendant le jeu (optionnel)</label>
+          <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire" autocomplete="off">
+        </div>
+      </div>
+
+      <div>
+        <p class="step-lbl">4 — Écran de victoire</p>
+        <div class="builder-row">
+          <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
+          <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
+        </div>
+        <div class="builder-row" style="margin-top:10px">
+          <label class="field-hint" for="selectWinEffect">Effet d’arrière-plan</label>
+          <select id="selectWinEffect">
+            <option value="fireworks">Feux d’artifice</option>
+            <option value="confetti">Confettis</option>
+            <option value="minimal">Minimal (sobre)</option>
+          </select>
+        </div>
+        <div class="builder-row" style="margin-top:10px">
+          <label class="field-hint" for="selectWinFont">Police du message</label>
+          <select id="selectWinFont">
+            <option value="system">Système (Segoe UI)</option>
+            <option value="bebas">Bebas Neue</option>
+            <option value="pacifico">Pacifico</option>
+            <option value="dancing">Dancing Script</option>
+            <option value="playfair">Playfair Display</option>
+            <option value="rubik">Rubik</option>
+          </select>
+        </div>
+        <div class="builder-row-inline" style="margin-top:10px">
+          <label class="field-hint" for="inputWinColor">Couleur du texte</label>
+          <input type="color" id="inputWinColor" value="#e8e8f0" title="Couleur du texte">
+          <label class="field-hint" style="display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="checkWinGradient" checked> Dégradé animé (arc-en-ciel)
+          </label>
+        </div>
+      </div>
+
+      <p id="setupError" role="alert"></p>
+      <div class="builder-actions">
+        <button type="button" class="wp-btn p" id="btnStartGame">Lancer le puzzle</button>
+        <button type="button" class="wp-btn s" id="btnShareLink">Générer le lien de partage</button>
+      </div>
+      <div id="shareResult">
+        <p class="field-hint">Lien permanent (image + réglages conservés sur le stockage) :</p>
+        <input type="text" id="shareResultInput" readonly aria-label="Lien de partage">
+        <button type="button" class="wp-btn s" id="btnCopyShare" style="width:100%;margin-top:10px">Copier le lien</button>
       </div>
     </div>
-  </div>
-
-  <div>
-    <p class="step-lbl">2 — Textes &amp; barre</p>
-    <div class="builder-row">
-      <label class="field-hint" for="inputToolTitle">Titre dans la barre du jeu (optionnel)</label>
-      <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire" autocomplete="off">
-    </div>
-    <div class="builder-row" style="margin-top:10px">
-      <label class="field-hint" for="inputCornerText">Texte en haut à droite sur le puzzle (optionnel)</label>
-      <input type="text" id="inputCornerText" maxlength="40" placeholder="Ex. 2026" autocomplete="off">
-    </div>
-  </div>
-
-  <div>
-    <p class="step-lbl">3 — Écran de victoire</p>
-    <div class="builder-row">
-      <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
-      <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
-    </div>
-    <div class="builder-row" style="margin-top:10px">
-      <label class="field-hint" for="selectWinEffect">Effet d’arrière-plan</label>
-      <select id="selectWinEffect">
-        <option value="fireworks">Feux d’artifice</option>
-        <option value="confetti">Confettis</option>
-        <option value="minimal">Minimal (sobre)</option>
-      </select>
-    </div>
-    <div class="builder-row" style="margin-top:10px">
-      <label class="field-hint" for="selectWinFont">Police du message</label>
-      <select id="selectWinFont">
-        <option value="system">Système (Segoe UI)</option>
-        <option value="bebas">Bebas Neue</option>
-        <option value="pacifico">Pacifico</option>
-        <option value="dancing">Dancing Script</option>
-        <option value="playfair">Playfair Display</option>
-        <option value="rubik">Rubik</option>
-      </select>
-    </div>
-    <div class="builder-row-inline" style="margin-top:10px">
-      <label class="field-hint" for="inputWinColor">Couleur du texte</label>
-      <input type="color" id="inputWinColor" value="#e8e8f0" title="Couleur du texte">
-      <label class="field-hint" style="display:flex;align-items:center;gap:6px;cursor:pointer">
-        <input type="checkbox" id="checkWinGradient" checked> Dégradé animé (arc-en-ciel)
-      </label>
-    </div>
-  </div>
-
-  <p id="setupError" role="alert"></p>
-  <div class="builder-actions">
-    <button type="button" class="wp-btn p" id="btnStartGame">Lancer le puzzle</button>
-    <button type="button" class="wp-btn s" id="btnShareLink">Générer le lien de partage</button>
-  </div>
-  <div id="shareResult">
-    <p class="field-hint">Lien permanent (image + réglages conservés sur le stockage) :</p>
-    <input type="text" id="shareResultInput" readonly aria-label="Lien de partage">
-    <button type="button" class="wp-btn s" id="btnCopyShare" style="width:100%;margin-top:10px">Copier le lien</button>
   </div>
 </div>
 
@@ -455,12 +735,13 @@ const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 function defaultScenario() {
   return {
     toolTitle: '',
-    cornerText: '',
     winText: 'Bravo !',
     winEffect: 'fireworks',
     winFontKey: 'system',
     winTextColor: '#e8e8f0',
-    winTextGradient: true
+    winTextGradient: true,
+    gridCols: 3,
+    gridRows: 3
   };
 }
 
@@ -468,6 +749,27 @@ let scenario = defaultScenario();
 let selectedImageFile = null;
 let previewObjectUrl = null;
 let shareLoadId = null;
+
+function clampGridDims(c, r) {
+  c = Math.round(Number(c));
+  r = Math.round(Number(r));
+  if (!Number.isFinite(c) || c < 2) c = 3;
+  if (!Number.isFinite(r) || r < 2) r = 3;
+  c = Math.min(12, Math.max(2, c));
+  r = Math.min(12, Math.max(2, r));
+  while (c * r > 64) {
+    if (c >= r) c--; else r--;
+  }
+  return { c, r };
+}
+
+function syncGridFromScenario() {
+  const { c, r } = clampGridDims(scenario.gridCols, scenario.gridRows);
+  scenario.gridCols = c;
+  scenario.gridRows = r;
+  gridCols = c;
+  gridRows = r;
+}
 
 function fontStackForScenario() {
   const key = scenario.winFontKey && FONT_MAP[scenario.winFontKey] ? scenario.winFontKey : 'system';
@@ -521,54 +823,171 @@ function applyWinHeadlineStyles() {
 
 function readFormToScenario() {
   scenario.toolTitle = (document.getElementById('inputToolTitle') || {}).value || '';
-  scenario.cornerText = (document.getElementById('inputCornerText') || {}).value || '';
   scenario.winText = (document.getElementById('textareaWinText') || {}).value || 'Bravo !';
   scenario.winEffect = (document.getElementById('selectWinEffect') || {}).value || 'fireworks';
   scenario.winFontKey = (document.getElementById('selectWinFont') || {}).value || 'system';
   scenario.winTextColor = (document.getElementById('inputWinColor') || {}).value || '#e8e8f0';
   scenario.winTextGradient = !!(document.getElementById('checkWinGradient') || {}).checked;
+  const ic = document.getElementById('inputGridCols');
+  const ir = document.getElementById('inputGridRows');
+  scenario.gridCols = ic ? parseInt(ic.value, 10) : scenario.gridCols;
+  scenario.gridRows = ir ? parseInt(ir.value, 10) : scenario.gridRows;
+  syncGridFromScenario();
+  if (ic) ic.value = String(scenario.gridCols);
+  if (ir) ir.value = String(scenario.gridRows);
 }
 
 function syncFormFromScenario() {
   const t = document.getElementById('inputToolTitle');
-  const c = document.getElementById('inputCornerText');
   const w = document.getElementById('textareaWinText');
   const e = document.getElementById('selectWinEffect');
   const f = document.getElementById('selectWinFont');
   const col = document.getElementById('inputWinColor');
   const g = document.getElementById('checkWinGradient');
+  const ic = document.getElementById('inputGridCols');
+  const ir = document.getElementById('inputGridRows');
   if (t) t.value = scenario.toolTitle || '';
-  if (c) c.value = scenario.cornerText || '';
   if (w) w.value = scenario.winText || '';
   if (e) e.value = scenario.winEffect || 'fireworks';
   if (f) f.value = scenario.winFontKey || 'system';
   if (col) col.value = scenario.winTextColor || '#e8e8f0';
   if (g) g.checked = !!scenario.winTextGradient;
+  syncGridFromScenario();
+  if (ic) ic.value = String(scenario.gridCols);
+  if (ir) ir.value = String(scenario.gridRows);
+}
+
+function getPreviewCropNote(gc, gr, prevEl) {
+  const n = gc * gr;
+  const targetAR = gc / gr;
+  let s = 'Grille ' + gc + '×' + gr + ' (' + n + ' pièces). Zone affichée en ' + gc + '∶' + gr + ' (largeur∶hauteur). ';
+  if (!prevEl || prevEl.hidden || !prevEl.getAttribute('src')) {
+    return s + 'Charge une image : on indique ici quels bords seront rognés.';
+  }
+  const iw = prevEl.naturalWidth;
+  const ih = prevEl.naturalHeight;
+  if (!iw || !ih) {
+    return s + 'Chargement de l’image…';
+  }
+  const srcAR = iw / ih;
+  if (Math.abs(srcAR - targetAR) < 0.025) {
+    return s + 'Ta photo a presque les mêmes proportions : rognage quasi nul.';
+  }
+  if (srcAR > targetAR) {
+    return s + 'Ta photo est plus large que la grille : les bandes à gauche et à droite sont enlevées (on garde le centre).';
+  }
+  return s + 'Ta photo est plus haute que la grille : les bandes en haut et en bas sont enlevées (on garde le centre).';
+}
+
+function updateBuilderPreviews() {
+  const toolEl = document.getElementById('inputToolTitle');
+  const winTextEl = document.getElementById('textareaWinText');
+  const effectEl = document.getElementById('selectWinEffect');
+  const fontEl = document.getElementById('selectWinFont');
+  const colorEl = document.getElementById('inputWinColor');
+  const gradEl = document.getElementById('checkWinGradient');
+
+  const toolTitle = (toolEl && toolEl.value) || '';
+  let winText = (winTextEl && winTextEl.value) || '';
+  if (!String(winText).trim()) winText = 'Bravo !';
+  const effect = (effectEl && effectEl.value) || 'fireworks';
+  const fontKey = (fontEl && fontEl.value && FONT_MAP[fontEl.value]) ? fontEl.value : 'system';
+  const color = (colorEl && colorEl.value) || '#e8e8f0';
+  const gradient = !!(gradEl && gradEl.checked);
+
+  const tb = document.getElementById('previewToolbarTitle');
+  if (tb) tb.textContent = toolTitle.trim() || 'Puzzle';
+
+  const gcEl = document.getElementById('inputGridCols');
+  const grEl = document.getElementById('inputGridRows');
+  const { c: gc, r: gr } = clampGridDims(
+    gcEl ? parseInt(gcEl.value, 10) : 3,
+    grEl ? parseInt(grEl.value, 10) : 3
+  );
+
+  const dims = document.getElementById('previewGridDims');
+  if (dims) dims.textContent = gc + '×' + gr;
+
+  const frame = document.getElementById('mockCropFrame');
+  if (frame) frame.style.aspectRatio = gc + ' / ' + gr;
+
+  const overlay = document.getElementById('mockGridOverlay');
+  if (overlay) {
+    overlay.innerHTML = '';
+    overlay.style.gridTemplateColumns = 'repeat(' + gc + ', 1fr)';
+    overlay.style.gridTemplateRows = 'repeat(' + gr + ', 1fr)';
+    for (let i = 0; i < gc * gr; i++) overlay.appendChild(document.createElement('span'));
+  }
+
+  const prev = document.getElementById('preview');
+  const boardImg = document.getElementById('previewGameBoardImg');
+  const ph = document.getElementById('previewGamePlaceholder');
+  const cropNote = document.getElementById('previewCropNote');
+  if (prev && boardImg && ph) {
+    if (!prev.hidden && prev.getAttribute('src')) {
+      boardImg.src = prev.src;
+      boardImg.hidden = false;
+      ph.hidden = true;
+    } else {
+      boardImg.removeAttribute('src');
+      boardImg.hidden = true;
+      ph.hidden = false;
+    }
+  }
+  if (cropNote) cropNote.textContent = getPreviewCropNote(gc, gr, prev);
+
+  const winBg = document.getElementById('previewWinBg');
+  if (winBg) {
+    const eff = ['fireworks', 'confetti', 'minimal'].includes(effect) ? effect : 'fireworks';
+    winBg.className = 'mock-win-bg preview-effect-' + eff;
+  }
+
+  const h = document.getElementById('previewWinHeadline');
+  if (h) {
+    setWinHeadlineContent(h, winText);
+    h.style.fontFamily = FONT_MAP[fontKey].stack;
+    h.style.setProperty('--pv-win-color', color);
+    if (gradient) {
+      h.classList.remove('plain');
+      h.style.color = '';
+    } else {
+      h.classList.add('plain');
+      h.style.color = color;
+    }
+  }
+
+  ensureGoogleFont(fontKey);
 }
 
 function metaForUpload() {
   return {
     toolTitle: scenario.toolTitle,
-    cornerText: scenario.cornerText,
     winText: scenario.winText,
     winEffect: scenario.winEffect,
     winFontKey: scenario.winFontKey,
     winTextColor: scenario.winTextColor,
-    winTextGradient: scenario.winTextGradient
+    winTextGradient: scenario.winTextGradient,
+    gridCols: scenario.gridCols,
+    gridRows: scenario.gridRows
   };
 }
 
 function applyScenarioPayload(data) {
   if (!data || typeof data !== 'object') return;
   scenario.toolTitle = typeof data.toolTitle === 'string' ? data.toolTitle : '';
-  scenario.cornerText = typeof data.cornerText === 'string' ? data.cornerText : '';
   scenario.winText = typeof data.winText === 'string' ? data.winText : 'Bravo !';
   scenario.winEffect = ['fireworks', 'confetti', 'minimal'].includes(data.winEffect) ? data.winEffect : 'fireworks';
   scenario.winFontKey = FONT_MAP[data.winFontKey] ? data.winFontKey : 'system';
   scenario.winTextColor = typeof data.winTextColor === 'string' ? data.winTextColor : '#e8e8f0';
   scenario.winTextGradient = !!data.winTextGradient;
+  const gc = data.gridCols != null ? parseInt(data.gridCols, 10) : 3;
+  const gr = data.gridRows != null ? parseInt(data.gridRows, 10) : 3;
+  scenario.gridCols = gc;
+  scenario.gridRows = gr;
+  syncGridFromScenario();
   syncFormFromScenario();
   ensureGoogleFont(scenario.winFontKey);
+  updateBuilderPreviews();
 }
 
 function validateImageFile(file) {
@@ -590,6 +1009,7 @@ function clearLocalImage() {
   }
   srcImg = null;
   imageReady = false;
+  updateBuilderPreviews();
 }
 
 function assignImageFromFile(file, onDone) {
@@ -606,10 +1026,12 @@ function assignImageFromFile(file, onDone) {
     prev.src = previewObjectUrl;
     prev.hidden = false;
   }
+  updateBuilderPreviews();
   const img = new Image();
   img.onload = () => {
     srcImg = img;
     imageReady = true;
+    updateBuilderPreviews();
     if (onDone) onDone('');
   };
   img.onerror = () => {
@@ -630,6 +1052,7 @@ function assignImageFromUrl(url, onDone) {
       prev.src = url;
       prev.hidden = false;
     }
+    updateBuilderPreviews();
     if (onDone) onDone('');
   };
   img.onerror = () => {
@@ -670,9 +1093,10 @@ let tabR = []; // tabR[r][c] = ±1 entre (r,c) et (r,c+1), c ∈ [0, N-2]
 let tabD = []; // tabD[r][c] = ±1 entre (r,c) et (r+1,c], r ∈ [0, N-2]
 
 // ═══════════════════════════════════════════════════════════
-//  STATE
+//  STATE  (grille colonnes × lignes, alignée sur scenario)
 // ═══════════════════════════════════════════════════════════
-const gridN  = 3;
+let gridCols = 3;
+let gridRows = 3;
 let srcImg = null;
 let tiles  = [];    // tiles[row][col] → <canvas> pièce puzzle découpée + hitPath
 
@@ -894,6 +1318,20 @@ function angDiff(a, b) {
   return Math.abs(d);
 }
 
+/** Recadrage « cover » : ratio cible = cols/rows (largeur/hauteur), centré. */
+function getCoverCropRect(iw, ih, cols, rows) {
+  const targetAR = cols / rows;
+  const srcAR = iw / ih;
+  if (srcAR > targetAR) {
+    const sh = ih;
+    const sw = ih * targetAR;
+    return { sx: (iw - sw) / 2, sy: 0, sw, sh };
+  }
+  const sw = iw;
+  const sh = iw / targetAR;
+  return { sx: 0, sy: (ih - sh) / 2, sw, sh };
+}
+
 /** Plafond taille d’une pièce (px) : monte sur grand écran / projecteur. */
 function pieceSizeCap(avail) {
   if (avail >= 1600) return 440;
@@ -904,13 +1342,14 @@ function pieceSizeCap(avail) {
 
 /** Côté d’une cellule : fraction de l’écran + plafond selon la taille du viewport. */
 function computePieceSize() {
+  const gMax = Math.max(gridCols, gridRows);
   const capFallback = pieceSizeCap(520);
-  if (!W || !H) return Math.max(PS_MIN, Math.min(capFallback, Math.floor(520 / gridN)));
+  if (!W || !H) return Math.max(PS_MIN, Math.min(capFallback, Math.floor(520 / gMax)));
   const avail = Math.min(W, H);
   const cap = pieceSizeCap(avail);
   const frac = avail >= 1300 ? 0.56 : PUZZLE_SCREEN_FRACTION;
   const targetSide = avail * frac;
-  return Math.max(PS_MIN, Math.min(cap, Math.floor(targetSide / gridN)));
+  return Math.max(PS_MIN, Math.min(cap, Math.floor(targetSide / gMax)));
 }
 
 /**
@@ -1057,7 +1496,7 @@ function snapAll(gid) {
 // ═══════════════════════════════════════════════════════════
 function updateHUD() {
   const n = Object.keys(groups).length;
-  const t = gridN * gridN;
+  const t = gridCols * gridRows;
   const conn = t - n;
   document.getElementById('piece-count').textContent = `${conn} / ${t-1}`;
   document.getElementById('progress').style.width =
@@ -1090,8 +1529,8 @@ function centerPuzzle() {
   const m00 = getMember(g, p00.id);
 
   // Center of the full image in local space
-  const localCx = m00.lx + (gridN / 2 - 0.5) * PS;
-  const localCy = m00.ly + (gridN / 2 - 0.5) * PS;
+  const localCx = m00.lx + (gridCols / 2 - 0.5) * PS;
+  const localCy = m00.ly + (gridRows / 2 - 0.5) * PS;
 
   // Current world position of that point
   const wc = toWorld(g, localCx, localCy);
@@ -1127,13 +1566,11 @@ function drawFullImage() {
 
   const tlx = m00.lx - PS / 2;   // top-left of image in group local space
   const tly = m00.ly - PS / 2;
-  const sz  = gridN * PS;
+  const pw  = gridCols * PS;
+  const ph  = gridRows * PS;
 
-  // Cover-crop source image to a square (same logic as buildTiles)
   const iw = srcImg.naturalWidth, ih = srcImg.naturalHeight;
-  const scale = Math.max(sz / iw, sz / ih);
-  const sw = sz / scale, sh = sz / scale;
-  const sxc = (iw - sw) / 2, syc = (ih - sh) / 2;
+  const crop = getCoverCropRect(iw, ih, gridCols, gridRows);
 
   ctx.save();
   ctx.translate(g.x, g.y);
@@ -1143,14 +1580,14 @@ function drawFullImage() {
   ctx.shadowColor  = 'rgba(168,85,247,.45)';
   ctx.shadowBlur   = 40;
 
-  ctx.drawImage(srcImg, sxc, syc, sw, sh, tlx, tly, sz, sz);
+  ctx.drawImage(srcImg, crop.sx, crop.sy, crop.sw, crop.sh, tlx, tly, pw, ph);
 
   ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
 
   // Thin elegant border
   ctx.strokeStyle = 'rgba(168,85,247,.5)';
   ctx.lineWidth   = 2.5;
-  ctx.strokeRect(tlx, tly, sz, sz);
+  ctx.strokeRect(tlx, tly, pw, ph);
 
   ctx.restore();
 }
@@ -1158,55 +1595,6 @@ function drawFullImage() {
 // ═══════════════════════════════════════════════════════════
 //  RENDER
 // ═══════════════════════════════════════════════════════════
-function drawCornerAnniversary() {
-  if (!ctx || W < 40) return;
-  const text = (scenario.cornerText && String(scenario.cornerText).trim()) || '';
-  if (!text) return;
-  const padTop = 16;
-  const edgePad = 14;
-  const borderGap = 14;
-  const fontSize = Math.max(28, Math.min(88, Math.min(W, H) * 0.1));
-  ctx.save();
-  const fam = fontStackForScenario();
-  ctx.font = `900 ${fontSize}px ${fam}`;
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'top';
-  const y = padTop;
-  const lineX = W - edgePad;
-  const x = lineX - borderGap;
-  const tw = ctx.measureText(text).width;
-  const y0 = y - 6;
-  const y1 = y + fontSize * 1.22 + 6;
-  const borderW = Math.max(3, fontSize * 0.055);
-  const lg = ctx.createLinearGradient(lineX, y0, lineX, y1);
-  lg.addColorStop(0, '#e94560');
-  lg.addColorStop(0.5, '#f472b6');
-  lg.addColorStop(1, '#a855f7');
-  ctx.beginPath();
-  ctx.moveTo(lineX, y0);
-  ctx.lineTo(lineX, y1);
-  ctx.strokeStyle = lg;
-  ctx.lineWidth = borderW;
-  ctx.lineCap = 'round';
-  ctx.stroke();
-  const g = ctx.createLinearGradient(x - tw, y, x, y + fontSize);
-  g.addColorStop(0, '#e94560');
-  g.addColorStop(0.5, '#f472b6');
-  g.addColorStop(1, '#a855f7');
-  ctx.shadowColor = 'rgba(0,0,0,.45)';
-  ctx.shadowBlur = 14;
-  ctx.shadowOffsetX = 2;
-  ctx.shadowOffsetY = 3;
-  ctx.lineWidth = Math.max(2.5, fontSize * 0.055);
-  ctx.strokeStyle = 'rgba(15,10,30,.65)';
-  ctx.strokeText(text, x, y);
-  ctx.shadowBlur = 0;
-  ctx.shadowOffsetX = ctx.shadowOffsetY = 0;
-  ctx.fillStyle = g;
-  ctx.fillText(text, x, y);
-  ctx.restore();
-}
-
 function render() {
   ctx.clearRect(0, 0, W, H);
 
@@ -1227,8 +1615,6 @@ function render() {
 
   // Once solved: draw the seamless full image on top
   if (winState) drawFullImage();
-
-  drawCornerAnniversary();
 }
 
 function drawPiece(p) {
@@ -1385,14 +1771,14 @@ function onDblClick(e) {
 // ═══════════════════════════════════════════════════════════
 function generateTabs() {
   tabR = []; tabD = [];
-  for (let r = 0; r < gridN; r++) {
+  for (let r = 0; r < gridRows; r++) {
     tabR[r] = [];
-    for (let c = 0; c < gridN - 1; c++)
+    for (let c = 0; c < gridCols - 1; c++)
       tabR[r][c] = Math.random() < 0.5 ? 1 : -1;
   }
-  for (let r = 0; r < gridN - 1; r++) {
+  for (let r = 0; r < gridRows - 1; r++) {
     tabD[r] = [];
-    for (let c = 0; c < gridN; c++)
+    for (let c = 0; c < gridCols; c++)
       tabD[r][c] = Math.random() < 0.5 ? 1 : -1;
   }
 }
@@ -1425,10 +1811,10 @@ function addJigsawSide(path, ax, ay, bx, by, nx, ny, tab) {
 /** Même lecture des tabs que buildPiecePath (pour bornes image / path). */
 function pieceTabs(row, col) {
   return {
-    topT:    row > 0           ? -tabD[row - 1][col] : 0,
-    rightT:  col < gridN - 1   ?  tabR[row][col]     : 0,
-    bottomT: row < gridN - 1   ?  tabD[row][col]     : 0,
-    leftT:   col > 0           ? -tabR[row][col - 1] : 0
+    topT:    row > 0             ? -tabD[row - 1][col] : 0,
+    rightT:  col < gridCols - 1 ?  tabR[row][col]     : 0,
+    bottomT: row < gridRows - 1 ?  tabD[row][col]     : 0,
+    leftT:   col > 0             ? -tabR[row][col - 1] : 0
   };
 }
 
@@ -1470,25 +1856,25 @@ function buildPiecePath(row, col) {
 function buildTiles() {
   generateTabs();
 
-  const sz = gridN * PS;
+  const pw = gridCols * PS;
+  const ph = gridRows * PS;
   const tmp = document.createElement('canvas');
-  tmp.width = sz; tmp.height = sz;
+  tmp.width = pw;
+  tmp.height = ph;
   const tctx = tmp.getContext('2d');
 
   const iw = srcImg.naturalWidth, ih = srcImg.naturalHeight;
-  const scale = Math.max(sz / iw, sz / ih);
-  const sw = sz / scale, sh = sz / scale;
-  const sx = (iw - sw) / 2, sy = (ih - sh) / 2;
-  tctx.drawImage(srcImg, sx, sy, sw, sh, 0, 0, sz, sz);
+  const crop = getCoverCropRect(iw, ih, gridCols, gridRows);
+  tctx.drawImage(srcImg, crop.sx, crop.sy, crop.sw, crop.sh, 0, 0, pw, ph);
 
   const pad = JIG_PAD;
   const h = PS / 2;
   const cw = PS + 2 * pad;
 
   tiles = [];
-  for (let r = 0; r < gridN; r++) {
+  for (let r = 0; r < gridRows; r++) {
     tiles[r] = [];
-    for (let c = 0; c < gridN; c++) {
+    for (let c = 0; c < gridCols; c++) {
       const hitPath = buildPiecePath(r, c);
       const out = document.createElement('canvas');
       out.width = cw; out.height = cw;
@@ -1502,10 +1888,10 @@ function buildTiles() {
       let srcY = r * PS + h + b.minY;
       const srcW = b.maxX - b.minX;
       const srcH = b.maxY - b.minY;
-      const sx0 = Math.max(0, Math.min(sz, srcX));
-      const sy0 = Math.max(0, Math.min(sz, srcY));
-      const sx1 = Math.max(0, Math.min(sz, srcX + srcW));
-      const sy1 = Math.max(0, Math.min(sz, srcY + srcH));
+      const sx0 = Math.max(0, Math.min(pw, srcX));
+      const sy0 = Math.max(0, Math.min(ph, srcY));
+      const sx1 = Math.max(0, Math.min(pw, srcX + srcW));
+      const sy1 = Math.max(0, Math.min(ph, srcY + srcH));
       const drwW = sx1 - sx0;
       const drwH = sy1 - sy0;
       if (drwW > 0 && drwH > 0) {
@@ -1531,9 +1917,9 @@ function scatter() {
   selId = null; drag = null; flashes = [];
   const margin = PS * 0.5 + JIG_PAD + 24;
   const ANGLES  = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
-  for (let r = 0; r < gridN; r++) {
-    for (let c = 0; c < gridN; c++) {
-      const pid = r * gridN + c;
+  for (let r = 0; r < gridRows; r++) {
+    for (let c = 0; c < gridCols; c++) {
+      const pid = r * gridCols + c;
       const piece = { id: pid, row: r, col: c, groupId: null };
       pieces.push(piece);
       const gid = gidSeq++;
@@ -1588,6 +1974,7 @@ function startGame() {
       window.addEventListener('resize', onWindowResize);
     }
 
+    syncGridFromScenario();
     applyPieceSizeFromViewport(false);
     buildTiles();
     scatter();
@@ -1620,6 +2007,7 @@ function restartGame() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight - tb.offsetHeight;
   }
+  syncGridFromScenario();
   applyPieceSizeFromViewport(false);
   buildTiles();
   scatter();
@@ -1659,6 +2047,7 @@ function newPuzzle() {
       prev.hidden = false;
     }
   }
+  updateBuilderPreviews();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1808,6 +2197,15 @@ function initDropZone() {
   }
 }
 
+function initBuilderPreviewListeners() {
+  ['inputToolTitle', 'textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', updateBuilderPreviews);
+    el.addEventListener('change', updateBuilderPreviews);
+  });
+}
+
 function backToBuilderFromShareError(message) {
   try {
     window.history.replaceState({}, '', window.location.pathname + window.location.hash);
@@ -1867,7 +2265,11 @@ document.getElementById('btnShareStart').addEventListener('click', onShareStartC
 
 syncFormFromScenario();
 ensureGoogleFont('system');
+initBuilderPreviewListeners();
 initDropZone();
+const previewImgEl = document.getElementById('preview');
+if (previewImgEl) previewImgEl.addEventListener('load', updateBuilderPreviews);
+updateBuilderPreviews();
 
 const sid = getQueryScenarioId();
 if (sid) loadSharedScenario(sid);
