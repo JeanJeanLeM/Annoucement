@@ -34,20 +34,25 @@ body{
 #introScreen.intro-visible{display:flex}
 body.intro-blocking #setup{display:none!important}
 .intro-screen-inner{
-  width:min(100%,720px);
+  /* Laptop ~ tablette : raisonnable ; projecteur / 4K : jusqu’à ~1200px de large */
+  width:min(100%,min(94vw,1200px));
+  max-width:100%;
   display:flex;
   flex-direction:column;
   gap:16px;
 }
 .intro-video-wrap{
   position:relative;
+  width:100%;
+  max-width:100%;
   border-radius:16px;
   overflow:hidden;
   border:2px solid rgba(168,85,247,.35);
   box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(233,69,96,.12);
   background:#000;
   aspect-ratio:16/9;
-  max-height:min(56vh,520px);
+  /* Grand écran / projecteur : plus de hauteur utile */
+  max-height:min(82dvh,82vh,720px);
 }
 #introVideo{
   display:block;
@@ -449,10 +454,9 @@ let PS = 100;
 let JIG_PAD = 36;
 const SNAP_ANG   = Math.PI / 7;      // ~25.7° angle tolerance
 const ROT_STEP   = Math.PI / 4;      // 45° (1/8 tour) per wheel notch
-/** Part de min(largeur,hauteur) occupée par le côté du puzzle résolu (hors barre). */
+/** Part de min(W,H) pour le côté du puzzle résolu ; un peu plus sur très grand écran (projecteur). */
 const PUZZLE_SCREEN_FRACTION = 0.5;
 const PS_MIN = 36;
-const PS_MAX = 280;
 /** Profondeur relative des languettes (fraction du côté). */
 const TAB_DEPTH  = 0.2;
 const TAB_HALF_W = 0.24;
@@ -608,12 +612,23 @@ function angDiff(a, b) {
   return Math.abs(d);
 }
 
-/** Côté d’une cellule pour que le puzzle résolu occupe ~PUZZLE_SCREEN_FRACTION de la zone utile. */
+/** Plafond taille d’une pièce (px) : monte sur grand écran / projecteur. */
+function pieceSizeCap(avail) {
+  if (avail >= 1600) return 440;
+  if (avail >= 1200) return 380;
+  if (avail >= 800) return 300;
+  return 260;
+}
+
+/** Côté d’une cellule : fraction de l’écran + plafond selon la taille du viewport. */
 function computePieceSize() {
-  if (!W || !H) return Math.max(PS_MIN, Math.min(PS_MAX, Math.floor(520 / gridN)));
+  const capFallback = pieceSizeCap(520);
+  if (!W || !H) return Math.max(PS_MIN, Math.min(capFallback, Math.floor(520 / gridN)));
   const avail = Math.min(W, H);
-  const targetSide = avail * PUZZLE_SCREEN_FRACTION;
-  return Math.max(PS_MIN, Math.min(PS_MAX, Math.floor(targetSide / gridN)));
+  const cap = pieceSizeCap(avail);
+  const frac = avail >= 1300 ? 0.56 : PUZZLE_SCREEN_FRACTION;
+  const targetSide = avail * frac;
+  return Math.max(PS_MIN, Math.min(cap, Math.floor(targetSide / gridN)));
 }
 
 /**
