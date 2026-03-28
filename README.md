@@ -20,9 +20,10 @@ La doc détaillée : [Using Vercel Blob](https://vercel.com/docs/storage/vercel-
 
 - C’est un **secret généré par Vercel** pour ton store Blob (tu ne l’inventes pas).
 - Dans le dashboard : **Project → Settings → Environment Variables**, ajoute :
-  - **Name** : `BLOB_READ_WRITE_TOKEN`
+  - **Name** : exactement `BLOB_READ_WRITE_TOKEN` (**tout en majuscules** ; sur Vercel les noms sont sensibles à la casse : `Blob_READ_WRITE_TOKEN` ne marchera pas).
   - **Value** : le token **Read and Write** affiché pour le store Blob (copié depuis l’écran du store ou depuis les suggestions après liaison au projet).
   - Coche au minimum **Production** ; ajoute **Preview** si tu veux que les déploiements de preview puissent aussi uploader.
+  - Après toute modification : lancer un **Redeploy** pour que la fonction voie la nouvelle valeur.
 - **Sécurité** : ne mets **jamais** cette valeur dans le dépôt Git, dans le README, ni dans un ticket public. Si un token a fuité, **régénère-le** dans Vercel et mets à jour la variable.
 - **Développement local** : crée un fichier `.env.local` à la racine (non versionné ; ajoute-le à `.gitignore` si besoin) avec une ligne du type `BLOB_READ_WRITE_TOKEN=...` pour que `vercel dev` charge le secret. Ne commit pas ce fichier.
 
@@ -35,6 +36,15 @@ La doc détaillée : [Using Vercel Blob](https://vercel.com/docs/storage/vercel-
 Les liens de partage ont la forme `https://<ton-domaine>/CadeauLuc.html?s=<uuid>` (bouton « Générer le lien de partage » après upload).
 
 Quotas et tarification : [documentation Blob](https://vercel.com/docs/storage/vercel-blob) (limites selon le plan).
+
+### Réponse HTTP 503 sur `POST /api/create-scenario`
+
+Le corps JSON indique un champ `code` :
+
+- **`MISSING_BLOB_TOKEN`** — la variable n’est pas vue par le déploiement (nom incorrect, pas coché pour Production, ou déploiement pas refait après ajout).
+- **`BLOB_STORE_PRIVATE`** — le token pointe encore vers un store **privé** ; passe le store en **public** ou utilise un token d’un store public.
+
+Dans l’onglet **Network** du navigateur, ouvre la requête `create-scenario` → **Response** pour lire `error` et `hint`.
 
 ## Fichiers utiles
 

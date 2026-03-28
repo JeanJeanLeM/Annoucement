@@ -27,8 +27,15 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return res.status(503).json({ error: 'Storage not configured (BLOB_READ_WRITE_TOKEN)' });
+  const rawToken = process.env.BLOB_READ_WRITE_TOKEN;
+  if (!rawToken || !String(rawToken).trim()) {
+    return res.status(503).json({
+      code: 'MISSING_BLOB_TOKEN',
+      error:
+        'Variable BLOB_READ_WRITE_TOKEN absente ou vide sur ce déploiement.',
+      hint:
+        'Vercel → Projet → Settings → Environment Variables : nom exactement BLOB_READ_WRITE_TOKEN (tout en majuscules, pas Blob_…). Coche Production, enregistre, puis Redeploy.',
+    });
   }
 
   let rawBody;
@@ -130,7 +137,7 @@ module.exports = async (req, res) => {
         const id = randomUUID();
         const pathBase = `puzzles/${id}`;
         const imagePath = `${pathBase}/image.${ext}`;
-        const token = process.env.BLOB_READ_WRITE_TOKEN;
+        const token = String(rawToken).trim();
 
         const imageBlob = await put(imagePath, buf, {
           access: 'public',
@@ -163,13 +170,18 @@ module.exports = async (req, res) => {
         const msg = e && e.message ? String(e.message) : '';
         if (/private store|Cannot use public access/i.test(msg)) {
           res.status(503).json({
+            code: 'BLOB_STORE_PRIVATE',
             error:
               'Le store Blob est privé : ce projet exige un store en accès public pour les images partagées.',
             hint:
-              'Vercel → Storage → ton store Blob → passe en accès public, ou crée un store Blob public et mets à jour BLOB_READ_WRITE_TOKEN sur le projet.',
+              'Vercel → Storage → ouvre le store lié à ce token → accès public. Sinon crée un store Blob public, copie le nouveau token Read/Write, mets à jour BLOB_READ_WRITE_TOKEN, Redeploy.',
           });
         } else {
-          res.status(500).json({ error: 'Upload failed' });
+          res.status(500).json({
+            code: 'BLOB_UPLOAD_FAILED',
+            error: 'Upload failed',
+            detail: process.env.VERCEL_ENV === 'development' ? msg : undefined,
+          });
         }
       }
       done();

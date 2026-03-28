@@ -2151,7 +2151,12 @@ async function onShareLinkClick() {
     const res = await fetch('/api/create-scenario', { method: 'POST', body: fd });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setSetupError(data.error || 'Échec de l’envoi (vérifie le déploiement et BLOB_READ_WRITE_TOKEN).');
+      let errMsg = data.error || 'Échec de l’envoi.';
+      if (data.hint) errMsg += ' ' + data.hint;
+      else if (data.code === 'MISSING_BLOB_TOKEN')
+        errMsg +=
+          ' Vérifie sur Vercel le nom exact BLOB_READ_WRITE_TOKEN (tout en majuscules) et redéploie.';
+      setSetupError(errMsg);
       return;
     }
     const box = document.getElementById('shareResult');
