@@ -621,7 +621,8 @@ body{
   flex:1;
   min-height:0;
   max-height:100%;
-  border-radius:12px;
+  border-radius:0;
+  border:0;
 }
 .ux-mock-win .preview-win-headline{
   font-size:clamp(1rem,3.8vw,1.7rem);
@@ -629,6 +630,10 @@ body{
 .ux-mock-win .mock-win-fake-btns .mock-fake{
   font-size:.76rem!important;
   padding:8px 14px!important;
+}
+.ux-walk-stage--win.ux-walk-stage{
+  padding:0;
+  gap:0;
 }
 .ux-walk-end-card{
   background:#16213e;
@@ -1064,6 +1069,9 @@ body{
 .preview-effect-minimal{
   background:radial-gradient(ellipse at 50% 100%,rgba(30,20,50,.4),#0b0b17 55%);
 }
+.preview-effect-off{
+  background:#0b0b17;
+}
 .mock-win-inner{
   position:relative;
   z-index:2;
@@ -1486,6 +1494,7 @@ kbd{
 .wp-btn.p:hover{box-shadow:0 10px 28px rgba(233,69,96,.6)}
 .wp-btn.s{background:#0f3460;color:#b0b0d0;border:1px solid rgba(168,85,247,.28)}
 #winCelebration.win-effect-minimal #fireworksCanvas{opacity:.35}
+#winCelebration.win-effect-off #fireworksCanvas{opacity:1}
 .win-headline.plain{
   background:none!important;
   -webkit-text-fill-color:unset!important;
@@ -1748,6 +1757,9 @@ kbd{
             <option value="confetti">Confettis</option>
             <option value="minimal">Minimal (sobre)</option>
           </select>
+          <label class="field-hint" style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-top:8px">
+            <input type="checkbox" id="checkWinEffectEnabled" checked> Effet ON / OFF
+          </label>
         </div>
         <div class="builder-row" style="margin-top:10px">
           <label class="field-hint" for="selectWinFont">Police du message</label>
@@ -1861,6 +1873,7 @@ function defaultScenario() {
     shareGateBody: '',
     winText: 'Bravo !',
     winEffect: 'fireworks',
+    winEffectEnabled: true,
     winFontKey: 'system',
     winTextColor: '#e8e8f0',
     winTextGradient: true,
@@ -2164,6 +2177,7 @@ function readFormToScenario() {
   scenario.toolTitle = (document.getElementById('inputToolTitle') || {}).value || '';
   scenario.winText = (document.getElementById('textareaWinText') || {}).value || 'Bravo !';
   scenario.winEffect = (document.getElementById('selectWinEffect') || {}).value || 'fireworks';
+  scenario.winEffectEnabled = !!(document.getElementById('checkWinEffectEnabled') || {}).checked;
   scenario.winFontKey = (document.getElementById('selectWinFont') || {}).value || 'system';
   scenario.winTextColor = (document.getElementById('inputWinColor') || {}).value || '#e8e8f0';
   scenario.winTextGradient = !!(document.getElementById('checkWinGradient') || {}).checked;
@@ -2182,6 +2196,7 @@ function syncFormFromScenario() {
   const t = document.getElementById('inputToolTitle');
   const w = document.getElementById('textareaWinText');
   const e = document.getElementById('selectWinEffect');
+  const eo = document.getElementById('checkWinEffectEnabled');
   const f = document.getElementById('selectWinFont');
   const col = document.getElementById('inputWinColor');
   const g = document.getElementById('checkWinGradient');
@@ -2192,6 +2207,7 @@ function syncFormFromScenario() {
   if (t) t.value = scenario.toolTitle || '';
   if (w) w.value = scenario.winText || '';
   if (e) e.value = scenario.winEffect || 'fireworks';
+  if (eo) eo.checked = scenario.winEffectEnabled !== false;
   if (f) f.value = scenario.winFontKey || 'system';
   if (col) col.value = scenario.winTextColor || '#e8e8f0';
   if (g) g.checked = !!scenario.winTextGradient;
@@ -2232,6 +2248,7 @@ function syncUxWalkPreviews(state) {
     prev,
     winText,
     effect,
+    effectEnabled,
     fontKey,
     color,
     gradient
@@ -2295,7 +2312,7 @@ function syncUxWalkPreviews(state) {
   const winBg = document.getElementById('uxWalkWinBg');
   if (winBg) {
     const eff = ['fireworks', 'confetti', 'minimal'].includes(effect) ? effect : 'fireworks';
-    winBg.className = 'mock-win-bg preview-effect-' + eff + ' preview-click-edit';
+    winBg.className = 'mock-win-bg preview-effect-' + (effectEnabled ? eff : 'off') + ' preview-click-edit';
   }
 
   const h = document.getElementById('uxWalkWinHeadline');
@@ -2319,6 +2336,7 @@ function updateBuilderPreviews() {
   const toolEl = document.getElementById('inputToolTitle');
   const winTextEl = document.getElementById('textareaWinText');
   const effectEl = document.getElementById('selectWinEffect');
+  const effectToggleEl = document.getElementById('checkWinEffectEnabled');
   const fontEl = document.getElementById('selectWinFont');
   const colorEl = document.getElementById('inputWinColor');
   const gradEl = document.getElementById('checkWinGradient');
@@ -2326,6 +2344,7 @@ function updateBuilderPreviews() {
   let winText = (winTextEl && winTextEl.value) || '';
   if (!String(winText).trim()) winText = 'Bravo !';
   const effect = (effectEl && effectEl.value) || 'fireworks';
+  const effectEnabled = effectToggleEl ? !!effectToggleEl.checked : scenario.winEffectEnabled !== false;
   const fontKey = (fontEl && fontEl.value && FONT_MAP[fontEl.value]) ? fontEl.value : 'system';
   const color = (colorEl && colorEl.value) || '#e8e8f0';
   const gradient = !!(gradEl && gradEl.checked);
@@ -2389,7 +2408,7 @@ function updateBuilderPreviews() {
   const winBg = document.getElementById('previewWinBg');
   if (winBg) {
     const eff = ['fireworks', 'confetti', 'minimal'].includes(effect) ? effect : 'fireworks';
-    winBg.className = 'mock-win-bg preview-effect-' + eff;
+    winBg.className = 'mock-win-bg preview-effect-' + (effectEnabled ? eff : 'off');
   }
 
   const h = document.getElementById('previewWinHeadline');
@@ -2417,6 +2436,7 @@ function updateBuilderPreviews() {
     prev,
     winText,
     effect,
+    effectEnabled,
     fontKey,
     color,
     gradient
@@ -2637,6 +2657,7 @@ function getGuidedStepForField(focusId) {
   if (
     focusId === 'textareaWinText' ||
     focusId === 'selectWinEffect' ||
+    focusId === 'checkWinEffectEnabled' ||
     focusId === 'selectWinFont' ||
     focusId === 'inputWinColor' ||
     focusId === 'checkWinGradient'
@@ -3053,6 +3074,7 @@ function metaForUpload() {
     shareGateBody: scenario.shareGateBody,
     winText: scenario.winText,
     winEffect: scenario.winEffect,
+    winEffectEnabled: scenario.winEffectEnabled !== false,
     winFontKey: scenario.winFontKey,
     winTextColor: scenario.winTextColor,
     winTextGradient: scenario.winTextGradient,
@@ -3068,6 +3090,7 @@ function applyScenarioPayload(data) {
   scenario.shareGateBody = typeof data.shareGateBody === 'string' ? data.shareGateBody : '';
   scenario.winText = typeof data.winText === 'string' ? data.winText : 'Bravo !';
   scenario.winEffect = ['fireworks', 'confetti', 'minimal'].includes(data.winEffect) ? data.winEffect : 'fireworks';
+  scenario.winEffectEnabled = data.winEffectEnabled !== false;
   scenario.winFontKey = FONT_MAP[data.winFontKey] ? data.winFontKey : 'system';
   scenario.winTextColor = typeof data.winTextColor === 'string' ? data.winTextColor : '#e8e8f0';
   scenario.winTextGradient = !!data.winTextGradient;
@@ -3379,7 +3402,18 @@ function stopAllWinEffects() {
 function startWinEffect(kind) {
   stopAllWinEffects();
   const cel = document.getElementById('winCelebration');
-  cel.classList.remove('win-effect-minimal');
+  cel.classList.remove('win-effect-minimal', 'win-effect-off');
+  if (kind === 'off') {
+    fwCanvas = document.getElementById('fireworksCanvas');
+    if (fwCanvas) {
+      fwCtx = fwCanvas.getContext('2d');
+      resizeFireworksCanvas();
+      fwCtx.fillStyle = '#0b0b17';
+      fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
+    }
+    cel.classList.add('win-effect-off');
+    return;
+  }
   if (kind === 'minimal') {
     cel.classList.add('win-effect-minimal');
     fwCanvas = document.getElementById('fireworksCanvas');
@@ -3614,7 +3648,7 @@ function showWin() {
   const cel = document.getElementById('winCelebration');
   cel.classList.add('on');
   cel.setAttribute('aria-hidden', 'false');
-  startWinEffect(scenario.winEffect || 'fireworks');
+  startWinEffect(scenario.winEffectEnabled === false ? 'off' : (scenario.winEffect || 'fireworks'));
 }
 
 // Animate the assembled group smoothly to the canvas center.
@@ -4134,7 +4168,7 @@ function startGame() {
     const c = document.getElementById('winCelebration');
     if (c && c.classList.contains('on')) {
       resizeFireworksCanvas();
-      if (scenario.winEffect === 'minimal' && fwCtx && fwCanvas) {
+      if ((scenario.winEffect === 'minimal' || scenario.winEffectEnabled === false) && fwCtx && fwCanvas) {
         fwCtx.fillStyle = 'rgba(11,11,23,.92)';
         fwCtx.fillRect(0, 0, fwCanvas.width, fwCanvas.height);
       }
@@ -4182,7 +4216,7 @@ function restartGame() {
   winState = false;
   stopAllWinEffects();
   const cel = document.getElementById('winCelebration');
-  cel.classList.remove('on', 'win-effect-minimal');
+  cel.classList.remove('on', 'win-effect-minimal', 'win-effect-off');
   cel.setAttribute('aria-hidden', 'true');
   const tb = document.getElementById('toolbar');
   if (canvas && tb) {
@@ -4203,7 +4237,7 @@ function newPuzzle() {
   cancelAnimationFrame(rafId);
   stopAllWinEffects();
   const cel = document.getElementById('winCelebration');
-  cel.classList.remove('on', 'win-effect-minimal');
+  cel.classList.remove('on', 'win-effect-minimal', 'win-effect-off');
   cel.setAttribute('aria-hidden', 'true');
   document.getElementById('game').style.display = 'none';
   document.getElementById('setup').style.display = 'flex';
@@ -4370,7 +4404,7 @@ function initDropZone() {
 }
 
 function initBuilderPreviewListeners() {
-  ['inputShareGateTitle', 'textareaShareGateBody', 'inputToolTitle', 'textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
+  ['inputShareGateTitle', 'textareaShareGateBody', 'inputToolTitle', 'textareaWinText', 'selectWinEffect', 'checkWinEffectEnabled', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', updateBuilderPreviews);
