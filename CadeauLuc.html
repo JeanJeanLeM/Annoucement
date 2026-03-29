@@ -58,7 +58,173 @@ body{
   gap:18px;
   align-self:center;
 }
-.setup-title-full{text-align:center;margin-bottom:2px}
+.setup-title-full{text-align:center;margin-bottom:2px;flex:1;min-width:0}
+.setup-header-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:4px;
+}
+.setup-mode-toggle{
+  flex-shrink:0;
+  font-size:.78rem!important;
+  padding:10px 16px!important;
+  min-width:0!important;
+}
+.guided-step-hint{
+  font-size:.75rem;
+  color:#8b8ba8;
+  text-align:center;
+  margin:-8px 0 4px;
+  line-height:1.4;
+}
+.guided-nav-btn{
+  display:none;
+  flex-shrink:0;
+  align-self:center;
+  width:44px;
+  min-height:120px;
+  border-radius:12px;
+  border:1px solid rgba(168,85,247,.35);
+  background:rgba(168,85,247,.12);
+  color:#e8e8f0;
+  font-size:1.85rem;
+  font-weight:300;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s,border-color .15s,transform .12s;
+}
+.guided-nav-btn:hover:not(:disabled){
+  background:rgba(168,85,247,.22);
+  border-color:#a855f7;
+}
+.guided-nav-btn:active:not(:disabled){transform:scale(.96)}
+.guided-nav-btn:disabled{
+  opacity:.28;
+  cursor:default;
+}
+#setup.creation-guided .guided-nav-btn{display:flex;align-items:center;justify-content:center}
+.setup-previews-inner{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  min-width:0;
+  flex:1;
+}
+#setup.creation-guided .setup-previews{
+  flex-direction:row;
+  align-items:stretch;
+  gap:10px;
+  position:relative;
+  top:auto;
+}
+#setup.creation-guided .setup-layout{
+  grid-template-columns:1fr;
+  max-width:min(720px,100%);
+  margin:0 auto;
+  width:100%;
+}
+#setup.creation-guided #builderStepsMount{
+  display:none;
+}
+.guided-floating-panel{
+  display:none;
+  position:fixed;
+  z-index:80;
+  width:min(400px,calc(100vw - 28px));
+  max-height:min(72vh,calc(100vh - 120px));
+  overflow:auto;
+  padding:16px 18px 18px;
+  background:#1a1a32;
+  border:1px solid rgba(168,85,247,.35);
+  border-radius:16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.2);
+  transition:top .28s ease,left .28s ease,transform .28s ease,opacity .2s ease;
+  pointer-events:auto;
+}
+#setup.creation-guided .guided-floating-panel{display:block}
+.guided-float-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(168,85,247,.2);
+}
+.guided-float-badge{
+  font-size:.65rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#a855f7;
+  background:rgba(168,85,247,.12);
+  padding:4px 10px;
+  border-radius:8px;
+}
+.guided-float-title{
+  font-size:.88rem;
+  font-weight:700;
+  color:#e0e0f0;
+  line-height:1.3;
+}
+.guided-float-body .builder-step .step-lbl{
+  margin-top:0;
+}
+.preview-click-edit{
+  cursor:pointer;
+  border-radius:8px;
+  transition:outline .15s ease,box-shadow .15s ease,background-color .15s ease;
+}
+.preview-click-edit:hover{
+  outline:2px solid rgba(168,85,247,.45);
+  outline-offset:2px;
+  background-color:rgba(168,85,247,.06);
+}
+.preview-click-edit:focus{
+  outline:none;
+}
+.preview-click-edit:focus-visible{
+  outline:2px solid #a855f7;
+  outline-offset:2px;
+  box-shadow:0 0 0 4px rgba(168,85,247,.2);
+}
+.mock-share-gate .preview-click-edit:hover{background-color:rgba(168,85,247,.1)}
+.mock-game .preview-click-edit.preview-game-banner-hit:hover{background-color:rgba(168,85,247,.08)}
+.field-flash{
+  animation:fieldFlash 1.05s ease;
+}
+@keyframes fieldFlash{
+  0%,100%{box-shadow:inset 0 0 0 0 transparent}
+  25%{box-shadow:inset 0 0 0 2px rgba(168,85,247,.75),0 0 0 3px rgba(168,85,247,.25)}
+  55%{box-shadow:inset 0 0 0 2px rgba(233,69,96,.5),0 0 0 2px rgba(233,69,96,.2)}
+}
+.drop-zone.field-flash{
+  animation:fieldFlashDz 1.05s ease;
+}
+@keyframes fieldFlashDz{
+  0%,100%{box-shadow:none}
+  25%{box-shadow:0 0 0 3px rgba(168,85,247,.55),0 0 12px rgba(168,85,247,.2)}
+  55%{box-shadow:0 0 0 2px rgba(233,69,96,.45),0 0 10px rgba(233,69,96,.15)}
+}
+.preview-block{
+  transition:opacity .25s ease,filter .25s ease,transform .25s ease;
+}
+#setup.creation-guided .preview-block.preview-block--dim{
+  opacity:.38;
+  filter:grayscale(.35);
+  transform:scale(.985);
+}
+#setup.creation-guided .preview-block.preview-block--focus{
+  opacity:1;
+  filter:none;
+  transform:scale(1);
+  outline:2px solid rgba(168,85,247,.55);
+  outline-offset:4px;
+  border-radius:16px;
+}
 .setup-layout{
   display:grid;
   grid-template-columns:minmax(280px,1fr) minmax(300px,400px);
@@ -260,7 +426,12 @@ body{
 .mock-win-bg{
   position:absolute;
   inset:0;
+  z-index:1;
   pointer-events:none;
+}
+.mock-win-bg.preview-click-edit{
+  pointer-events:auto;
+  cursor:pointer;
 }
 .preview-effect-fireworks{
   background:radial-gradient(ellipse at 50% 120%,rgba(233,69,96,.15),transparent 50%),
@@ -297,6 +468,15 @@ body{
   align-items:center;
   gap:10px;
   max-width:100%;
+}
+.preview-win-meta-edit{
+  font-size:.58rem;
+  color:#9090b8;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  max-width:100%;
+  text-align:center;
+  line-height:1.3;
 }
 .mock-win .preview-win-headline{
   font-size:clamp(.68rem,2.4vw,1.05rem);
@@ -683,58 +863,68 @@ kbd{
   </div>
 </div>
 
-<div id="setup">
-  <h1 class="app-title setup-title-full">🧩 Puzzle personnalisable</h1>
+<div id="setup" data-creation-mode="classic">
+  <div class="setup-header-row">
+    <h1 class="app-title setup-title-full">🧩 Puzzle personnalisable</h1>
+    <button type="button" class="wp-btn s setup-mode-toggle" id="btnToggleCreationMode" aria-pressed="false">Mode parcours guidé</button>
+  </div>
+  <p class="guided-step-hint" id="guidedModeStepHint" hidden></p>
 
   <div class="setup-layout">
-    <aside class="setup-previews" aria-label="Aperçus des écrans">
+    <aside class="setup-previews" aria-label="Aperçus des écrans" id="setupPreviewsColumn">
+      <button type="button" class="guided-nav-btn guided-nav-btn--prev" id="btnGuidedPrev" aria-label="Étape précédente" hidden>‹</button>
+      <div class="setup-previews-inner">
       <p class="preview-col-title">Aperçu en direct</p>
 
-      <div class="preview-block">
+      <div class="preview-block" data-preview-stage="gate">
         <p class="step-lbl">Avant d’ouvrir (lien partagé)</p>
         <div class="mock-share-gate" aria-hidden="true">
-          <p class="step-lbl" id="previewShareGateTitle">Puzzle partagé</p>
-          <p class="mock-share-text" id="previewShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+          <p class="step-lbl preview-click-edit" id="previewShareGateTitle" tabindex="0" role="button" data-edit-target="inputShareGateTitle" aria-label="Modifier le titre d’accueil (avant Commencer)">Puzzle partagé</p>
+          <p class="mock-share-text preview-click-edit" id="previewShareGateBody" tabindex="0" role="button" data-edit-target="textareaShareGateBody" aria-label="Modifier le texte d’invitation">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
           <span class="wp-btn p mock-share-fake-btn">Commencer</span>
         </div>
       </div>
 
-      <div class="preview-block">
+      <div class="preview-block" data-preview-stage="game">
         <p class="step-lbl">Pendant le jeu</p>
         <div class="mock-game">
           <div class="mock-toolbar">
-            <span class="mock-grid-dims" id="previewGridDims">3×3</span>
+            <span class="mock-grid-dims preview-click-edit" id="previewGridDims" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Modifier la grille (colonnes et lignes)">3×3</span>
             <span class="mock-hint">Molette · Glisser · 2 clics</span>
           </div>
-          <p class="mock-game-banner" id="previewGameBanner">Puzzle</p>
+          <p class="mock-game-banner preview-click-edit preview-game-banner-hit" id="previewGameBanner" tabindex="0" role="button" data-edit-target="inputToolTitle" aria-label="Modifier le titre au-dessus du puzzle">Puzzle</p>
           <div class="mock-canvas">
-            <div class="mock-crop-frame" id="mockCropFrame">
+            <div class="mock-crop-frame preview-click-edit" id="mockCropFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
               <img class="mock-crop-img" id="previewGameBoardImg" alt="" hidden>
               <div class="mock-grid-overlay" id="mockGridOverlay" aria-hidden="true"></div>
               <div class="mock-board-placeholder" id="previewGamePlaceholder">Ajoute une image à droite pour voir la zone utilisée et la grille.</div>
             </div>
           </div>
         </div>
-        <p class="preview-crop-note field-hint" id="previewCropNote"></p>
+        <p class="preview-crop-note field-hint preview-click-edit" id="previewCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille (colonnes × lignes)"></p>
       </div>
 
-      <div class="preview-block">
+      <div class="preview-block" data-preview-stage="win">
         <p class="step-lbl">Écran de victoire</p>
         <div class="mock-win" id="previewWinRoot">
-          <div class="mock-win-bg preview-effect-fireworks" id="previewWinBg" aria-hidden="true"></div>
           <div class="mock-win-inner">
-            <div class="preview-win-headline" id="previewWinHeadline">Bravo !</div>
+            <div class="preview-win-headline preview-click-edit" id="previewWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
+            <span class="preview-win-meta-edit preview-click-edit" tabindex="0" role="button" data-edit-target="selectWinFont" aria-label="Modifier la police du message de victoire">Police &amp; couleur du texte</span>
             <div class="mock-win-fake-btns">
               <span class="wp-btn p mock-fake">↺ Rejouer</span>
               <span class="wp-btn s mock-fake">➕ Nouveau puzzle</span>
             </div>
           </div>
+          <div class="mock-win-bg preview-effect-fireworks preview-click-edit" id="previewWinBg" tabindex="0" role="button" data-edit-target="selectWinEffect" aria-label="Modifier l’effet d’arrière-plan (victoire)"></div>
         </div>
       </div>
+      </div>
+      <button type="button" class="guided-nav-btn guided-nav-btn--next" id="btnGuidedNext" aria-label="Étape suivante" hidden>›</button>
     </aside>
 
-    <div class="setup-customize">
-      <div>
+    <div class="setup-customize" id="setupCustomizeColumn">
+      <div id="builderStepsMount">
+      <div class="builder-step" data-builder-step="1">
         <p class="step-lbl">1 — Accueil (lien partagé)</p>
         <div class="builder-row">
           <label class="field-hint" for="inputShareGateTitle">Titre (écran avant « Commencer »)</label>
@@ -746,7 +936,7 @@ kbd{
         </div>
       </div>
 
-      <div>
+      <div class="builder-step" data-builder-step="2">
         <p class="step-lbl">2 — Image du puzzle</p>
         <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Choisir une image : glisser-déposer ou cliquer">
           <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
@@ -758,7 +948,7 @@ kbd{
         </div>
       </div>
 
-      <div>
+      <div class="builder-step" data-builder-step="3">
         <div class="step-lbl-with-info">
           <p class="step-lbl">3 — Grille du puzzle</p>
           <div class="info-tip-anchor">
@@ -778,7 +968,7 @@ kbd{
         </div>
       </div>
 
-      <div>
+      <div class="builder-step" data-builder-step="4">
         <p class="step-lbl">4 — Message au-dessus du puzzle</p>
         <div class="builder-row">
           <label class="field-hint" for="inputToolTitle">Affiché au-dessus de la zone de jeu pendant la partie (optionnel)</label>
@@ -786,7 +976,7 @@ kbd{
         </div>
       </div>
 
-      <div>
+      <div class="builder-step" data-builder-step="5">
         <p class="step-lbl">5 — Écran de victoire</p>
         <div class="builder-row">
           <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
@@ -820,17 +1010,30 @@ kbd{
         </div>
       </div>
 
-      <p id="setupError" role="alert"></p>
-      <div class="builder-actions">
-        <button type="button" class="wp-btn p" id="btnStartGame">Lancer le puzzle</button>
-        <button type="button" class="wp-btn s" id="btnShareLink">Générer le lien de partage</button>
+      <div class="builder-step" data-builder-step="6">
+        <p class="step-lbl">6 — Lancer ou partager</p>
+        <p class="field-hint" style="margin-bottom:12px;line-height:1.45">Tu as parcouru le même chemin que ton invité : accueil → jeu → victoire. Ici tu lances la partie en local ou tu génères le lien.</p>
+        <p id="setupError" role="alert"></p>
+        <div class="builder-actions">
+          <button type="button" class="wp-btn p" id="btnStartGame">Lancer le puzzle</button>
+          <button type="button" class="wp-btn s" id="btnShareLink">Générer le lien de partage</button>
+        </div>
+        <div id="shareResult">
+          <p class="field-hint">Lien permanent (image + réglages conservés sur le stockage) :</p>
+          <input type="text" id="shareResultInput" readonly aria-label="Lien de partage">
+          <button type="button" class="wp-btn s" id="btnCopyShare" style="width:100%;margin-top:10px">Copier le lien</button>
+        </div>
       </div>
-      <div id="shareResult">
-        <p class="field-hint">Lien permanent (image + réglages conservés sur le stockage) :</p>
-        <input type="text" id="shareResultInput" readonly aria-label="Lien de partage">
-        <button type="button" class="wp-btn s" id="btnCopyShare" style="width:100%;margin-top:10px">Copier le lien</button>
       </div>
     </div>
+  </div>
+
+  <div id="guidedFloatingPanel" class="guided-floating-panel" aria-hidden="true">
+    <div class="guided-float-head">
+      <span class="guided-float-badge" id="guidedFloatBadge"></span>
+      <span class="guided-float-title" id="guidedFloatTitle"></span>
+    </div>
+    <div class="guided-float-body" id="guidedFloatBody"></div>
   </div>
 </div>
 
@@ -899,6 +1102,25 @@ let scenario = defaultScenario();
 let selectedImageFile = null;
 let previewObjectUrl = null;
 let shareLoadId = null;
+let creationMode = 'classic';
+let guidedStepIndex = 0;
+const BUILDER_STEP_COUNT = 6;
+const GUIDED_FLOAT_TITLES = [
+  'Accueil du lien partagé',
+  'Photo du puzzle',
+  'Grille (colonnes × lignes)',
+  'Titre au-dessus du jeu',
+  'Écran de victoire',
+  'Lancer ou partager'
+];
+const GUIDED_STEP_HINTS = [
+  'Comme ton invité : il voit d’abord cette carte, puis appuie sur « Commencer ».',
+  'C’est la même image qui sera découpée en pièces pendant la partie.',
+  'Le cadre à gauche montre ce qui sera visible au centre ; le rognage s’adapte aux proportions.',
+  'Ce texte apparaît au-dessus de la zone de puzzle pendant le jeu (optionnel).',
+  'Message, effet, police et couleurs après la victoire.',
+  'Tu peux tester tout de suite ou créer le lien à envoyer.'
+];
 
 function clampGridDims(c, r) {
   c = Math.round(Number(c));
@@ -1140,6 +1362,258 @@ function updateBuilderPreviews() {
   }
 
   ensureGoogleFont(fontKey);
+
+  if (creationMode === 'guided')
+    requestAnimationFrame(() => positionGuidedFloatingPanel());
+}
+
+function reorderAllBuilderStepsToMount() {
+  const mount = document.getElementById('builderStepsMount');
+  if (!mount) return;
+  for (let n = 1; n <= BUILDER_STEP_COUNT; n++) {
+    const el = document.querySelector('[data-builder-step="' + n + '"]');
+    if (el) mount.appendChild(el);
+  }
+}
+
+function getGuidedAnchorEl() {
+  if (guidedStepIndex <= 0)
+    return document.querySelector('.preview-block[data-preview-stage="gate"]');
+  if (guidedStepIndex <= 3)
+    return document.querySelector('.preview-block[data-preview-stage="game"]');
+  if (guidedStepIndex === 4)
+    return document.querySelector('.preview-block[data-preview-stage="win"]');
+  return document.getElementById('setupPreviewsColumn');
+}
+
+function applyGuidedPreviewFocus() {
+  document.querySelectorAll('.preview-block[data-preview-stage]').forEach((b) => {
+    b.classList.remove('preview-block--dim', 'preview-block--focus');
+  });
+  if (guidedStepIndex >= 5) return;
+  const stage =
+    guidedStepIndex <= 0
+      ? 'gate'
+      : guidedStepIndex <= 3
+        ? 'game'
+        : 'win';
+  document.querySelectorAll('.preview-block[data-preview-stage]').forEach((b) => {
+    if (b.getAttribute('data-preview-stage') === stage) b.classList.add('preview-block--focus');
+    else b.classList.add('preview-block--dim');
+  });
+}
+
+function positionGuidedFloatingPanel() {
+  if (creationMode !== 'guided') return;
+  const panel = document.getElementById('guidedFloatingPanel');
+  const setup = document.getElementById('setup');
+  if (!panel || !setup) return;
+  if (getComputedStyle(setup).display === 'none') return;
+
+  const anchor = getGuidedAnchorEl();
+  if (!anchor) return;
+
+  const pr = anchor.getBoundingClientRect();
+  const m = 12;
+  const w = panel.offsetWidth || 360;
+  const h = panel.offsetHeight || 320;
+
+  let left;
+  let top;
+  const roomRight = pr.right + m + w <= window.innerWidth - m;
+
+  if (roomRight && window.innerWidth >= 560) {
+    left = pr.right + m;
+    top = pr.top;
+  } else {
+    left = (window.innerWidth - w) / 2;
+    top = pr.bottom + m;
+  }
+
+  top = Math.max(m, Math.min(top, window.innerHeight - h - m));
+  left = Math.max(m, Math.min(left, window.innerWidth - w - m));
+
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+  panel.style.right = 'auto';
+  panel.style.bottom = 'auto';
+}
+
+function getGuidedStepForField(focusId) {
+  if (focusId === 'inputShareGateTitle' || focusId === 'textareaShareGateBody') return 0;
+  if (focusId === 'dropZone') return 1;
+  if (focusId === 'inputGridCols' || focusId === 'inputGridRows') return 2;
+  if (focusId === 'inputToolTitle') return 3;
+  if (
+    focusId === 'textareaWinText' ||
+    focusId === 'selectWinEffect' ||
+    focusId === 'selectWinFont' ||
+    focusId === 'inputWinColor' ||
+    focusId === 'checkWinGradient'
+  )
+    return 4;
+  return null;
+}
+
+function focusBuilderField(focusId) {
+  const el = document.getElementById(focusId);
+  if (!el) return;
+  try {
+    el.focus({ preventScroll: true });
+  } catch (e) {
+    el.focus();
+  }
+  if (el.tagName === 'INPUT') {
+    const t = el.type;
+    if (t === 'text' || t === 'number' || t === 'search' || t === 'url') el.select();
+  }
+  if (el.tagName === 'TEXTAREA') el.select();
+  el.classList.remove('field-flash');
+  void el.offsetWidth;
+  el.classList.add('field-flash');
+  window.setTimeout(() => el.classList.remove('field-flash'), 1100);
+}
+
+function openFieldFromPreview(focusId) {
+  if (!focusId) return;
+  const setup = document.getElementById('setup');
+  if (!setup || getComputedStyle(setup).display === 'none') return;
+
+  const step = getGuidedStepForField(focusId);
+  const runFocus = () => {
+    focusBuilderField(focusId);
+    const el = document.getElementById(focusId);
+    if (el) {
+      try {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (e) {
+        el.scrollIntoView();
+      }
+    }
+  };
+
+  if (creationMode === 'guided' && step != null) {
+    setGuidedStep(step, runFocus);
+  } else {
+    runFocus();
+  }
+}
+
+function initPreviewClickToEdit() {
+  const col = document.getElementById('setupPreviewsColumn');
+  if (!col) return;
+
+  col.addEventListener('click', (e) => {
+    if (e.target.closest('.guided-nav-btn')) return;
+    const host = e.target.closest('[data-edit-target]');
+    if (!host || !col.contains(host)) return;
+    const id = host.getAttribute('data-edit-target');
+    if (!id) return;
+    e.preventDefault();
+    openFieldFromPreview(id);
+  });
+
+  col.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (e.target.closest('.guided-nav-btn')) return;
+    const host = e.target.closest('[data-edit-target]');
+    if (!host || !col.contains(host)) return;
+    if (document.activeElement !== host) return;
+    const id = host.getAttribute('data-edit-target');
+    if (!id) return;
+    e.preventDefault();
+    openFieldFromPreview(id);
+  });
+}
+
+function setGuidedStep(i, onDone) {
+  i = Math.max(0, Math.min(BUILDER_STEP_COUNT - 1, i));
+  guidedStepIndex = i;
+  reorderAllBuilderStepsToMount();
+  const stepEl = document.querySelector('[data-builder-step="' + (i + 1) + '"]');
+  const floatBody = document.getElementById('guidedFloatBody');
+  if (stepEl && floatBody) floatBody.appendChild(stepEl);
+
+  const badge = document.getElementById('guidedFloatBadge');
+  const titleEl = document.getElementById('guidedFloatTitle');
+  const hint = document.getElementById('guidedModeStepHint');
+  if (badge) badge.textContent = i + 1 + ' / ' + BUILDER_STEP_COUNT;
+  if (titleEl) titleEl.textContent = GUIDED_FLOAT_TITLES[i] || '';
+  if (hint) {
+    hint.textContent = GUIDED_STEP_HINTS[i] || '';
+    hint.hidden = false;
+  }
+
+  const prev = document.getElementById('btnGuidedPrev');
+  const next = document.getElementById('btnGuidedNext');
+  if (prev) {
+    prev.disabled = i === 0;
+    prev.hidden = false;
+  }
+  if (next) {
+    next.disabled = i >= BUILDER_STEP_COUNT - 1;
+    next.hidden = false;
+  }
+
+  applyGuidedPreviewFocus();
+  readFormToScenario();
+  updateBuilderPreviews();
+  requestAnimationFrame(() => {
+    positionGuidedFloatingPanel();
+    requestAnimationFrame(() => {
+      positionGuidedFloatingPanel();
+      if (typeof onDone === 'function') onDone();
+    });
+  });
+}
+
+function setCreationMode(mode) {
+  const setup = document.getElementById('setup');
+  const btn = document.getElementById('btnToggleCreationMode');
+  const panel = document.getElementById('guidedFloatingPanel');
+  const prev = document.getElementById('btnGuidedPrev');
+  const next = document.getElementById('btnGuidedNext');
+  const hint = document.getElementById('guidedModeStepHint');
+
+  const nextMode = mode === 'guided' ? 'guided' : 'classic';
+  creationMode = nextMode;
+
+  if (setup) {
+    setup.dataset.creationMode = nextMode;
+    setup.classList.toggle('creation-guided', nextMode === 'guided');
+  }
+  if (btn) {
+    btn.textContent =
+      nextMode === 'guided' ? 'Vue complète (toutes les étapes)' : 'Mode parcours guidé';
+    btn.setAttribute('aria-pressed', nextMode === 'guided' ? 'true' : 'false');
+  }
+
+  if (nextMode === 'classic') {
+    reorderAllBuilderStepsToMount();
+    if (panel) panel.setAttribute('aria-hidden', 'true');
+    if (prev) {
+      prev.hidden = true;
+      prev.disabled = false;
+    }
+    if (next) {
+      next.hidden = true;
+      next.disabled = false;
+    }
+    if (hint) {
+      hint.hidden = true;
+      hint.textContent = '';
+    }
+    document.querySelectorAll('.preview-block').forEach((b) => {
+      b.classList.remove('preview-block--dim', 'preview-block--focus');
+    });
+    window.removeEventListener('scroll', positionGuidedFloatingPanel, true);
+    window.removeEventListener('resize', positionGuidedFloatingPanel);
+  } else {
+    if (panel) panel.setAttribute('aria-hidden', 'false');
+    window.addEventListener('scroll', positionGuidedFloatingPanel, true);
+    window.addEventListener('resize', positionGuidedFloatingPanel);
+    setGuidedStep(guidedStepIndex);
+  }
 }
 
 function metaForUpload() {
@@ -2236,6 +2710,8 @@ function newPuzzle() {
     }
   }
   updateBuilderPreviews();
+  if (creationMode === 'guided')
+    requestAnimationFrame(() => positionGuidedFloatingPanel());
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2390,6 +2866,8 @@ function backToBuilderFromShareError(message) {
   const setup = document.getElementById('setup');
   if (setup) setup.style.display = 'flex';
   setSetupError(message || '');
+  if (creationMode === 'guided')
+    requestAnimationFrame(() => setGuidedStep(guidedStepIndex));
 }
 
 async function loadSharedScenario(id) {
@@ -2438,9 +2916,43 @@ document.getElementById('btnShareLink').addEventListener('click', onShareLinkCli
 document.getElementById('btnCopyShare').addEventListener('click', onCopyShareClick);
 document.getElementById('btnShareStart').addEventListener('click', onShareStartClick);
 
+const btnToggleCreation = document.getElementById('btnToggleCreationMode');
+if (btnToggleCreation) {
+  btnToggleCreation.addEventListener('click', () => {
+    setCreationMode(creationMode === 'classic' ? 'guided' : 'classic');
+  });
+}
+const btnGuidedPrev = document.getElementById('btnGuidedPrev');
+const btnGuidedNext = document.getElementById('btnGuidedNext');
+if (btnGuidedPrev)
+  btnGuidedPrev.addEventListener('click', () => {
+    if (guidedStepIndex > 0) setGuidedStep(guidedStepIndex - 1);
+  });
+if (btnGuidedNext)
+  btnGuidedNext.addEventListener('click', () => {
+    if (guidedStepIndex < BUILDER_STEP_COUNT - 1) setGuidedStep(guidedStepIndex + 1);
+  });
+
+document.addEventListener('keydown', (e) => {
+  if (creationMode !== 'guided') return;
+  const setup = document.getElementById('setup');
+  if (!setup || getComputedStyle(setup).display === 'none') return;
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable))
+    return;
+  if (e.key === 'ArrowLeft' && guidedStepIndex > 0) {
+    e.preventDefault();
+    setGuidedStep(guidedStepIndex - 1);
+  } else if (e.key === 'ArrowRight' && guidedStepIndex < BUILDER_STEP_COUNT - 1) {
+    e.preventDefault();
+    setGuidedStep(guidedStepIndex + 1);
+  }
+});
+
 syncFormFromScenario();
 ensureGoogleFont('system');
 initBuilderPreviewListeners();
+initPreviewClickToEdit();
 initDropZone();
 const previewImgEl = document.getElementById('preview');
 if (previewImgEl) previewImgEl.addEventListener('load', updateBuilderPreviews);
