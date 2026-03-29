@@ -1411,6 +1411,45 @@ body{
 #shareResult{display:none;margin-top:12px;padding:12px;background:rgba(0,0,0,.25);border-radius:10px;border:1px solid rgba(168,85,247,.2)}
 #shareResult.on{display:block}
 #shareResultInput{width:100%;box-sizing:border-box;margin-top:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(168,85,247,.25);background:#0b0b17;color:#c0c0e0;font-size:.78rem}
+.loading-indicator{
+  display:none;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+  padding:8px 10px;
+  border-radius:9px;
+  background:rgba(15,52,96,.32);
+  border:1px solid rgba(168,85,247,.25);
+  color:#b7b7d8;
+  font-size:.78rem;
+}
+.loading-indicator.on{display:flex}
+.loading-spinner{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  border:2px solid rgba(168,85,247,.22);
+  border-top-color:#e94560;
+  animation:spinLoader .75s linear infinite;
+}
+@keyframes spinLoader{to{transform:rotate(360deg)}}
+.wp-btn.is-loading{
+  position:relative;
+  padding-left:42px;
+}
+.wp-btn.is-loading::before{
+  content:"";
+  position:absolute;
+  left:16px;
+  top:50%;
+  width:14px;
+  height:14px;
+  margin-top:-7px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.28);
+  border-top-color:#fff;
+  animation:spinLoader .75s linear infinite;
+}
 #setupError{color:#f472b6;font-size:.85rem;min-height:1.1em}
 #btnCreate{
   background:linear-gradient(135deg,#e94560,#c0185e);
@@ -1872,6 +1911,10 @@ kbd{
           <button type="button" class="wp-btn p" id="btnStartGame">Lancer le puzzle</button>
           <button type="button" class="wp-btn s" id="btnShareLink">Générer le lien de partage</button>
         </div>
+        <p id="shareLoading" class="loading-indicator" aria-live="polite">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          Génération du lien en cours…
+        </p>
         <div id="shareResult">
           <p class="field-hint">Lien permanent (image + réglages conservés sur le stockage) :</p>
           <input type="text" id="shareResultInput" readonly aria-label="Lien de partage">
@@ -4305,7 +4348,15 @@ async function onShareLinkClick() {
   fd.append('meta', JSON.stringify(metaForUpload()));
   fd.append('image', selectedImageFile, selectedImageFile.name || 'puzzle.jpg');
   const btn = document.getElementById('btnShareLink');
-  if (btn) btn.disabled = true;
+  const loading = document.getElementById('shareLoading');
+  const initialBtnLabel = btn ? btn.textContent : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add('is-loading');
+    btn.textContent = 'Génération en cours…';
+    btn.setAttribute('aria-busy', 'true');
+  }
+  if (loading) loading.classList.add('on');
   try {
     const res = await fetch('/api/create-scenario', { method: 'POST', body: fd });
     const data = await res.json().catch(() => ({}));
@@ -4327,7 +4378,13 @@ async function onShareLinkClick() {
   } catch (e) {
     setSetupError('Réseau ou serveur indisponible. En local, lance avec Vercel dev ou déploie sur Vercel.');
   } finally {
-    if (btn) btn.disabled = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('is-loading');
+      btn.textContent = initialBtnLabel || 'Générer le lien de partage';
+      btn.removeAttribute('aria-busy');
+    }
+    if (loading) loading.classList.remove('on');
   }
 }
 
