@@ -479,6 +479,9 @@ body{
   gap:10px;
   padding:12px 8px;
 }
+.ux-walk-stage.is-centered{
+  justify-content:center;
+}
 .ux-walk-stage[hidden]{display:none!important}
 .ux-walk-live-hint{
   font-size:.72rem;
@@ -2799,6 +2802,27 @@ function setUxWalkStageVisibility(i) {
   }
 }
 
+function updateUxWalkStageCentering() {
+  const viewport = document.getElementById('uxWalkViewportScreen');
+  if (!viewport) return;
+  viewport.querySelectorAll('.ux-walk-stage').forEach((stage) => {
+    if (stage.hidden) {
+      stage.classList.remove('is-centered');
+      return;
+    }
+    let contentH = 0;
+    Array.from(stage.children).forEach((child) => {
+      const cs = getComputedStyle(child);
+      if (child.hidden || cs.display === 'none') return;
+      const mt = parseFloat(cs.marginTop) || 0;
+      const mb = parseFloat(cs.marginBottom) || 0;
+      contentH += child.getBoundingClientRect().height + mt + mb;
+    });
+    const available = Math.max(0, stage.clientHeight - 24);
+    stage.classList.toggle('is-centered', contentH > 0 && contentH <= available);
+  });
+}
+
 function updateUxWalkLiveHint(i) {
   const el = document.getElementById('uxWalkOutsideHint');
   if (!el) return;
@@ -2888,6 +2912,7 @@ function setGuidedStep(i, onDone) {
   }
 
   setUxWalkStageVisibility(i);
+  updateUxWalkStageCentering();
   updateUxWalkLiveHint(i);
   applyGuidedPreviewFocus();
   readFormToScenario();
@@ -2896,6 +2921,7 @@ function setGuidedStep(i, onDone) {
     positionGuidedFloatingPanel();
     requestAnimationFrame(() => {
       positionGuidedFloatingPanel();
+      updateUxWalkStageCentering();
       if (typeof onDone === 'function') onDone();
     });
   });
@@ -2917,6 +2943,7 @@ function setUxWalkDevice(device) {
         ? 'Simulation écran ordinateur : l’invité voit une zone plus large (proportions desktop).'
         : 'Simulation écran téléphone : l’invité voit un cadre vertical compact.';
   }
+  requestAnimationFrame(updateUxWalkStageCentering);
 }
 
 function setCreationMode(mode) {
@@ -2980,6 +3007,7 @@ function setCreationMode(mode) {
     });
     window.removeEventListener('scroll', positionGuidedFloatingPanel, true);
     window.removeEventListener('resize', positionGuidedFloatingPanel);
+    window.removeEventListener('resize', updateUxWalkStageCentering);
   } else {
     if (nextMode === 'guided' || nextMode === 'uxwalk') guidedPanelUserPos = null;
     if (panel) panel.setAttribute('aria-hidden', 'false');
@@ -2991,12 +3019,14 @@ function setCreationMode(mode) {
         shell.hidden = false;
         shell.setAttribute('aria-hidden', 'false');
       }
+      window.addEventListener('resize', updateUxWalkStageCentering);
     } else {
       document.body.style.overflow = '';
       if (shell) {
         shell.hidden = true;
         shell.setAttribute('aria-hidden', 'true');
       }
+      window.removeEventListener('resize', updateUxWalkStageCentering);
       const uxPrev = document.getElementById('btnUxWalkPrev');
       const uxNext = document.getElementById('btnUxWalkNext');
       if (uxPrev) uxPrev.hidden = true;
