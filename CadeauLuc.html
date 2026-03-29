@@ -735,7 +735,19 @@ kbd{
 
     <div class="setup-customize">
       <div>
-        <p class="step-lbl">1 — Image du puzzle</p>
+        <p class="step-lbl">1 — Accueil (lien partagé)</p>
+        <div class="builder-row">
+          <label class="field-hint" for="inputShareGateTitle">Titre (écran avant « Commencer »)</label>
+          <input type="text" id="inputShareGateTitle" maxlength="80" placeholder="Ex. Puzzle partagé" autocomplete="off">
+        </div>
+        <div class="builder-row" style="margin-top:10px">
+          <label class="field-hint" for="textareaShareGateBody">Texte d’invitation (plusieurs lignes possibles)</label>
+          <textarea id="textareaShareGateBody" maxlength="400" rows="3" placeholder="Quand tu es prêt…"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <p class="step-lbl">2 — Image du puzzle</p>
         <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Choisir une image : glisser-déposer ou cliquer">
           <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
           <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
@@ -748,7 +760,7 @@ kbd{
 
       <div>
         <div class="step-lbl-with-info">
-          <p class="step-lbl">2 — Grille du puzzle</p>
+          <p class="step-lbl">3 — Grille du puzzle</p>
           <div class="info-tip-anchor">
             <button type="button" class="info-icon-btn" aria-label="Informations sur la grille du puzzle" aria-describedby="gridHelpTooltip">i</button>
             <div id="gridHelpTooltip" class="info-tooltip" role="tooltip">Ex. <strong>4×3</strong> = 12 pièces. Maximum <strong>64</strong> pièces (colonnes × lignes). La photo est affichée en <strong>« remplissage »</strong> : elle couvre toute la grille puis les bandes qui dépassent sont <strong>coupées au centre</strong> (à gauche et à droite si la photo est trop large, en haut et en bas si elle est trop haute).</div>
@@ -763,18 +775,6 @@ kbd{
             <label class="field-hint" for="inputGridRows">Lignes</label>
             <input type="number" id="inputGridRows" min="2" max="12" value="3" inputmode="numeric">
           </div>
-        </div>
-      </div>
-
-      <div>
-        <p class="step-lbl">3 — Accueil (lien partagé)</p>
-        <div class="builder-row">
-          <label class="field-hint" for="inputShareGateTitle">Titre (écran avant « Commencer »)</label>
-          <input type="text" id="inputShareGateTitle" maxlength="80" placeholder="Ex. Puzzle partagé" autocomplete="off">
-        </div>
-        <div class="builder-row" style="margin-top:10px">
-          <label class="field-hint" for="textareaShareGateBody">Texte d’invitation (plusieurs lignes possibles)</label>
-          <textarea id="textareaShareGateBody" maxlength="400" rows="3" placeholder="Quand tu es prêt…"></textarea>
         </div>
       </div>
 
