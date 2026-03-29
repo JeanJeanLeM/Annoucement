@@ -91,6 +91,45 @@ body{
   margin-bottom:-6px;
 }
 .preview-block .step-lbl{margin-bottom:8px}
+/* Aperçu : même carte que l’écran plein écran avant le jeu (lien ?s=) */
+.mock-share-gate{
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.22);
+  background:linear-gradient(180deg,#12122a 0%,#0b0b18 100%);
+  padding:16px 14px 14px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:148px;
+  max-height:200px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);
+}
+.mock-share-gate .step-lbl{
+  margin-bottom:6px;
+  text-align:center;
+  width:100%;
+}
+.mock-share-gate .mock-share-text{
+  margin:0;
+  font-size:.72rem;
+  line-height:1.45;
+  color:#9090b8;
+  max-width:260px;
+}
+.mock-share-gate .mock-share-fake-btn{
+  margin-top:12px;
+  width:100%;
+  max-width:220px;
+  pointer-events:none;
+  cursor:default;
+  font-size:.68rem!important;
+  padding:9px 14px!important;
+  min-width:0!important;
+  opacity:.92;
+}
 .mock-game{
   border-radius:14px;
   overflow:hidden;
@@ -647,6 +686,15 @@ kbd{
   <div class="setup-layout">
     <aside class="setup-previews" aria-label="Aperçus des écrans">
       <p class="preview-col-title">Aperçu en direct</p>
+
+      <div class="preview-block">
+        <p class="step-lbl">Avant d’ouvrir (lien partagé)</p>
+        <div class="mock-share-gate" aria-hidden="true">
+          <p class="step-lbl">Puzzle partagé</p>
+          <p class="mock-share-text">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+          <span class="wp-btn p mock-share-fake-btn">Commencer</span>
+        </div>
+      </div>
 
       <div class="preview-block">
         <p class="step-lbl">Pendant le jeu</p>
