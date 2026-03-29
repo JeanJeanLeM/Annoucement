@@ -1571,7 +1571,7 @@ kbd{
                       </div>
                     </div>
                   </div>
-                  <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="3">
+                  <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="3,4">
                     <div class="mock-win ux-mock-win" id="uxWalkWinRoot">
                       <div class="mock-win-inner">
                         <div class="preview-win-headline preview-click-edit" id="uxWalkWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
@@ -1589,11 +1589,11 @@ kbd{
               <p class="ux-walk-outside-hint" id="uxWalkOutsideHint"></p>
             </div>
             <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="4" hidden>
-              <p class="ux-walk-creator-only-banner">Pas sur le lien — étape créateur uniquement</p>
+              <p class="ux-walk-creator-only-banner">Actions créateur uniquement (hors vue invitée)</p>
               <div class="ux-walk-stage ux-walk-stage--end" style="max-width:460px">
                 <div class="ux-walk-end-card">
-                  <p class="step-lbl" style="margin-bottom:12px">Lancer ou partager</p>
-                  <p class="field-hint">Tu testes en local ou tu génères le lien avec la configuration de l’invité.</p>
+                  <p class="step-lbl" style="margin-bottom:12px">Finalisation créateur</p>
+                  <p class="field-hint">L’invité ne voit pas cette zone. Tu peux lancer un test local ou générer le lien de partage.</p>
                   <div class="ux-walk-end-mock-btns">
                     <span class="wp-btn p mock-fake">Lancer le puzzle</span>
                     <span class="wp-btn s mock-fake">Générer le lien de partage</span>
@@ -1899,14 +1899,14 @@ const GUIDED_FLOAT_TITLES = [
   'Photo + grille du puzzle',
   'Titre au-dessus du jeu',
   'Écran de victoire',
-  'Lancer ou partager'
+  'Finalisation créateur (hors vue invitée)'
 ];
 const GUIDED_STEP_HINTS = [
   'Comme ton invité : il voit d’abord cette carte, puis appuie sur « Commencer ».',
   'Choisis l’image puis la grille : c’est ce qui sera découpé pendant la partie.',
   'Ce texte apparaît au-dessus de la zone de puzzle pendant le jeu (optionnel).',
   'Message, effet, police et couleurs après la victoire.',
-  'Tu peux tester tout de suite ou créer le lien à envoyer.'
+  'Cette dernière étape n’apparaît pas chez l’invité : elle sert uniquement au créateur.'
 ];
 const OCCASION_FALLBACK = 'cadeau';
 const OCCASION_PRESETS = {
@@ -2820,12 +2820,12 @@ function setUxWalkStageVisibility(i) {
     el.hidden = !stages.includes(i);
   });
   const pkg = document.getElementById('uxWalkViewportPackage');
-  if (pkg) pkg.hidden = i === 4;
+  if (pkg) pkg.hidden = false;
   const band = document.getElementById('uxWalkChromeBand');
   if (band) {
     if (i === 4) {
       band.innerHTML =
-        '<strong>Étape créateur</strong> — lancer / partager n’apparaît pas dans la vue invitée.';
+        '<strong>Vue invitée figée sur la dernière étape</strong> · actions créateur affichées séparément.';
     } else {
       band.innerHTML =
         '<strong>Ce cadre = vue invitée</strong> · la zone de modification est séparée à droite.';
@@ -2874,7 +2874,7 @@ function updateUxWalkLiveHint(i) {
     return;
   }
   if (i === 4) {
-    el.textContent = '';
+    el.textContent = 'Cette partie est côté créateur uniquement : l’invité reste sur son écran de victoire.';
     return;
   }
   el.textContent = '';
