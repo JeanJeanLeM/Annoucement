@@ -1664,6 +1664,7 @@ kbd{
           <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
           <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
           <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
+          <button type="button" class="occasion-chip" data-occasion="surprise" aria-pressed="false">Il y a une surprise pour toi</button>
           <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
           <button type="button" class="occasion-chip" data-occasion="saint-valentin" aria-pressed="false">Saint-Valentin</button>
         </div>
@@ -1714,6 +1715,7 @@ kbd{
           <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
           <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
           <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
+          <button type="button" class="occasion-chip" data-occasion="surprise" aria-pressed="false">Il y a une surprise pour toi</button>
           <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
           <button type="button" class="occasion-chip" data-occasion="saint-valentin" aria-pressed="false">Saint-Valentin</button>
         </div>
@@ -1731,6 +1733,7 @@ kbd{
           <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
           <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
           <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
+          <button type="button" class="occasion-chip" data-occasion="surprise" aria-pressed="false">Il y a une surprise pour toi</button>
           <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
           <button type="button" class="occasion-chip" data-occasion="saint-valentin" aria-pressed="false">Saint-Valentin</button>
         </div>
@@ -1918,6 +1921,12 @@ const OCCASION_PRESETS = {
     step3Title: 'Decouvre ta surprise',
     step4Win: 'Surprise debloquee !\nJ\'espere que ce cadeau te fait plaisir.'
   },
+  surprise: {
+    step1Title: 'Il y a une surprise pour toi',
+    step1Body: 'Un message surprise t\'attend derriere ce puzzle. Clique sur « Commencer ».',
+    step3Title: 'Il y a une surprise pour toi',
+    step4Win: 'Surprise pour toi !\nMerci d\'avoir joue ce puzzle.'
+  },
   vacances: {
     step1Title: 'Souvenir de vacances',
     step1Body: 'Un puzzle souvenir de vacances t\'attend. Clique sur « Commencer ».',
@@ -2014,6 +2023,7 @@ function detectOccasionFromText() {
     ['anniversaire', ['anniversaire', 'birthday']],
     ['naissance', ['naissance', 'bebe', 'baby', 'bienvenue']],
     ['mariage', ['mariage', 'marie', 'wedding', 'union']],
+    ['surprise', ['il y a une surprise pour toi', 'surprise pour toi']],
     ['vacances', ['vacances', 'voyage', 'plage', 'ete', 'souvenir']],
     ['cadeau', ['cadeau', 'surprise', 'present', 'gift']]
   ];
