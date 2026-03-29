@@ -426,6 +426,26 @@ body{
   max-width:100%;
   word-break:break-word;
 }
+.ux-walk-stage--gate .ux-walk-gate-card{
+  width:min(92%,420px);
+  margin:0 auto;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  padding:26px 22px;
+}
+.ux-walk-stage--gate .ux-walk-gate-card .step-lbl{
+  margin-bottom:0!important;
+}
+.ux-walk-stage--gate .ux-walk-gate-body{
+  max-width:34ch;
+  text-align:center;
+}
+.ux-walk-stage--gate .ux-walk-fake-start{
+  max-width:220px;
+}
 .ux-walk-fake-start{
   width:100%;
   margin-top:10px;
@@ -1397,7 +1417,7 @@ kbd{
               <div class="ux-walk-viewport-bezel" id="uxWalkViewportBezel" aria-label="Cadre écran invité">
                 <div class="ux-walk-viewport-screen" id="uxWalkViewportScreen">
                   <div class="ux-walk-stage ux-walk-stage--gate" data-ux-stages="0">
-                    <div class="share-gate-card" style="max-width:100%;width:100%;margin:0 4px">
+                    <div class="share-gate-card ux-walk-gate-card">
                       <p class="step-lbl preview-click-edit" id="uxWalkGateTitle" tabindex="0" role="button" data-edit-target="inputShareGateTitle" style="margin-bottom:10px;text-align:center">Puzzle partagé</p>
                       <p class="ux-walk-gate-body preview-click-edit" id="uxWalkGateBody" tabindex="0" role="button" data-edit-target="textareaShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
                       <span class="wp-btn p ux-walk-fake-start">Commencer</span>
