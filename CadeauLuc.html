@@ -115,6 +115,26 @@ body{
   min-width:0;
   flex:1;
 }
+#setup.creation-guided{
+  position:fixed;
+  inset:0;
+  width:100%;
+  max-width:none;
+  min-height:100vh;
+  max-height:100vh;
+  border-radius:0;
+  z-index:55;
+  overflow:auto;
+  padding:22px 24px 20px;
+  align-self:stretch;
+}
+#setup.creation-guided .setup-previews{
+  position:static;
+  top:auto;
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+}
 #setup.creation-guided .setup-layout{
   grid-template-columns:1fr;
   max-width:min(720px,100%);
@@ -160,8 +180,7 @@ body{
   color:#b0b0d8;
   letter-spacing:.03em;
 }
-#setup.creation-guided .guided-float-drag-bar,
-#setup.creation-uxwalk .guided-float-drag-bar{display:flex}
+#setup.creation-guided .guided-float-drag-bar{display:flex}
 .guided-float-drag-bar:active{cursor:grabbing}
 .guided-float-drag-grip{
   width:18px;
@@ -178,7 +197,7 @@ body{
 .guided-float-drag-hint{color:#6b6b8a;font-size:.65rem}
 #setup.creation-guided .guided-floating-panel{display:block}
 #setup.creation-uxwalk #builderStepsMount{display:none}
-#setup.creation-uxwalk .guided-floating-panel{display:block}
+#setup.creation-uxwalk .guided-floating-panel{display:none}
 #setup.creation-uxwalk{
   position:fixed;
   inset:0;
@@ -192,39 +211,72 @@ body{
   box-sizing:border-box;
 }
 #setup.creation-uxwalk .setup-layout{
-  display:flex;
-  flex-direction:column;
+  display:block;
   flex:1;
   min-height:0;
-  grid-template-columns:unset;
   max-width:none;
   margin:0;
   width:100%;
 }
 #setup.creation-uxwalk .setup-previews,
 #setup.creation-uxwalk .setup-customize{display:none!important}
-#setup.creation-uxwalk .guided-floating-panel{
-  width:min(520px,calc(100vw - 28px));
-  max-height:min(42vh,calc(100vh - 100px));
-  z-index:90;
+#setup.creation-uxwalk .setup-header-row{
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
 }
+.ux-device-switch{
+  display:none;
+  align-items:center;
+  gap:6px;
+  background:rgba(15,52,96,.45);
+  border:1px solid rgba(168,85,247,.28);
+  border-radius:12px;
+  padding:4px;
+}
+#setup.creation-uxwalk .ux-device-switch{display:inline-flex}
+.ux-device-btn{
+  border:1px solid transparent;
+  background:transparent;
+  color:#9f9fc0;
+  font-size:.72rem;
+  font-weight:700;
+  padding:7px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background .16s,border-color .16s,color .16s;
+}
+.ux-device-btn[aria-pressed="true"]{
+  background:rgba(168,85,247,.2);
+  border-color:rgba(168,85,247,.55);
+  color:#ececff;
+}
+.ux-device-btn:hover{color:#ececff}
 .ux-walk-shell{
   display:none;
-  flex:1;
-  flex-direction:row;
-  align-items:stretch;
-  gap:10px;
   min-height:0;
   width:100%;
   padding:0 6px 10px;
   box-sizing:border-box;
 }
-#setup.creation-uxwalk .ux-walk-shell{display:flex}
+#setup.creation-uxwalk .ux-walk-shell{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(320px,390px);
+  gap:14px;
+  height:calc(100vh - 150px);
+}
+.ux-walk-shell-main{
+  min-width:0;
+  min-height:0;
+  display:flex;
+  align-items:stretch;
+  gap:10px;
+}
 .ux-walk-side-nav{
   flex-shrink:0;
   align-self:center;
-  width:min(52px,11vw);
-  min-height:min(160px,28vh);
+  width:48px;
+  min-height:140px;
   border-radius:14px;
   border:1px solid rgba(168,85,247,.38);
   background:rgba(168,85,247,.14);
@@ -240,52 +292,52 @@ body{
   border-color:#a855f7;
 }
 .ux-walk-side-nav:active:not(:disabled){transform:scale(.96)}
-.ux-walk-side-nav:disabled{opacity:.3;cursor:default}
+.ux-walk-side-nav:disabled{opacity:.28;cursor:default}
 .ux-walk-stage-wrap{
   flex:1;
+  min-width:0;
+  min-height:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  min-width:0;
-  min-height:0;
   overflow:auto;
-  padding:6px 4px 8px;
+  padding:8px 4px;
 }
 .ux-walk-assembly{
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:8px;
+  width:100%;
   min-width:0;
-  max-width:100%;
 }
-.ux-walk-assembly[hidden]{display:none!important}
 .ux-walk-chrome-band{
-  font-size:.62rem;
+  font-size:.67rem;
   font-weight:800;
-  letter-spacing:.14em;
+  letter-spacing:.1em;
   text-transform:uppercase;
-  color:#6b6b8a;
+  color:#7a7aa1;
   text-align:center;
   line-height:1.35;
-  max-width:min(420px,94vw);
+  max-width:min(540px,96%);
 }
-.ux-walk-chrome-band strong{color:#a855f7;font-weight:800}
+.ux-walk-chrome-band strong{color:#b886ff;font-weight:800}
 .ux-walk-viewport-package{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:6px;
+  gap:8px;
+  width:100%;
 }
 .ux-walk-viewport-package[hidden]{display:none!important}
 .ux-walk-viewport-bezel{
   position:relative;
   flex-shrink:0;
-  width:min(360px,calc(100vw - 140px),calc(min(82vh,640px) * 9 / 19.5));
+  width:min(360px,calc(100vw - 560px),calc((100vh - 220px) * 9 / 19.5));
   aspect-ratio:9/19.5;
-  max-height:min(82vh,640px);
+  max-height:min(72vh,640px);
   padding:5px;
-  border-radius:20px;
+  border-radius:22px;
   background:linear-gradient(145deg,#2a2a3d,#12121c);
   box-shadow:
     0 0 0 1px rgba(255,255,255,.12),
@@ -300,7 +352,7 @@ body{
   border-radius:14px;
   overflow:hidden;
   background:#0b0b17;
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.18);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.16);
 }
 .ux-walk-viewport-screen::after{
   content:'';
@@ -312,69 +364,58 @@ body{
   z-index:50;
 }
 .ux-walk-viewport-foot{
-  font-size:.68rem;
-  color:#5c5c78;
+  margin:0;
+  font-size:.72rem;
+  color:#77779a;
   text-align:center;
   line-height:1.4;
-  max-width:min(380px,92vw);
-  margin:0;
-  padding:0 6px;
+  max-width:min(560px,96%);
 }
 .ux-walk-creator-only-zone{
+  width:100%;
+  max-width:620px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:14px;
-  padding:12px;
-  min-height:min(200px,30vh);
 }
 .ux-walk-creator-only-zone[hidden]{display:none!important}
 .ux-walk-creator-only-banner{
-  font-size:.7rem;
-  font-weight:700;
-  letter-spacing:.1em;
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.08em;
   text-transform:uppercase;
-  color:#e94560;
+  color:#ff8da0;
   text-align:center;
-  max-width:360px;
-  line-height:1.4;
 }
 .ux-walk-viewport-screen > .ux-walk-stage{
   position:absolute;
   inset:0;
   width:100%;
-  max-width:none;
   height:100%;
   margin:0;
-  padding:10px 8px;
   box-sizing:border-box;
   overflow:auto;
+  z-index:1;
+}
+.ux-walk-stage{
+  width:100%;
+  max-width:100%;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:10px;
-  z-index:1;
-}
-.ux-walk-stage{
-  width:100%;
-  max-width:min(520px,100%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
+  padding:10px 8px;
 }
 .ux-walk-stage[hidden]{display:none!important}
 .ux-walk-live-hint{
-  font-size:.78rem;
+  font-size:.72rem;
   color:#8b8ba8;
   text-align:center;
   line-height:1.45;
-  max-width:36em;
-  margin:0 auto;
-  padding:0 8px;
+  margin:0;
 }
 .ux-walk-live-hint[hidden]{display:none!important}
 .ux-walk-gate-body{
@@ -395,18 +436,17 @@ body{
 .ux-walk-photo-caption{
   text-align:center;
   margin:0;
+  font-size:.65rem;
 }
-.ux-walk-viewport-screen .ux-walk-photo-caption{font-size:.62rem}
-.ux-walk-viewport-screen .ux-walk-crop-note{font-size:.65rem!important}
 .ux-walk-photo-frame{
   position:relative;
-  width:min(88%,300px);
+  width:min(90%,260px);
   aspect-ratio:1;
-  max-height:min(38vh,320px);
+  max-height:min(34vh,250px);
   border-radius:12px;
   overflow:hidden;
   border:1px solid rgba(168,85,247,.4);
-  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
   background:#12121f;
 }
 .ux-walk-photo-frame .mock-grid-overlay{
@@ -437,17 +477,17 @@ body{
   text-align:center;
   padding:16px;
   color:#6a6a88;
-  font-size:.88rem;
-  line-height:1.45;
+  font-size:.82rem;
+  line-height:1.4;
   background:rgba(18,18,31,.82);
 }
 .ux-walk-photo-ph[hidden]{display:none!important}
 .ux-walk-crop-note{
-  font-size:.78rem!important;
-  line-height:1.45!important;
+  font-size:.66rem!important;
+  line-height:1.4!important;
   color:#8b8ba8!important;
   text-align:center;
-  max-width:min(420px,100%);
+  max-width:min(92%,360px);
 }
 .ux-mock-game{
   width:100%;
@@ -460,23 +500,19 @@ body{
   background:#0b0b17;
   display:flex;
   flex-direction:column;
-  box-shadow:none;
 }
-.ux-walk-stage--game.ux-walk-stage{
-  justify-content:flex-start;
-  padding-top:6px;
-}
+.ux-walk-stage--game.ux-walk-stage{justify-content:flex-start}
 .ux-mock-game .mock-canvas{
   flex:1;
   min-height:72px;
 }
 .ux-mock-game .mock-crop-frame{
   width:min(94%,220px);
-  max-height:min(36vh,240px);
+  max-height:min(34vh,220px);
 }
 .ux-mock-game .preview-crop-note{
   flex-shrink:0;
-  padding:8px 12px 12px;
+  padding:8px 10px 10px;
   margin:0;
 }
 .ux-mock-win{
@@ -487,35 +523,123 @@ body{
   max-height:100%;
   border-radius:12px;
 }
-.ux-walk-stage--win.ux-walk-stage{padding:6px 6px 10px}
 .ux-mock-win .preview-win-headline{
-  font-size:clamp(1.1rem,4.2vw,1.75rem);
+  font-size:clamp(1rem,3.8vw,1.7rem);
 }
 .ux-mock-win .mock-win-fake-btns .mock-fake{
-  font-size:.82rem!important;
-  padding:10px 18px!important;
+  font-size:.76rem!important;
+  padding:8px 14px!important;
 }
 .ux-walk-end-card{
   background:#16213e;
-  border-radius:20px;
-  padding:28px 24px;
+  border-radius:18px;
+  padding:24px 20px;
   width:100%;
-  max-width:420px;
+  max-width:460px;
   border:1px solid rgba(168,85,247,.22);
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
   text-align:center;
 }
-.ux-walk-end-card .field-hint{margin-bottom:18px;line-height:1.5}
+.ux-walk-end-card .field-hint{margin-bottom:14px;line-height:1.45}
 .ux-walk-end-mock-btns{
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:10px;
   pointer-events:none;
 }
 .ux-walk-end-mock-btns .mock-fake{
   font-size:.9rem!important;
   padding:12px 18px!important;
   cursor:default;
+}
+.ux-walk-editor{
+  background:#121a34;
+  border:1px solid rgba(168,85,247,.28);
+  border-radius:16px;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+}
+.ux-walk-editor-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(168,85,247,.22);
+  background:rgba(168,85,247,.08);
+}
+.ux-walk-editor-title{
+  font-size:.82rem;
+  font-weight:800;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  color:#d7d7f4;
+}
+.ux-walk-editor-sub{
+  font-size:.68rem;
+  color:#8f8fb4;
+}
+.ux-walk-editor-body{
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  padding:12px 14px 14px;
+}
+.ux-walk-editor-body .builder-step{
+  margin:0;
+}
+#setup[data-ux-device="desktop"] .ux-walk-viewport-bezel{
+  width:min(860px,calc(100vw - 560px),calc((100vh - 230px) * 16 / 10));
+  aspect-ratio:16/10;
+  max-height:min(70vh,560px);
+  border-radius:14px;
+  padding:6px;
+}
+#setup[data-ux-device="desktop"] .ux-walk-viewport-screen,
+#setup[data-ux-device="desktop"] .ux-walk-viewport-screen::after{
+  border-radius:9px;
+}
+#setup[data-ux-device="desktop"] .ux-walk-photo-frame{
+  width:min(78%,420px);
+  max-height:min(40vh,300px);
+}
+#setup[data-ux-device="desktop"] .ux-mock-game .mock-crop-frame{
+  width:min(88%,340px);
+  max-height:min(35vh,260px);
+}
+#setup[data-ux-device="desktop"] .ux-mock-win .preview-win-headline{
+  font-size:clamp(1.2rem,2.8vw,2rem);
+}
+@media (max-width:1200px){
+  #setup.creation-uxwalk .ux-walk-shell{
+    grid-template-columns:1fr;
+    grid-template-rows:minmax(0,1fr) minmax(220px,40vh);
+    height:calc(100vh - 165px);
+  }
+  .ux-walk-editor{max-height:42vh}
+  .ux-walk-viewport-bezel{
+    width:min(360px,calc(100vw - 90px),calc((100vh - 320px) * 9 / 19.5));
+  }
+  #setup[data-ux-device="desktop"] .ux-walk-viewport-bezel{
+    width:min(760px,calc(100vw - 90px),calc((100vh - 330px) * 16 / 10));
+  }
+}
+@media (max-width:700px){
+  #setup.creation-uxwalk .ux-walk-shell{
+    height:calc(100vh - 182px);
+    padding:0 2px 8px;
+  }
+  .ux-walk-side-nav{
+    width:40px;
+    min-height:120px;
+  }
+  .ux-device-btn{
+    font-size:.68rem;
+    padding:6px 8px;
+  }
 }
 .guided-float-head{
   margin-bottom:12px;
@@ -714,6 +838,7 @@ body{
   overflow:hidden;
   display:-webkit-box;
   -webkit-line-clamp:2;
+  line-clamp:2;
   -webkit-box-orient:vertical;
   word-break:break-word;
 }
@@ -1128,6 +1253,10 @@ kbd{
 #canvas{
   flex:1;display:block;
   cursor:default;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  touch-action:none;
   /* dot grid via CSS – no JS draw cost */
   background-image:radial-gradient(rgba(168,85,247,.07) 1.5px, transparent 1.5px);
   background-size:40px 40px;
@@ -1248,89 +1377,100 @@ kbd{
   <div class="setup-header-row">
     <h1 class="app-title setup-title-full">🧩 Puzzle personnalisable</h1>
     <button type="button" class="wp-btn s setup-mode-toggle" id="btnToggleCreationMode" aria-pressed="false">Mode parcours guidé</button>
+    <div class="ux-device-switch" id="uxDeviceSwitch" hidden aria-label="Type de vue invité">
+      <button type="button" class="ux-device-btn" id="btnUxDevicePhone" aria-pressed="true">Vue téléphone</button>
+      <button type="button" class="ux-device-btn" id="btnUxDeviceDesktop" aria-pressed="false">Vue ordinateur</button>
+    </div>
   </div>
   <p class="guided-step-hint" id="guidedModeStepHint" hidden></p>
 
   <div class="setup-layout">
     <div id="uxWalkShell" class="ux-walk-shell" hidden aria-hidden="true">
-      <button type="button" class="ux-walk-side-nav ux-walk-side-nav--prev" id="btnUxWalkPrev" aria-label="Étape précédente" hidden>‹</button>
-      <div class="ux-walk-stage-wrap" id="uxWalkStageWrap">
-        <div class="ux-walk-assembly" id="uxWalkAssembly">
-          <p class="ux-walk-chrome-band" id="uxWalkChromeBand">
-            <strong>Hors vue invité</strong> — navigation ‹ › et panneau « modification » autour du cadre
-          </p>
-          <div class="ux-walk-viewport-package" id="uxWalkViewportPackage">
-            <div class="ux-walk-viewport-bezel" id="uxWalkViewportBezel" aria-label="Cadre navigateur plein écran de l’invité">
-              <div class="ux-walk-viewport-screen" id="uxWalkViewportScreen">
-        <div class="ux-walk-stage ux-walk-stage--gate" data-ux-stages="0">
-          <div class="share-gate-card" style="max-width:100%;width:100%;margin:0 4px">
-            <p class="step-lbl preview-click-edit" id="uxWalkGateTitle" tabindex="0" role="button" data-edit-target="inputShareGateTitle" style="margin-bottom:10px;text-align:center">Puzzle partagé</p>
-            <p class="ux-walk-gate-body preview-click-edit" id="uxWalkGateBody" tabindex="0" role="button" data-edit-target="textareaShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
-            <span class="wp-btn p ux-walk-fake-start">Commencer</span>
-          </div>
-        </div>
-        <div class="ux-walk-stage ux-walk-stage--photo" data-ux-stages="1">
-          <p class="step-lbl ux-walk-photo-caption">Même zone que pendant le jeu (invité)</p>
-          <div class="ux-walk-photo-frame preview-click-edit" id="uxWalkPhotoFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
-            <img class="ux-walk-photo-img" id="uxWalkPhotoImg" alt="" hidden>
-            <div class="mock-grid-overlay" id="uxWalkPhotoGrid" aria-hidden="true"></div>
-            <div class="ux-walk-photo-ph" id="uxWalkPhotoPh">Ajoute une image via le panneau en bas.</div>
-          </div>
-          <p class="ux-walk-crop-note preview-click-edit" id="uxWalkPhotoCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
-        </div>
-        <div class="ux-walk-stage ux-walk-stage--game" data-ux-stages="2,3">
-          <p class="ux-walk-live-hint" id="uxWalkLiveHint" hidden></p>
-          <div class="ux-mock-game">
-            <div class="mock-toolbar">
-              <span class="mock-grid-dims preview-click-edit" id="uxWalkGridDims" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Modifier la grille">3×3</span>
-              <span class="mock-hint">Molette · Glisser · 2 clics</span>
-            </div>
-            <p class="mock-game-banner preview-click-edit preview-game-banner-hit" id="uxWalkGameBanner" tabindex="0" role="button" data-edit-target="inputToolTitle" aria-label="Modifier le titre au-dessus du puzzle">Puzzle</p>
-            <div class="mock-canvas">
-              <div class="mock-crop-frame preview-click-edit" id="uxWalkGameFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
-                <img class="mock-crop-img" id="uxWalkGameBoardImg" alt="" hidden>
-                <div class="mock-grid-overlay" id="uxWalkGameGridOverlay" aria-hidden="true"></div>
-                <div class="mock-board-placeholder" id="uxWalkGamePh">Ajoute une image à droite pour voir la zone utilisée et la grille.</div>
-              </div>
-            </div>
-            <p class="preview-crop-note field-hint preview-click-edit" id="uxWalkGameCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
-          </div>
-        </div>
-        <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="4">
-          <div class="mock-win ux-mock-win" id="uxWalkWinRoot">
-            <div class="mock-win-inner">
-              <div class="preview-win-headline preview-click-edit" id="uxWalkWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
-              <span class="preview-win-meta-edit preview-click-edit" tabindex="0" role="button" data-edit-target="selectWinFont" aria-label="Modifier la police du message de victoire">Police &amp; couleur du texte</span>
-              <div class="mock-win-fake-btns">
-                <span class="wp-btn p mock-fake">↺ Rejouer</span>
-                <span class="wp-btn s mock-fake">➕ Nouveau puzzle</span>
-              </div>
-            </div>
-            <div class="mock-win-bg preview-effect-fireworks preview-click-edit" id="uxWalkWinBg" tabindex="0" role="button" data-edit-target="selectWinEffect" aria-label="Modifier l’effet d’arrière-plan"></div>
-          </div>
-        </div>
-              </div>
-            </div>
-            <p class="ux-walk-viewport-foot" id="uxWalkViewportFoot">
-              L’intérieur du cadre = bords de la fenêtre (ou onglet) de l’invité, comme sur un téléphone. Le puzzle s’affiche en plein écran derrière la barre d’adresse masquée ici.
+      <div class="ux-walk-shell-main">
+        <button type="button" class="ux-walk-side-nav ux-walk-side-nav--prev" id="btnUxWalkPrev" aria-label="Étape précédente" hidden>‹</button>
+        <div class="ux-walk-stage-wrap" id="uxWalkStageWrap">
+          <div class="ux-walk-assembly" id="uxWalkAssembly">
+            <p class="ux-walk-chrome-band" id="uxWalkChromeBand">
+              <strong>Ce cadre = vue invitée</strong> · la zone de modification est séparée à droite.
             </p>
-          </div>
-        <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="5" hidden>
-          <p class="ux-walk-creator-only-banner">Pas sur le lien — étape créateur uniquement</p>
-          <div class="ux-walk-stage ux-walk-stage--end" style="max-width:420px">
-          <div class="ux-walk-end-card">
-            <p class="step-lbl" style="margin-bottom:12px">Lancer ou partager</p>
-            <p class="field-hint">Tu testes en local ou tu génères le lien. Utilise le panneau de modification (déplaçable).</p>
-            <div class="ux-walk-end-mock-btns">
-              <span class="wp-btn p mock-fake">Lancer le puzzle</span>
-              <span class="wp-btn s mock-fake">Générer le lien de partage</span>
+            <div class="ux-walk-viewport-package" id="uxWalkViewportPackage">
+              <div class="ux-walk-viewport-bezel" id="uxWalkViewportBezel" aria-label="Cadre écran invité">
+                <div class="ux-walk-viewport-screen" id="uxWalkViewportScreen">
+                  <div class="ux-walk-stage ux-walk-stage--gate" data-ux-stages="0">
+                    <div class="share-gate-card" style="max-width:100%;width:100%;margin:0 4px">
+                      <p class="step-lbl preview-click-edit" id="uxWalkGateTitle" tabindex="0" role="button" data-edit-target="inputShareGateTitle" style="margin-bottom:10px;text-align:center">Puzzle partagé</p>
+                      <p class="ux-walk-gate-body preview-click-edit" id="uxWalkGateBody" tabindex="0" role="button" data-edit-target="textareaShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+                      <span class="wp-btn p ux-walk-fake-start">Commencer</span>
+                    </div>
+                  </div>
+                  <div class="ux-walk-stage ux-walk-stage--photo" data-ux-stages="1">
+                    <p class="step-lbl ux-walk-photo-caption">Même zone que pendant le jeu (invité)</p>
+                    <div class="ux-walk-photo-frame preview-click-edit" id="uxWalkPhotoFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
+                      <img class="ux-walk-photo-img" id="uxWalkPhotoImg" alt="" hidden>
+                      <div class="mock-grid-overlay" id="uxWalkPhotoGrid" aria-hidden="true"></div>
+                      <div class="ux-walk-photo-ph" id="uxWalkPhotoPh">Ajoute une image via le panneau de modification.</div>
+                    </div>
+                    <p class="ux-walk-crop-note preview-click-edit" id="uxWalkPhotoCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
+                  </div>
+                  <div class="ux-walk-stage ux-walk-stage--game" data-ux-stages="2,3">
+                    <p class="ux-walk-live-hint" id="uxWalkLiveHint" hidden></p>
+                    <div class="ux-mock-game">
+                      <div class="mock-toolbar">
+                        <span class="mock-grid-dims preview-click-edit" id="uxWalkGridDims" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Modifier la grille">3×3</span>
+                        <span class="mock-hint">Molette · Glisser · 2 clics</span>
+                      </div>
+                      <p class="mock-game-banner preview-click-edit preview-game-banner-hit" id="uxWalkGameBanner" tabindex="0" role="button" data-edit-target="inputToolTitle" aria-label="Modifier le titre au-dessus du puzzle">Puzzle</p>
+                      <div class="mock-canvas">
+                        <div class="mock-crop-frame preview-click-edit" id="uxWalkGameFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
+                          <img class="mock-crop-img" id="uxWalkGameBoardImg" alt="" hidden>
+                          <div class="mock-grid-overlay" id="uxWalkGameGridOverlay" aria-hidden="true"></div>
+                          <div class="mock-board-placeholder" id="uxWalkGamePh">Ajoute une image à droite pour voir la zone utilisée et la grille.</div>
+                        </div>
+                      </div>
+                      <p class="preview-crop-note field-hint preview-click-edit" id="uxWalkGameCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
+                    </div>
+                  </div>
+                  <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="4">
+                    <div class="mock-win ux-mock-win" id="uxWalkWinRoot">
+                      <div class="mock-win-inner">
+                        <div class="preview-win-headline preview-click-edit" id="uxWalkWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
+                        <span class="preview-win-meta-edit preview-click-edit" tabindex="0" role="button" data-edit-target="selectWinFont" aria-label="Modifier la police du message de victoire">Police &amp; couleur du texte</span>
+                        <div class="mock-win-fake-btns">
+                          <span class="wp-btn p mock-fake">↺ Rejouer</span>
+                          <span class="wp-btn s mock-fake">➕ Nouveau puzzle</span>
+                        </div>
+                      </div>
+                      <div class="mock-win-bg preview-effect-fireworks preview-click-edit" id="uxWalkWinBg" tabindex="0" role="button" data-edit-target="selectWinEffect" aria-label="Modifier l’effet d’arrière-plan"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="ux-walk-viewport-foot" id="uxWalkViewportFoot">Le cadre représente la fenêtre de la personne qui ouvre ton lien.</p>
+            </div>
+            <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="5" hidden>
+              <p class="ux-walk-creator-only-banner">Pas sur le lien — étape créateur uniquement</p>
+              <div class="ux-walk-stage ux-walk-stage--end" style="max-width:460px">
+                <div class="ux-walk-end-card">
+                  <p class="step-lbl" style="margin-bottom:12px">Lancer ou partager</p>
+                  <p class="field-hint">Tu testes en local ou tu génères le lien avec la configuration de l’invité.</p>
+                  <div class="ux-walk-end-mock-btns">
+                    <span class="wp-btn p mock-fake">Lancer le puzzle</span>
+                    <span class="wp-btn s mock-fake">Générer le lien de partage</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          </div>
         </div>
-        </div>
+        <button type="button" class="ux-walk-side-nav ux-walk-side-nav--next" id="btnUxWalkNext" aria-label="Étape suivante" hidden>›</button>
       </div>
-      <button type="button" class="ux-walk-side-nav ux-walk-side-nav--next" id="btnUxWalkNext" aria-label="Étape suivante" hidden>›</button>
+      <aside class="ux-walk-editor" id="uxWalkEditorPanel" aria-label="Mode modification">
+        <div class="ux-walk-editor-head">
+          <span class="ux-walk-editor-title">Mode modification</span>
+          <span class="ux-walk-editor-sub">Hors vue invité</span>
+        </div>
+        <div class="ux-walk-editor-body" id="uxWalkEditorBody"></div>
+      </aside>
     </div>
 
     <aside class="setup-previews" aria-label="Aperçus des écrans" id="setupPreviewsColumn">
@@ -1489,7 +1629,7 @@ kbd{
   </div>
 
   <div id="guidedFloatingPanel" class="guided-floating-panel" aria-hidden="true">
-    <div class="guided-float-drag-bar" id="guidedFloatDragBar" title="Glisser pour déplacer le panneau · en parcours invité, le placer hors du cadre « téléphone » · double-clic : replacer automatiquement">
+    <div class="guided-float-drag-bar" id="guidedFloatDragBar" title="Glisser pour déplacer le panneau · double-clic : replacer automatiquement">
       <span class="guided-float-drag-grip" aria-hidden="true"></span>
       <span>Déplacer le panneau</span>
       <span class="guided-float-drag-hint">· double-clic : replacer</span>
@@ -1513,6 +1653,7 @@ kbd{
   <div id="toolbar">
     <h2 id="toolTitle">Puzzle</h2>
     <span class="hint"><kbd>Molette</kbd>&nbsp;Rotation</span>
+    <span class="hint"><kbd>2 taps</kbd>&nbsp;Rotation mobile</span>
     <span class="hint"><kbd>Glisser</kbd>&nbsp;Déplacer</span>
     <span class="hint"><kbd>2 clics</kbd>&nbsp;Connecter</span>
     <span class="hint"><kbd>Dbl-clic</kbd>&nbsp;Sens de la photo</span>
@@ -1575,6 +1716,7 @@ let previewObjectUrl = null;
 let shareLoadId = null;
 let creationMode = 'classic';
 let guidedStepIndex = 0;
+let uxWalkDevice = 'phone';
 let guidedPanelUserPos = null;
 let guidedPanelDragging = false;
 let guidedPanelDragPtr = null;
@@ -1946,7 +2088,7 @@ function updateBuilderPreviews() {
     gradient
   });
 
-  if (creationMode === 'guided' || creationMode === 'uxwalk')
+  if (creationMode === 'guided')
     requestAnimationFrame(() => positionGuidedFloatingPanel());
 }
 
@@ -2029,21 +2171,32 @@ function snapGuidedPanelToFreeSpace(desiredLeft, desiredTop, w, h) {
     return rectsIntersect(panelRectAt(c.left, c.top, w, h), avoid) ? null : c;
   }
 
-  let first = clearAt(desiredLeft, desiredTop);
-  if (first) return first;
+  const direct = clearAt(desiredLeft, desiredTop);
+  if (direct) return direct;
 
-  const candidates = [];
+  // If the desired position overlaps the showcase, prefer moving to one side
+  // (same Y when possible) so drag-and-drop feels natural.
+  const avoidCenterX = (avoid.left + avoid.right) / 2;
+  const desiredCenterX = desiredLeft + w / 2;
+  const preferRight = desiredCenterX >= avoidCenterX;
+  const sidePrimary = preferRight ? avoid.right + m : avoid.left - m - w;
+  const sideSecondary = preferRight ? avoid.left - m - w : avoid.right + m;
+  const sideYs = [desiredTop, (vh - h) / 2, m, vh - h - m];
+
+  for (let i = 0; i < sideYs.length; i++) {
+    const c = clearAt(sidePrimary, sideYs[i]);
+    if (c) return c;
+  }
+  for (let i = 0; i < sideYs.length; i++) {
+    const c = clearAt(sideSecondary, sideYs[i]);
+    if (c) return c;
+  }
+
+  const fallback = [];
   const add = (l0, t0) => {
     const c = clearAt(l0, t0);
-    if (c) candidates.push(c);
+    if (c) fallback.push(c);
   };
-
-  add(avoid.left - m - w, desiredTop);
-  add(avoid.left - m - w, (vh - h) / 2);
-  add(avoid.left - m - w, m);
-  add(avoid.right + m, desiredTop);
-  add(avoid.right + m, (vh - h) / 2);
-  add(avoid.right + m, vh - h - m);
 
   add(desiredLeft, avoid.bottom + m);
   add(desiredLeft, avoid.top - m - h);
@@ -2057,14 +2210,14 @@ function snapGuidedPanelToFreeSpace(desiredLeft, desiredTop, w, h) {
   add(m, vh - h - m);
   add(vw - w - m, vh - h - m);
 
-  if (!candidates.length) {
+  if (!fallback.length) {
     const t = Math.min(Math.max(m, avoid.bottom + m), vh - h - m);
     return { left: Math.max(m, Math.min((vw - w) / 2, vw - w - m)), top: t };
   }
 
-  let best = candidates[0];
+  let best = fallback[0];
   let bestD = Infinity;
-  for (const c of candidates) {
+  for (const c of fallback) {
     const dx = c.left - desiredLeft;
     const dy = c.top - desiredTop;
     const d = dx * dx + dy * dy;
@@ -2128,7 +2281,7 @@ function positionGuidedFloatingPanel() {
   if (!panel || !setup) return;
   if (getComputedStyle(setup).display === 'none') return;
 
-  if (creationMode !== 'guided' && creationMode !== 'uxwalk') return;
+  if (creationMode !== 'guided') return;
   if (guidedPanelDragging) return;
 
   const w = panel.offsetWidth || 360;
@@ -2241,7 +2394,7 @@ function initGuidedPanelDrag() {
   }
 
   function resetGuidedPanelPlacement(e) {
-    if (creationMode !== 'guided' && creationMode !== 'uxwalk') return;
+    if (creationMode !== 'guided') return;
     e.preventDefault();
     e.stopPropagation();
     guidedPanelUserPos = null;
@@ -2251,7 +2404,7 @@ function initGuidedPanelDrag() {
   if (bar) bar.addEventListener('dblclick', resetGuidedPanelPlacement);
 
   panel.addEventListener('pointerdown', (e) => {
-    if (creationMode !== 'guided' && creationMode !== 'uxwalk') return;
+    if (creationMode !== 'guided') return;
     if (e.button !== 0) return;
     if (!guidedDragTargetOk(e.target)) return;
     e.preventDefault();
@@ -2318,10 +2471,10 @@ function setUxWalkStageVisibility(i) {
   if (band) {
     if (i === 5) {
       band.innerHTML =
-        '<strong>Étape créateur</strong> — lancer / partager n’apparaît pas sur le lien (panneau déplaçable à part)';
+        '<strong>Étape créateur</strong> — lancer / partager n’apparaît pas dans la vue invitée.';
     } else {
       band.innerHTML =
-        '<strong>Hors vue invité</strong> — navigation ‹ › et panneau « modification » autour du cadre';
+        '<strong>Ce cadre = vue invitée</strong> · la zone de modification est séparée à droite.';
     }
   }
 }
@@ -2338,13 +2491,19 @@ function updateUxWalkLiveHint(i) {
   }
 }
 
+function getBuilderStepHostForMode() {
+  if (creationMode === 'uxwalk') return document.getElementById('uxWalkEditorBody');
+  if (creationMode === 'guided') return document.getElementById('guidedFloatBody');
+  return document.getElementById('builderStepsMount');
+}
+
 function setGuidedStep(i, onDone) {
   i = Math.max(0, Math.min(BUILDER_STEP_COUNT - 1, i));
   guidedStepIndex = i;
   reorderAllBuilderStepsToMount();
   const stepEl = document.querySelector('[data-builder-step="' + (i + 1) + '"]');
-  const floatBody = document.getElementById('guidedFloatBody');
-  if (stepEl && floatBody) floatBody.appendChild(stepEl);
+  const host = getBuilderStepHostForMode();
+  if (stepEl && host) host.appendChild(stepEl);
 
   const badge = document.getElementById('guidedFloatBadge');
   const titleEl = document.getElementById('guidedFloatTitle');
@@ -2406,6 +2565,24 @@ function setGuidedStep(i, onDone) {
       if (typeof onDone === 'function') onDone();
     });
   });
+}
+
+function setUxWalkDevice(device) {
+  const next = device === 'desktop' ? 'desktop' : 'phone';
+  uxWalkDevice = next;
+  const setup = document.getElementById('setup');
+  if (setup) setup.dataset.uxDevice = next;
+  const btnPhone = document.getElementById('btnUxDevicePhone');
+  const btnDesktop = document.getElementById('btnUxDeviceDesktop');
+  if (btnPhone) btnPhone.setAttribute('aria-pressed', next === 'phone' ? 'true' : 'false');
+  if (btnDesktop) btnDesktop.setAttribute('aria-pressed', next === 'desktop' ? 'true' : 'false');
+  const foot = document.getElementById('uxWalkViewportFoot');
+  if (foot) {
+    foot.textContent =
+      next === 'desktop'
+        ? 'Simulation écran ordinateur : l’invité voit une zone plus large (proportions desktop).'
+        : 'Simulation écran téléphone : l’invité voit un cadre vertical compact.';
+  }
 }
 
 function setCreationMode(mode) {
@@ -2623,6 +2800,8 @@ let PS = 100;
 let JIG_PAD = 36;
 const SNAP_ANG   = Math.PI / 7;      // ~25.7° angle tolerance
 const ROT_STEP   = Math.PI / 4;      // 45° (1/8 tour) per wheel notch
+const TOUCH_DOUBLE_TAP_MS = 320;
+const TOUCH_DOUBLE_TAP_DIST = 34;
 /** Part de min(W,H) pour le côté du puzzle résolu ; un peu plus sur très grand écran (projecteur). */
 const PUZZLE_SCREEN_FRACTION = 0.5;
 const PS_MIN = 36;
@@ -2648,6 +2827,8 @@ let gidSeq = 0;
 let selId  = null;  // id of currently selected piece
 let drag   = null;  // {gid, sx, sy, ox, oy, moved}
 let winState = false; // true once puzzle is solved
+let activePointerId = null;
+let lastTouchTap = null;
 
 // snap flash: [{cx,cy,t}] short-lived visual feedback
 let flashes = [];
@@ -3214,26 +3395,41 @@ function cp(e) {
 }
 
 function onDown(e) {
-  if (e.button || winState) return;
+  if (winState) return;
   const pos = cp(e);
   const p = pieceAt(pos.x, pos.y);
-  if (!p) { selId = null; return; }
+  if (!p) {
+    selId = null;
+    if ((e.pointerType || 'mouse') === 'touch') lastTouchTap = null;
+    return;
+  }
   bringToTop(p.groupId);
   const g = groups[p.groupId];
-  drag = { gid: p.groupId, sx: pos.x, sy: pos.y, ox: g.x, oy: g.y, moved: false };
-  canvas.style.cursor = 'grabbing';
+  drag = {
+    gid: p.groupId,
+    sx: pos.x,
+    sy: pos.y,
+    ox: g.x,
+    oy: g.y,
+    moved: false,
+    pointerType: e.pointerType || 'mouse'
+  };
+  if (drag.pointerType === 'mouse') canvas.style.cursor = 'grabbing';
 }
 
 function onMove(e) {
   const pos = cp(e);
+  const pointerType = (drag && drag.pointerType) || e.pointerType || 'mouse';
   if (!drag) {
-    canvas.style.cursor = pieceAt(pos.x, pos.y) ? 'grab' : 'default';
+    if (pointerType === 'mouse')
+      canvas.style.cursor = pieceAt(pos.x, pos.y) ? 'grab' : 'default';
     return;
   }
   const dx = pos.x - drag.sx, dy = pos.y - drag.sy;
   if (!drag.moved && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
     drag.moved = true;
     selId = null;
+    if (pointerType === 'touch') lastTouchTap = null;
   }
   if (drag.moved && groups[drag.gid]) {
     groups[drag.gid].x = drag.ox + dx;
@@ -3243,15 +3439,83 @@ function onMove(e) {
 
 function onUp(e) {
   if (!drag) return;
+  const pointerType = drag.pointerType || e.pointerType || 'mouse';
   if (!drag.moved) {
     const pos = cp(e);
     const p = pieceAt(pos.x, pos.y);
-    if (p) handleClick(p);
+    if (p) {
+      if (pointerType === 'touch') {
+        const now = performance.now();
+        const prev = lastTouchTap;
+        const isDoubleTap = !!prev
+          && prev.gid === p.groupId
+          && now - prev.ts <= TOUCH_DOUBLE_TAP_MS
+          && Math.hypot(pos.x - prev.x, pos.y - prev.y) <= TOUCH_DOUBLE_TAP_DIST;
+        if (isDoubleTap) {
+          const g = groups[p.groupId];
+          if (g) {
+            bringToTop(p.groupId);
+            g.angle += ROT_STEP;
+            selId = null;
+            snapAll(p.groupId);
+          }
+          lastTouchTap = null;
+        } else {
+          handleClick(p);
+          lastTouchTap = { ts: now, gid: p.groupId, x: pos.x, y: pos.y };
+        }
+      } else {
+        handleClick(p);
+      }
+    }
   } else {
+    if (pointerType === 'touch') lastTouchTap = null;
     snapAll(drag.gid);
   }
   drag = null;
+  activePointerId = null;
+  if (pointerType === 'mouse') canvas.style.cursor = 'default';
+  if (pointerType !== 'mouse') e.preventDefault();
+}
+
+function onPointerDown(e) {
+  if (winState) return;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  if (activePointerId !== null && activePointerId !== e.pointerId) return;
+  onDown(e);
+  if (!drag) return;
+  activePointerId = e.pointerId;
+  if (canvas.setPointerCapture) {
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+  }
+  if ((e.pointerType || 'mouse') !== 'mouse') e.preventDefault();
+}
+
+function onPointerMove(e) {
+  const pointerType = e.pointerType || 'mouse';
+  if (activePointerId !== null && e.pointerId !== activePointerId) return;
+  if (activePointerId === null && pointerType !== 'mouse') return;
+  onMove(e);
+  if (pointerType !== 'mouse' && drag) e.preventDefault();
+}
+
+function onPointerUp(e) {
+  if (activePointerId !== null && e.pointerId !== activePointerId) return;
+  onUp(e);
+}
+
+function onPointerCancel(e) {
+  if (activePointerId !== null && e.pointerId !== activePointerId) return;
+  drag = null;
+  activePointerId = null;
+  lastTouchTap = null;
   canvas.style.cursor = 'default';
+}
+
+function onPointerLeave(e) {
+  if (drag) return;
+  const pointerType = e.pointerType || 'mouse';
+  if (pointerType === 'mouse') canvas.style.cursor = 'default';
 }
 
 // Click: select or connect two neighboring pieces.
@@ -3523,10 +3787,12 @@ function startGame() {
 
     if (!canvasListenersBound) {
       canvasListenersBound = true;
-      canvas.addEventListener('mousedown',  onDown);
-      canvas.addEventListener('mousemove',  onMove);
-      canvas.addEventListener('mouseup',    onUp);
-      canvas.addEventListener('mouseleave', onUp);
+      canvas.addEventListener('pointerdown', onPointerDown, { passive: false });
+      canvas.addEventListener('pointermove', onPointerMove, { passive: false });
+      canvas.addEventListener('pointerup', onPointerUp, { passive: false });
+      canvas.addEventListener('pointercancel', onPointerCancel);
+      canvas.addEventListener('lostpointercapture', onPointerCancel);
+      canvas.addEventListener('pointerleave', onPointerLeave);
       canvas.addEventListener('dblclick',   onDblClick);
       canvas.addEventListener('wheel',      onWheel, { passive: false });
       canvas.addEventListener('contextmenu', e => e.preventDefault());
@@ -3589,7 +3855,7 @@ function newPuzzle() {
     }
   }
   updateBuilderPreviews();
-  if (creationMode === 'guided' || creationMode === 'uxwalk')
+  if (creationMode === 'guided')
     requestAnimationFrame(() => positionGuidedFloatingPanel());
 }
 
@@ -3840,6 +4106,16 @@ if (btnUxWalkNext)
   btnUxWalkNext.addEventListener('click', () => {
     if (guidedStepIndex < BUILDER_STEP_COUNT - 1) setGuidedStep(guidedStepIndex + 1);
   });
+const btnUxDevicePhone = document.getElementById('btnUxDevicePhone');
+const btnUxDeviceDesktop = document.getElementById('btnUxDeviceDesktop');
+if (btnUxDevicePhone)
+  btnUxDevicePhone.addEventListener('click', () => {
+    setUxWalkDevice('phone');
+  });
+if (btnUxDeviceDesktop)
+  btnUxDeviceDesktop.addEventListener('click', () => {
+    setUxWalkDevice('desktop');
+  });
 
 syncFormFromScenario();
 ensureGoogleFont('system');
@@ -3847,6 +4123,7 @@ initBuilderPreviewListeners();
 initPreviewClickToEdit();
 initGuidedPanelDrag();
 initDropZone();
+setUxWalkDevice('phone');
 const previewImgEl = document.getElementById('preview');
 if (previewImgEl) previewImgEl.addEventListener('load', updateBuilderPreviews);
 updateBuilderPreviews();
