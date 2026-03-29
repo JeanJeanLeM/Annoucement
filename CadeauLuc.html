@@ -355,10 +355,11 @@ body{
   min-width:0;
   min-height:0;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:center;
   overflow:auto;
-  padding:8px 4px;
+  overflow-x:hidden;
+  padding:10px 4px 12px;
 }
 .ux-walk-assembly{
   display:flex;
@@ -367,6 +368,9 @@ body{
   gap:8px;
   width:100%;
   min-width:0;
+  justify-content:flex-start;
+  padding-top:2px;
+  padding-bottom:6px;
 }
 .ux-walk-chrome-band{
   font-size:.67rem;
@@ -471,9 +475,9 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   gap:10px;
-  padding:10px 8px;
+  padding:12px 8px;
 }
 .ux-walk-stage[hidden]{display:none!important}
 .ux-walk-live-hint{
@@ -1269,6 +1273,42 @@ body{
 .builder-row-inline input[type="color"]{
   width:44px;height:36px;padding:2px;cursor:pointer;border-radius:8px;border:1px solid rgba(168,85,247,.35);
 }
+.occasion-caps{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:8px 0 10px;
+}
+.occasion-chip{
+  border:1px solid rgba(168,85,247,.34);
+  background:rgba(168,85,247,.12);
+  color:#bdbde0;
+  border-radius:999px;
+  padding:7px 12px;
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.01em;
+  line-height:1.15;
+  cursor:pointer;
+  transition:background .15s,border-color .15s,color .15s,transform .1s;
+}
+.occasion-chip:hover{
+  border-color:#a855f7;
+  background:rgba(168,85,247,.2);
+  color:#ececff;
+}
+.occasion-chip:active{transform:translateY(1px)}
+.occasion-chip.is-active,
+.occasion-chip[aria-pressed="true"]{
+  border-color:#d184ff;
+  background:linear-gradient(135deg,rgba(168,85,247,.35),rgba(233,69,96,.28));
+  color:#fff;
+  box-shadow:0 4px 14px rgba(168,85,247,.3);
+}
+.occasion-hint{
+  color:#8b8baa;
+  margin-top:2px;
+}
 .field-hint{font-size:.72rem;color:#6b6b8a}
 #preview{
   max-height:120px;max-width:100%;
@@ -1503,7 +1543,7 @@ kbd{
                       <div class="ux-walk-photo-ph" id="uxWalkPhotoPh" aria-hidden="true"></div>
                     </div>
                   </div>
-                  <div class="ux-walk-stage ux-walk-stage--game" data-ux-stages="2,3">
+                  <div class="ux-walk-stage ux-walk-stage--game" data-ux-stages="2">
                     <div class="ux-mock-game">
                       <div class="mock-toolbar">
                         <span class="mock-grid-dims preview-click-edit" id="uxWalkGridDims" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Modifier la grille">3×3</span>
@@ -1519,7 +1559,7 @@ kbd{
                       </div>
                     </div>
                   </div>
-                  <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="4">
+                  <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="3">
                     <div class="mock-win ux-mock-win" id="uxWalkWinRoot">
                       <div class="mock-win-inner">
                         <div class="preview-win-headline preview-click-edit" id="uxWalkWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
@@ -1536,7 +1576,7 @@ kbd{
               <p class="ux-walk-viewport-foot" id="uxWalkViewportFoot">Le cadre représente la fenêtre de la personne qui ouvre ton lien.</p>
               <p class="ux-walk-outside-hint" id="uxWalkOutsideHint"></p>
             </div>
-            <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="5" hidden>
+            <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="4" hidden>
               <p class="ux-walk-creator-only-banner">Pas sur le lien — étape créateur uniquement</p>
               <div class="ux-walk-stage ux-walk-stage--end" style="max-width:460px">
                 <div class="ux-walk-end-card">
@@ -1615,6 +1655,15 @@ kbd{
       <div id="builderStepsMount">
       <div class="builder-step" data-builder-step="1">
         <p class="step-lbl">1 — Accueil (lien partagé)</p>
+        <p class="field-hint occasion-hint">Occasion (phrases pre-ecrites modifiables)</p>
+        <div class="occasion-caps" id="occasionCapsStep1" role="group" aria-label="Occasion accueil">
+          <button type="button" class="occasion-chip" data-occasion="anniversaire" aria-pressed="false">Anniversaire</button>
+          <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
+          <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
+          <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
+          <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
+          <button type="button" class="occasion-chip" data-occasion="saint-valentin" aria-pressed="false">Saint-Valentin</button>
+        </div>
         <div class="builder-row">
           <label class="field-hint" for="inputShareGateTitle">Titre (écran avant « Commencer »)</label>
           <input type="text" id="inputShareGateTitle" maxlength="80" placeholder="Ex. Puzzle partagé" autocomplete="off">
@@ -1626,7 +1675,7 @@ kbd{
       </div>
 
       <div class="builder-step" data-builder-step="2">
-        <p class="step-lbl">2 — Image du puzzle</p>
+        <p class="step-lbl">2 — Image + grille du puzzle</p>
         <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Choisir une image : glisser-déposer ou cliquer">
           <p class="gift-hint" style="margin:0"><strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).</p>
           <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
@@ -1635,11 +1684,8 @@ kbd{
             <button type="button" class="wp-btn s" id="btnBrowse">Parcourir…</button>
           </div>
         </div>
-      </div>
-
-      <div class="builder-step" data-builder-step="3">
-        <div class="step-lbl-with-info">
-          <p class="step-lbl">3 — Grille du puzzle</p>
+        <div class="step-lbl-with-info" style="margin-top:14px">
+          <p class="step-lbl">Grille du puzzle</p>
           <div class="info-tip-anchor">
             <button type="button" class="info-icon-btn" aria-label="Informations sur la grille du puzzle" aria-describedby="gridHelpTooltip">i</button>
             <div id="gridHelpTooltip" class="info-tooltip" role="tooltip">Ex. <strong>4×3</strong> = 12 pièces. Maximum <strong>64</strong> pièces (colonnes × lignes). La photo est affichée en <strong>« remplissage »</strong> : elle couvre toute la grille puis les bandes qui dépassent sont <strong>coupées au centre</strong> (à gauche et à droite si la photo est trop large, en haut et en bas si elle est trop haute).</div>
@@ -1657,16 +1703,34 @@ kbd{
         </div>
       </div>
 
-      <div class="builder-step" data-builder-step="4">
-        <p class="step-lbl">4 — Message au-dessus du puzzle</p>
+      <div class="builder-step" data-builder-step="3">
+        <p class="step-lbl">3 — Message au-dessus du puzzle</p>
+        <p class="field-hint occasion-hint">Occasion (preselection depuis l'etape 1, modifiable)</p>
+        <div class="occasion-caps" id="occasionCapsStep3" role="group" aria-label="Occasion titre jeu">
+          <button type="button" class="occasion-chip" data-occasion="anniversaire" aria-pressed="false">Anniversaire</button>
+          <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
+          <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
+          <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
+          <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
+          <button type="button" class="occasion-chip" data-occasion="saint-valentin" aria-pressed="false">Saint-Valentin</button>
+        </div>
         <div class="builder-row">
           <label class="field-hint" for="inputToolTitle">Affiché au-dessus de la zone de jeu pendant la partie (optionnel)</label>
           <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire — laisse vide pour « Puzzle »" autocomplete="off">
         </div>
       </div>
 
-      <div class="builder-step" data-builder-step="5">
-        <p class="step-lbl">5 — Écran de victoire</p>
+      <div class="builder-step" data-builder-step="4">
+        <p class="step-lbl">4 — Écran de victoire</p>
+        <p class="field-hint occasion-hint">Occasion (meme logique que l'etape 3, modifiable)</p>
+        <div class="occasion-caps" id="occasionCapsStep4" role="group" aria-label="Occasion victoire">
+          <button type="button" class="occasion-chip" data-occasion="anniversaire" aria-pressed="false">Anniversaire</button>
+          <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
+          <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
+          <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
+          <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
+          <button type="button" class="occasion-chip" data-occasion="saint-valentin" aria-pressed="false">Saint-Valentin</button>
+        </div>
         <div class="builder-row">
           <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
           <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
@@ -1699,8 +1763,8 @@ kbd{
         </div>
       </div>
 
-      <div class="builder-step" data-builder-step="6">
-        <p class="step-lbl">6 — Lancer ou partager</p>
+      <div class="builder-step" data-builder-step="5">
+        <p class="step-lbl">5 — Lancer ou partager</p>
         <p class="field-hint" style="margin-bottom:12px;line-height:1.45">Tu as parcouru le même chemin que ton invité : accueil → jeu → victoire. Ici tu lances la partie en local ou tu génères le lien.</p>
         <p id="setupError" role="alert"></p>
         <div class="builder-actions">
@@ -1810,23 +1874,194 @@ let uxWalkCropHint = '';
 let guidedPanelUserPos = null;
 let guidedPanelDragging = false;
 let guidedPanelDragPtr = null;
-const BUILDER_STEP_COUNT = 6;
+const BUILDER_STEP_COUNT = 5;
 const GUIDED_FLOAT_TITLES = [
   'Accueil du lien partagé',
-  'Photo du puzzle',
-  'Grille (colonnes × lignes)',
+  'Photo + grille du puzzle',
   'Titre au-dessus du jeu',
   'Écran de victoire',
   'Lancer ou partager'
 ];
 const GUIDED_STEP_HINTS = [
   'Comme ton invité : il voit d’abord cette carte, puis appuie sur « Commencer ».',
-  'C’est la même image qui sera découpée en pièces pendant la partie.',
-  'Le cadre à gauche montre ce qui sera visible au centre ; le rognage s’adapte aux proportions.',
+  'Choisis l’image puis la grille : c’est ce qui sera découpé pendant la partie.',
   'Ce texte apparaît au-dessus de la zone de puzzle pendant le jeu (optionnel).',
   'Message, effet, police et couleurs après la victoire.',
   'Tu peux tester tout de suite ou créer le lien à envoyer.'
 ];
+const OCCASION_FALLBACK = 'cadeau';
+const OCCASION_PRESETS = {
+  anniversaire: {
+    step1Title: 'Invitation anniversaire',
+    step1Body: 'Un puzzle surprise t\'attend pour un anniversaire. Clique sur « Commencer » pour le decouvrir.',
+    step3Title: 'Joyeux anniversaire !',
+    step4Win: 'Joyeux anniversaire !\nProfite a fond de cette belle journee.'
+  },
+  naissance: {
+    step1Title: 'Bienvenue bebe',
+    step1Body: 'Un petit puzzle pour celebrer une belle naissance. Clique sur « Commencer ».',
+    step3Title: 'Bienvenue bebe',
+    step4Win: 'Bienvenue au bebe !\nFelicitations aux heureux parents.'
+  },
+  mariage: {
+    step1Title: 'Invitation mariage',
+    step1Body: 'Un puzzle souvenir du mariage t\'attend. Clique sur « Commencer ».',
+    step3Title: 'Vive les maries !',
+    step4Win: 'Vive les maries !\nBeaucoup d\'amour et de bonheur.'
+  },
+  cadeau: {
+    step1Title: 'Une surprise pour toi',
+    step1Body: 'Un cadeau t\'attend derriere ce puzzle. Clique sur « Commencer ».',
+    step3Title: 'Decouvre ta surprise',
+    step4Win: 'Surprise debloquee !\nJ\'espere que ce cadeau te fait plaisir.'
+  },
+  vacances: {
+    step1Title: 'Souvenir de vacances',
+    step1Body: 'Un puzzle souvenir de vacances t\'attend. Clique sur « Commencer ».',
+    step3Title: 'Cap sur les vacances',
+    step4Win: 'Bonnes vacances !\nQue ce souvenir te fasse sourire.'
+  },
+  'saint-valentin': {
+    step1Title: 'Message de Saint-Valentin',
+    step1Body: 'Un puzzle plein d\'amour t\'attend. Clique sur « Commencer ».',
+    step3Title: 'Bonne Saint-Valentin',
+    step4Win: 'Bonne Saint-Valentin !\nAvec tout mon amour.'
+  }
+};
+let occasionSelection = {
+  1: OCCASION_FALLBACK,
+  3: OCCASION_FALLBACK,
+  4: OCCASION_FALLBACK
+};
+
+function normalizeOccasionKey(key) {
+  return OCCASION_PRESETS[key] ? key : OCCASION_FALLBACK;
+}
+
+function setOccasionVisual(step, key) {
+  const root = document.getElementById('occasionCapsStep' + step);
+  if (!root) return;
+  const k = normalizeOccasionKey(key);
+  root.querySelectorAll('.occasion-chip[data-occasion]').forEach((btn) => {
+    const active = btn.getAttribute('data-occasion') === k;
+    btn.classList.toggle('is-active', active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+  });
+}
+
+function setOccasionSelection(step, key) {
+  const k = normalizeOccasionKey(key);
+  occasionSelection[step] = k;
+  setOccasionVisual(step, k);
+}
+
+function applyOccasionTextForStep(step, key) {
+  const p = OCCASION_PRESETS[normalizeOccasionKey(key)];
+  if (!p) return;
+  if (step === 1) {
+    const t1 = document.getElementById('inputShareGateTitle');
+    const b1 = document.getElementById('textareaShareGateBody');
+    if (t1) t1.value = p.step1Title;
+    if (b1) b1.value = p.step1Body;
+    return;
+  }
+  if (step === 3) {
+    const t4 = document.getElementById('inputToolTitle');
+    if (t4) t4.value = p.step3Title;
+    return;
+  }
+  if (step === 4) {
+    const w5 = document.getElementById('textareaWinText');
+    if (w5) w5.value = p.step4Win;
+  }
+}
+
+function applyOccasionPreset(step, key, options) {
+  const opts = options || {};
+  const k = normalizeOccasionKey(key);
+  const syncLinked = !!opts.syncLinkedFromStep1;
+  setOccasionSelection(step, k);
+  applyOccasionTextForStep(step, k);
+
+  if (step === 1 && syncLinked) {
+    setOccasionSelection(3, k);
+    setOccasionSelection(4, k);
+    applyOccasionTextForStep(3, k);
+    applyOccasionTextForStep(4, k);
+  }
+
+  if (opts.skipRefresh) return;
+  readFormToScenario();
+  updateBuilderPreviews();
+}
+
+function detectOccasionFromText() {
+  const txt = [
+    (document.getElementById('inputShareGateTitle') || {}).value || '',
+    (document.getElementById('textareaShareGateBody') || {}).value || '',
+    (document.getElementById('inputToolTitle') || {}).value || '',
+    (document.getElementById('textareaWinText') || {}).value || ''
+  ]
+    .join(' ')
+    .toLowerCase();
+  if (!txt.trim()) return '';
+
+  const checks = [
+    ['saint-valentin', ['valentin', 'amour', 'love', 'coeur']],
+    ['anniversaire', ['anniversaire', 'birthday']],
+    ['naissance', ['naissance', 'bebe', 'baby', 'bienvenue']],
+    ['mariage', ['mariage', 'marie', 'wedding', 'union']],
+    ['vacances', ['vacances', 'voyage', 'plage', 'ete', 'souvenir']],
+    ['cadeau', ['cadeau', 'surprise', 'present', 'gift']]
+  ];
+  for (let i = 0; i < checks.length; i++) {
+    const key = checks[i][0];
+    const words = checks[i][1];
+    if (words.some((w) => txt.includes(w))) return key;
+  }
+  return '';
+}
+
+function syncOccasionSelectionsFromCurrentFields() {
+  const key = normalizeOccasionKey(detectOccasionFromText() || OCCASION_FALLBACK);
+  setOccasionSelection(1, key);
+  setOccasionSelection(3, key);
+  setOccasionSelection(4, key);
+}
+
+function initOccasionCapsules() {
+  const steps = [1, 3, 4];
+  steps.forEach((step) => {
+    const root = document.getElementById('occasionCapsStep' + step);
+    if (!root) return;
+    root.querySelectorAll('.occasion-chip[data-occasion]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-occasion') || OCCASION_FALLBACK;
+        if (step === 1) {
+          applyOccasionPreset(1, key, { syncLinkedFromStep1: true });
+        } else {
+          applyOccasionPreset(step, key);
+        }
+      });
+    });
+  });
+
+  const sid = getQueryScenarioId();
+  const w5 = ((document.getElementById('textareaWinText') || {}).value || '').trim();
+  const hasCustom =
+    !!((document.getElementById('inputShareGateTitle') || {}).value || '').trim() ||
+    !!((document.getElementById('textareaShareGateBody') || {}).value || '').trim() ||
+    !!((document.getElementById('inputToolTitle') || {}).value || '').trim() ||
+    (w5 && w5 !== 'Bravo !');
+
+  if (!sid && !hasCustom) {
+    applyOccasionPreset(1, OCCASION_FALLBACK, { syncLinkedFromStep1: true, skipRefresh: true });
+    readFormToScenario();
+    updateBuilderPreviews();
+    return;
+  }
+  syncOccasionSelectionsFromCurrentFields();
+}
 
 function clampGridDims(c, r) {
   c = Math.round(Number(c));
@@ -2348,11 +2583,11 @@ function applyGuidedPreviewFocus() {
   document.querySelectorAll('.preview-block[data-preview-stage]').forEach((b) => {
     b.classList.remove('preview-block--dim', 'preview-block--focus');
   });
-  if (guidedStepIndex >= 5) return;
+  if (guidedStepIndex >= 4) return;
   const stage =
     guidedStepIndex <= 0
       ? 'gate'
-      : guidedStepIndex <= 3
+      : guidedStepIndex <= 2
         ? 'game'
         : 'win';
   document.querySelectorAll('.preview-block[data-preview-stage]').forEach((b) => {
@@ -2384,9 +2619,8 @@ function positionGuidedFloatingPanel() {
 
 function getGuidedStepForField(focusId) {
   if (focusId === 'inputShareGateTitle' || focusId === 'textareaShareGateBody') return 0;
-  if (focusId === 'dropZone') return 1;
-  if (focusId === 'inputGridCols' || focusId === 'inputGridRows') return 2;
-  if (focusId === 'inputToolTitle') return 3;
+  if (focusId === 'dropZone' || focusId === 'inputGridCols' || focusId === 'inputGridRows') return 1;
+  if (focusId === 'inputToolTitle') return 2;
   if (
     focusId === 'textareaWinText' ||
     focusId === 'selectWinEffect' ||
@@ -2394,7 +2628,7 @@ function getGuidedStepForField(focusId) {
     focusId === 'inputWinColor' ||
     focusId === 'checkWinGradient'
   )
-    return 4;
+    return 3;
   return null;
 }
 
@@ -2552,10 +2786,10 @@ function setUxWalkStageVisibility(i) {
     el.hidden = !stages.includes(i);
   });
   const pkg = document.getElementById('uxWalkViewportPackage');
-  if (pkg) pkg.hidden = i === 5;
+  if (pkg) pkg.hidden = i === 4;
   const band = document.getElementById('uxWalkChromeBand');
   if (band) {
-    if (i === 5) {
+    if (i === 4) {
       band.innerHTML =
         '<strong>Étape créateur</strong> — lancer / partager n’apparaît pas dans la vue invitée.';
     } else {
@@ -2573,19 +2807,19 @@ function updateUxWalkLiveHint(i) {
     return;
   }
   if (i === 1) {
-    el.textContent = uxWalkCropHint || 'Zone image visible pendant la partie.';
+    el.textContent = uxWalkCropHint || GUIDED_STEP_HINTS[1] || '';
     return;
   }
   if (i === 2) {
-    el.textContent = uxWalkCropHint || GUIDED_STEP_HINTS[i] || '';
+    el.textContent = GUIDED_STEP_HINTS[2] || '';
     return;
   }
   if (i === 3) {
-    el.textContent = GUIDED_STEP_HINTS[i] || '';
+    el.textContent = GUIDED_STEP_HINTS[3] || '';
     return;
   }
   if (i === 4) {
-    el.textContent = 'Ecran de victoire reel de l’invite.';
+    el.textContent = '';
     return;
   }
   el.textContent = '';
@@ -2803,6 +3037,7 @@ function applyScenarioPayload(data) {
   scenario.gridRows = gr;
   syncGridFromScenario();
   syncFormFromScenario();
+  syncOccasionSelectionsFromCurrentFields();
   ensureGoogleFont(scenario.winFontKey);
   updateBuilderPreviews();
   applyShareGateTextsToDom();
@@ -3939,6 +4174,7 @@ function newPuzzle() {
     shareLoadId = null;
     scenario = defaultScenario();
     syncFormFromScenario();
+    syncOccasionSelectionsFromCurrentFields();
     clearLocalImage();
     const sr = document.getElementById('shareResult');
     if (sr) { sr.classList.remove('on'); }
@@ -4220,6 +4456,7 @@ if (btnUxDeviceDesktop)
 syncFormFromScenario();
 ensureGoogleFont('system');
 initBuilderPreviewListeners();
+initOccasionCapsules();
 initPreviewClickToEdit();
 initGuidedPanelDrag();
 initDropZone();
