@@ -1509,13 +1509,13 @@ kbd{
   </div>
 </div>
 
-<div id="setup" data-creation-mode="classic">
+<div id="setup" data-creation-mode="uxwalk">
   <div class="setup-header-row">
     <h1 class="app-title setup-title-full">🧩 Puzzle personnalisable</h1>
     <button type="button" class="wp-btn s setup-mode-toggle" id="btnToggleCreationMode" aria-pressed="false">Mode parcours guidé</button>
     <div class="ux-device-switch" id="uxDeviceSwitch" hidden aria-label="Type de vue invité">
-      <button type="button" class="ux-device-btn" id="btnUxDevicePhone" aria-pressed="true">Vue téléphone</button>
-      <button type="button" class="ux-device-btn" id="btnUxDeviceDesktop" aria-pressed="false">Vue ordinateur</button>
+      <button type="button" class="ux-device-btn" id="btnUxDevicePhone" aria-pressed="false">Vue téléphone</button>
+      <button type="button" class="ux-device-btn" id="btnUxDeviceDesktop" aria-pressed="true">Vue ordinateur</button>
     </div>
   </div>
   <p class="guided-step-hint" id="guidedModeStepHint" hidden></p>
@@ -1873,9 +1873,9 @@ let scenario = defaultScenario();
 let selectedImageFile = null;
 let previewObjectUrl = null;
 let shareLoadId = null;
-let creationMode = 'classic';
+let creationMode = 'uxwalk';
 let guidedStepIndex = 0;
-let uxWalkDevice = 'phone';
+let uxWalkDevice = 'desktop';
 let uxWalkCropHint = '';
 let guidedPanelUserPos = null;
 let guidedPanelDragging = false;
@@ -1904,16 +1904,16 @@ const OCCASION_PRESETS = {
     step4Win: 'Joyeux anniversaire !\nProfite a fond de cette belle journee.'
   },
   naissance: {
-    step1Title: 'Bienvenue bebe',
-    step1Body: 'Un petit puzzle pour celebrer une belle naissance. Clique sur « Commencer ».',
-    step3Title: 'Bienvenue bebe',
-    step4Win: 'Bienvenue au bebe !\nFelicitations aux heureux parents.'
+    step1Title: 'Une annonce a te faire',
+    step1Body: 'On a une surprise a t\'annoncer avec ce puzzle. Clique sur « Commencer ».',
+    step3Title: 'Une belle annonce',
+    step4Win: 'Surprise : un bebe arrive !\nMerci de partager ce bonheur avec nous.'
   },
   mariage: {
-    step1Title: 'Invitation mariage',
-    step1Body: 'Un puzzle souvenir du mariage t\'attend. Clique sur « Commencer ».',
-    step3Title: 'Vive les maries !',
-    step4Win: 'Vive les maries !\nBeaucoup d\'amour et de bonheur.'
+    step1Title: 'Une annonce a te faire',
+    step1Body: 'On a une grande surprise a t\'annoncer avec ce puzzle. Clique sur « Commencer ».',
+    step3Title: 'Grande annonce',
+    step4Win: 'Surprise : on se marie !\nOn est heureux de te l\'annoncer.'
   },
   cadeau: {
     step1Title: 'Une surprise pour toi',
@@ -4500,7 +4500,8 @@ initOccasionCapsules();
 initPreviewClickToEdit();
 initGuidedPanelDrag();
 initDropZone();
-setUxWalkDevice('phone');
+setUxWalkDevice('desktop');
+setCreationMode('uxwalk');
 const previewImgEl = document.getElementById('preview');
 if (previewImgEl) previewImgEl.addEventListener('load', updateBuilderPreviews);
 updateBuilderPreviews();
