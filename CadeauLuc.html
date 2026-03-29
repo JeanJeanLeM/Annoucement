@@ -118,6 +118,9 @@ body{
   line-height:1.45;
   color:#9090b8;
   max-width:260px;
+  max-height:4.35em;
+  overflow:hidden;
+  word-break:break-word;
 }
 .mock-share-gate .mock-share-fake-btn{
   margin-top:12px;
@@ -673,8 +676,8 @@ kbd{
 
 <div id="shareGate" aria-hidden="true">
   <div class="share-gate-card">
-    <p class="step-lbl" style="margin-bottom:8px;text-align:center">Puzzle partagé</p>
-    <p>Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+    <p class="step-lbl" id="shareGateCardTitle" style="margin-bottom:8px;text-align:center">Puzzle partagé</p>
+    <p id="shareGateCardBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
     <p id="shareGateError" role="alert"></p>
     <button type="button" class="wp-btn p" id="btnShareStart" style="width:100%;margin-top:8px">Commencer</button>
   </div>
@@ -690,8 +693,8 @@ kbd{
       <div class="preview-block">
         <p class="step-lbl">Avant d’ouvrir (lien partagé)</p>
         <div class="mock-share-gate" aria-hidden="true">
-          <p class="step-lbl">Puzzle partagé</p>
-          <p class="mock-share-text">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+          <p class="step-lbl" id="previewShareGateTitle">Puzzle partagé</p>
+          <p class="mock-share-text" id="previewShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
           <span class="wp-btn p mock-share-fake-btn">Commencer</span>
         </div>
       </div>
@@ -764,7 +767,19 @@ kbd{
       </div>
 
       <div>
-        <p class="step-lbl">3 — Message au-dessus du puzzle</p>
+        <p class="step-lbl">3 — Accueil (lien partagé)</p>
+        <div class="builder-row">
+          <label class="field-hint" for="inputShareGateTitle">Titre (écran avant « Commencer »)</label>
+          <input type="text" id="inputShareGateTitle" maxlength="80" placeholder="Ex. Puzzle partagé" autocomplete="off">
+        </div>
+        <div class="builder-row" style="margin-top:10px">
+          <label class="field-hint" for="textareaShareGateBody">Texte d’invitation (plusieurs lignes possibles)</label>
+          <textarea id="textareaShareGateBody" maxlength="400" rows="3" placeholder="Quand tu es prêt…"></textarea>
+        </div>
+      </div>
+
+      <div>
+        <p class="step-lbl">4 — Message au-dessus du puzzle</p>
         <div class="builder-row">
           <label class="field-hint" for="inputToolTitle">Affiché au-dessus de la zone de jeu pendant la partie (optionnel)</label>
           <input type="text" id="inputToolTitle" maxlength="80" placeholder="Ex. Joyeux anniversaire — laisse vide pour « Puzzle »" autocomplete="off">
@@ -772,7 +787,7 @@ kbd{
       </div>
 
       <div>
-        <p class="step-lbl">4 — Écran de victoire</p>
+        <p class="step-lbl">5 — Écran de victoire</p>
         <div class="builder-row">
           <label class="field-hint" for="textareaWinText">Message (plusieurs lignes possibles)</label>
           <textarea id="textareaWinText" maxlength="800" placeholder="Bravo !"></textarea>
@@ -861,9 +876,15 @@ const FONT_MAP = {
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 
+const DEFAULT_SHARE_GATE_TITLE = 'Puzzle partagé';
+const DEFAULT_SHARE_GATE_BODY =
+  'Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.';
+
 function defaultScenario() {
   return {
     toolTitle: '',
+    shareGateTitle: '',
+    shareGateBody: '',
     winText: 'Bravo !',
     winEffect: 'fireworks',
     winFontKey: 'system',
@@ -933,6 +954,17 @@ function setWinHeadlineContent(el, text) {
   });
 }
 
+function applyShareGateTextsToDom() {
+  const t =
+    (scenario.shareGateTitle && String(scenario.shareGateTitle).trim()) || DEFAULT_SHARE_GATE_TITLE;
+  const b =
+    (scenario.shareGateBody && String(scenario.shareGateBody).trim()) || DEFAULT_SHARE_GATE_BODY;
+  const titleEl = document.getElementById('shareGateCardTitle');
+  const bodyEl = document.getElementById('shareGateCardBody');
+  if (titleEl) titleEl.textContent = t;
+  if (bodyEl) setWinHeadlineContent(bodyEl, b);
+}
+
 function applyWinHeadlineStyles() {
   const el = document.getElementById('winHeadline');
   if (!el) return;
@@ -951,6 +983,8 @@ function applyWinHeadlineStyles() {
 }
 
 function readFormToScenario() {
+  scenario.shareGateTitle = (document.getElementById('inputShareGateTitle') || {}).value || '';
+  scenario.shareGateBody = (document.getElementById('textareaShareGateBody') || {}).value || '';
   scenario.toolTitle = (document.getElementById('inputToolTitle') || {}).value || '';
   scenario.winText = (document.getElementById('textareaWinText') || {}).value || 'Bravo !';
   scenario.winEffect = (document.getElementById('selectWinEffect') || {}).value || 'fireworks';
@@ -967,6 +1001,8 @@ function readFormToScenario() {
 }
 
 function syncFormFromScenario() {
+  const sgt = document.getElementById('inputShareGateTitle');
+  const sgb = document.getElementById('textareaShareGateBody');
   const t = document.getElementById('inputToolTitle');
   const w = document.getElementById('textareaWinText');
   const e = document.getElementById('selectWinEffect');
@@ -975,6 +1011,8 @@ function syncFormFromScenario() {
   const g = document.getElementById('checkWinGradient');
   const ic = document.getElementById('inputGridCols');
   const ir = document.getElementById('inputGridRows');
+  if (sgt) sgt.value = scenario.shareGateTitle != null ? scenario.shareGateTitle : '';
+  if (sgb) sgb.value = scenario.shareGateBody != null ? scenario.shareGateBody : '';
   if (t) t.value = scenario.toolTitle || '';
   if (w) w.value = scenario.winText || '';
   if (e) e.value = scenario.winEffect || 'fireworks';
@@ -1009,6 +1047,8 @@ function getPreviewCropNote(gc, gr, prevEl) {
 }
 
 function updateBuilderPreviews() {
+  const sgTitleIn = document.getElementById('inputShareGateTitle');
+  const sgBodyIn = document.getElementById('textareaShareGateBody');
   const toolEl = document.getElementById('inputToolTitle');
   const winTextEl = document.getElementById('textareaWinText');
   const effectEl = document.getElementById('selectWinEffect');
@@ -1022,6 +1062,19 @@ function updateBuilderPreviews() {
   const fontKey = (fontEl && fontEl.value && FONT_MAP[fontEl.value]) ? fontEl.value : 'system';
   const color = (colorEl && colorEl.value) || '#e8e8f0';
   const gradient = !!(gradEl && gradEl.checked);
+
+  const sgTitleShow =
+    (sgTitleIn && sgTitleIn.value.trim()) ||
+    (scenario.shareGateTitle && scenario.shareGateTitle.trim()) ||
+    DEFAULT_SHARE_GATE_TITLE;
+  const sgBodyShow =
+    (sgBodyIn && sgBodyIn.value.trim()) ||
+    (scenario.shareGateBody && scenario.shareGateBody.trim()) ||
+    DEFAULT_SHARE_GATE_BODY;
+  const psgt = document.getElementById('previewShareGateTitle');
+  const psgb = document.getElementById('previewShareGateBody');
+  if (psgt) psgt.textContent = sgTitleShow;
+  if (psgb) setWinHeadlineContent(psgb, sgBodyShow);
 
   const toolInput = toolEl ? toolEl.value.trim() : '';
   const titleShown = toolInput || (scenario.toolTitle && scenario.toolTitle.trim()) || 'Puzzle';
@@ -1092,6 +1145,8 @@ function updateBuilderPreviews() {
 function metaForUpload() {
   return {
     toolTitle: scenario.toolTitle,
+    shareGateTitle: scenario.shareGateTitle,
+    shareGateBody: scenario.shareGateBody,
     winText: scenario.winText,
     winEffect: scenario.winEffect,
     winFontKey: scenario.winFontKey,
@@ -1105,6 +1160,8 @@ function metaForUpload() {
 function applyScenarioPayload(data) {
   if (!data || typeof data !== 'object') return;
   scenario.toolTitle = typeof data.toolTitle === 'string' ? data.toolTitle : '';
+  scenario.shareGateTitle = typeof data.shareGateTitle === 'string' ? data.shareGateTitle : '';
+  scenario.shareGateBody = typeof data.shareGateBody === 'string' ? data.shareGateBody : '';
   scenario.winText = typeof data.winText === 'string' ? data.winText : 'Bravo !';
   scenario.winEffect = ['fireworks', 'confetti', 'minimal'].includes(data.winEffect) ? data.winEffect : 'fireworks';
   scenario.winFontKey = FONT_MAP[data.winFontKey] ? data.winFontKey : 'system';
@@ -1118,6 +1175,7 @@ function applyScenarioPayload(data) {
   syncFormFromScenario();
   ensureGoogleFont(scenario.winFontKey);
   updateBuilderPreviews();
+  applyShareGateTextsToDom();
 }
 
 function validateImageFile(file) {
@@ -2315,7 +2373,7 @@ function initDropZone() {
 }
 
 function initBuilderPreviewListeners() {
-  ['inputToolTitle', 'textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
+  ['inputShareGateTitle', 'textareaShareGateBody', 'inputToolTitle', 'textareaWinText', 'selectWinEffect', 'selectWinFont', 'inputWinColor', 'checkWinGradient', 'inputGridCols', 'inputGridRows'].forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', updateBuilderPreviews);
