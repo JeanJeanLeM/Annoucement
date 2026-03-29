@@ -1522,7 +1522,6 @@ kbd{
 <div id="setup" data-creation-mode="uxwalk">
   <div class="setup-header-row">
     <h1 class="app-title setup-title-full">🧩 Puzzle personnalisable</h1>
-    <button type="button" class="wp-btn s setup-mode-toggle" id="btnToggleCreationMode" aria-pressed="false">Mode parcours guidé</button>
     <div class="ux-device-switch" id="uxDeviceSwitch" hidden aria-label="Type de vue invité">
       <button type="button" class="ux-device-btn" id="btnUxDevicePhone" aria-pressed="false">Vue téléphone</button>
       <button type="button" class="ux-device-btn" id="btnUxDeviceDesktop" aria-pressed="true">Vue ordinateur</button>
@@ -1800,24 +1799,6 @@ kbd{
     </div>
   </div>
 
-  <div id="guidedFloatingPanel" class="guided-floating-panel" aria-hidden="true">
-    <div class="guided-float-drag-bar" id="guidedFloatDragBar" title="Glisser pour déplacer le panneau · double-clic : replacer automatiquement">
-      <span class="guided-float-drag-grip" aria-hidden="true"></span>
-      <span>Déplacer le panneau</span>
-      <span class="guided-float-drag-hint">· double-clic : replacer</span>
-    </div>
-    <div class="guided-float-head">
-      <div class="guided-float-head-nav">
-        <button type="button" class="guided-nav-btn guided-nav-btn--prev" id="btnGuidedPrev" aria-label="Étape précédente" hidden>‹</button>
-        <div class="guided-float-head-main">
-          <span class="guided-float-badge" id="guidedFloatBadge"></span>
-          <span class="guided-float-title" id="guidedFloatTitle"></span>
-        </div>
-        <button type="button" class="guided-nav-btn guided-nav-btn--next" id="btnGuidedNext" aria-label="Étape suivante" hidden>›</button>
-      </div>
-    </div>
-    <div class="guided-float-body" id="guidedFloatBody"></div>
-  </div>
 </div>
 
 <!-- ── Game ───────────────────────────────────────────── -->
@@ -2980,92 +2961,27 @@ function setUxWalkDevice(device) {
 
 function setCreationMode(mode) {
   const setup = document.getElementById('setup');
-  const btn = document.getElementById('btnToggleCreationMode');
-  const panel = document.getElementById('guidedFloatingPanel');
-  const prev = document.getElementById('btnGuidedPrev');
-  const next = document.getElementById('btnGuidedNext');
   const hint = document.getElementById('guidedModeStepHint');
   const shell = document.getElementById('uxWalkShell');
-
-  const allowed = ['classic', 'guided', 'uxwalk'];
-  const nextMode = allowed.includes(mode) ? mode : 'classic';
-  creationMode = nextMode;
+  creationMode = 'uxwalk';
 
   if (setup) {
-    setup.dataset.creationMode = nextMode;
-    setup.classList.toggle('creation-guided', nextMode === 'guided');
-    setup.classList.toggle('creation-uxwalk', nextMode === 'uxwalk');
+    setup.dataset.creationMode = 'uxwalk';
+    setup.classList.remove('creation-guided');
+    setup.classList.add('creation-uxwalk');
   }
-  if (btn) {
-    const goNext = {
-      classic: 'Mode parcours guidé',
-      guided: 'Parcours invité plein écran',
-      uxwalk: 'Vue complète (toutes les étapes)'
-    };
-    btn.textContent = goNext[nextMode];
-    btn.setAttribute('aria-pressed', nextMode !== 'classic' ? 'true' : 'false');
+  if (hint) {
+    hint.hidden = false;
   }
-
-  if (nextMode === 'classic') {
-    guidedPanelUserPos = null;
-    guidedPanelDragging = false;
-    guidedPanelDragPtr = null;
-    if (panel) panel.classList.remove('guided-floating-panel--dragging');
-    reorderAllBuilderStepsToMount();
-    if (panel) panel.setAttribute('aria-hidden', 'true');
-    if (prev) {
-      prev.hidden = true;
-      prev.disabled = false;
-    }
-    if (next) {
-      next.hidden = true;
-      next.disabled = false;
-    }
-    if (hint) {
-      hint.hidden = true;
-      hint.textContent = '';
-    }
-    if (shell) {
-      shell.hidden = true;
-      shell.setAttribute('aria-hidden', 'true');
-    }
-    const uxPrev = document.getElementById('btnUxWalkPrev');
-    const uxNext = document.getElementById('btnUxWalkNext');
-    if (uxPrev) uxPrev.hidden = true;
-    if (uxNext) uxNext.hidden = true;
-    document.body.style.overflow = '';
-    document.querySelectorAll('.preview-block').forEach((b) => {
-      b.classList.remove('preview-block--dim', 'preview-block--focus');
-    });
-    window.removeEventListener('scroll', positionGuidedFloatingPanel, true);
-    window.removeEventListener('resize', positionGuidedFloatingPanel);
-    window.removeEventListener('resize', updateUxWalkStageCentering);
-  } else {
-    if (nextMode === 'guided' || nextMode === 'uxwalk') guidedPanelUserPos = null;
-    if (panel) panel.setAttribute('aria-hidden', 'false');
-    window.addEventListener('scroll', positionGuidedFloatingPanel, true);
-    window.addEventListener('resize', positionGuidedFloatingPanel);
-    if (nextMode === 'uxwalk') {
-      document.body.style.overflow = 'hidden';
-      if (shell) {
-        shell.hidden = false;
-        shell.setAttribute('aria-hidden', 'false');
-      }
-      window.addEventListener('resize', updateUxWalkStageCentering);
-    } else {
-      document.body.style.overflow = '';
-      if (shell) {
-        shell.hidden = true;
-        shell.setAttribute('aria-hidden', 'true');
-      }
-      window.removeEventListener('resize', updateUxWalkStageCentering);
-      const uxPrev = document.getElementById('btnUxWalkPrev');
-      const uxNext = document.getElementById('btnUxWalkNext');
-      if (uxPrev) uxPrev.hidden = true;
-      if (uxNext) uxNext.hidden = true;
-    }
-    setGuidedStep(guidedStepIndex);
+  if (shell) {
+    shell.hidden = false;
+    shell.setAttribute('aria-hidden', 'false');
   }
+  document.body.style.overflow = 'hidden';
+  window.removeEventListener('scroll', positionGuidedFloatingPanel, true);
+  window.removeEventListener('resize', positionGuidedFloatingPanel);
+  window.addEventListener('resize', updateUxWalkStageCentering);
+  setGuidedStep(guidedStepIndex);
 }
 
 function metaForUpload() {
@@ -4472,27 +4388,8 @@ document.getElementById('btnShareLink').addEventListener('click', onShareLinkCli
 document.getElementById('btnCopyShare').addEventListener('click', onCopyShareClick);
 document.getElementById('btnShareStart').addEventListener('click', onShareStartClick);
 
-const btnToggleCreation = document.getElementById('btnToggleCreationMode');
-if (btnToggleCreation) {
-  btnToggleCreation.addEventListener('click', () => {
-    const order = ['classic', 'guided', 'uxwalk'];
-    const i = order.indexOf(creationMode);
-    setCreationMode(order[(Math.max(0, i) + 1) % order.length]);
-  });
-}
-const btnGuidedPrev = document.getElementById('btnGuidedPrev');
-const btnGuidedNext = document.getElementById('btnGuidedNext');
-if (btnGuidedPrev)
-  btnGuidedPrev.addEventListener('click', () => {
-    if (guidedStepIndex > 0) setGuidedStep(guidedStepIndex - 1);
-  });
-if (btnGuidedNext)
-  btnGuidedNext.addEventListener('click', () => {
-    if (guidedStepIndex < BUILDER_STEP_COUNT - 1) setGuidedStep(guidedStepIndex + 1);
-  });
-
 document.addEventListener('keydown', (e) => {
-  if (creationMode !== 'guided' && creationMode !== 'uxwalk') return;
+  if (creationMode !== 'uxwalk') return;
   const setup = document.getElementById('setup');
   if (!setup || getComputedStyle(setup).display === 'none') return;
   const t = e.target;
