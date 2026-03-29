@@ -139,7 +139,245 @@ body{
   transition:top .28s ease,left .28s ease,transform .28s ease,opacity .2s ease;
   pointer-events:auto;
 }
+.guided-floating-panel--dragging{
+  transition:none!important;
+  box-shadow:0 24px 56px rgba(0,0,0,.65),0 0 0 2px rgba(168,85,247,.42);
+}
+.guided-float-drag-handle{
+  cursor:grab;
+  user-select:none;
+  -webkit-user-select:none;
+  border-radius:10px;
+  padding:2px 4px;
+  margin:-2px -4px;
+}
+.guided-float-drag-handle:active{cursor:grabbing}
 #setup.creation-guided .guided-floating-panel{display:block}
+#setup.creation-uxwalk #builderStepsMount{display:none}
+#setup.creation-uxwalk .guided-floating-panel{display:block}
+#setup.creation-uxwalk{
+  position:fixed;
+  inset:0;
+  width:100%;
+  max-width:none;
+  border-radius:0;
+  z-index:55;
+  min-height:100vh;
+  max-height:100vh;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+#setup.creation-uxwalk .setup-layout{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  min-height:0;
+  grid-template-columns:unset;
+  max-width:none;
+  margin:0;
+  width:100%;
+}
+#setup.creation-uxwalk .setup-previews,
+#setup.creation-uxwalk .setup-customize{display:none!important}
+#setup.creation-uxwalk .guided-floating-panel{
+  width:min(520px,calc(100vw - 28px));
+  max-height:min(42vh,calc(100vh - 100px));
+}
+.ux-walk-shell{
+  display:none;
+  flex:1;
+  flex-direction:row;
+  align-items:stretch;
+  gap:10px;
+  min-height:0;
+  width:100%;
+  padding:0 6px 10px;
+  box-sizing:border-box;
+}
+#setup.creation-uxwalk .ux-walk-shell{display:flex}
+.ux-walk-side-nav{
+  flex-shrink:0;
+  align-self:center;
+  width:min(52px,11vw);
+  min-height:min(160px,28vh);
+  border-radius:14px;
+  border:1px solid rgba(168,85,247,.38);
+  background:rgba(168,85,247,.14);
+  color:#e8e8f0;
+  font-size:2rem;
+  font-weight:300;
+  line-height:1;
+  cursor:pointer;
+  transition:background .15s,border-color .15s,transform .12s,opacity .15s;
+}
+.ux-walk-side-nav:hover:not(:disabled){
+  background:rgba(168,85,247,.24);
+  border-color:#a855f7;
+}
+.ux-walk-side-nav:active:not(:disabled){transform:scale(.96)}
+.ux-walk-side-nav:disabled{opacity:.3;cursor:default}
+.ux-walk-stage-wrap{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  min-height:0;
+  overflow:auto;
+  padding:8px 4px 72px;
+}
+.ux-walk-stage{
+  width:100%;
+  max-width:min(520px,100%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+.ux-walk-stage[hidden]{display:none!important}
+.ux-walk-live-hint{
+  font-size:.78rem;
+  color:#8b8ba8;
+  text-align:center;
+  line-height:1.45;
+  max-width:36em;
+  margin:0 auto;
+  padding:0 8px;
+}
+.ux-walk-live-hint[hidden]{display:none!important}
+.ux-walk-gate-body{
+  margin:0;
+  font-size:.95rem;
+  line-height:1.5;
+  color:#a0a0c0;
+  max-width:100%;
+  word-break:break-word;
+}
+.ux-walk-fake-start{
+  width:100%;
+  margin-top:10px;
+  pointer-events:none;
+  cursor:default;
+  opacity:.95;
+}
+.ux-walk-photo-caption{
+  text-align:center;
+  margin:0;
+}
+.ux-walk-photo-frame{
+  position:relative;
+  width:min(92vw,420px);
+  aspect-ratio:1;
+  max-height:min(52vh,480px);
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.4);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  background:#12121f;
+}
+.ux-walk-photo-frame .mock-grid-overlay{
+  position:absolute;
+  inset:0;
+  display:grid;
+  gap:0;
+  pointer-events:none;
+  z-index:2;
+}
+.ux-walk-photo-img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+.ux-walk-photo-img[hidden]{display:none!important}
+.ux-walk-photo-ph{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:16px;
+  color:#6a6a88;
+  font-size:.88rem;
+  line-height:1.45;
+  background:rgba(18,18,31,.82);
+}
+.ux-walk-photo-ph[hidden]{display:none!important}
+.ux-walk-crop-note{
+  font-size:.78rem!important;
+  line-height:1.45!important;
+  color:#8b8ba8!important;
+  text-align:center;
+  max-width:min(420px,100%);
+}
+.ux-mock-game{
+  width:100%;
+  max-width:min(560px,100%);
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.25);
+  background:#0b0b17;
+  display:flex;
+  flex-direction:column;
+  min-height:min(420px,48vh);
+  max-height:min(72vh,calc(100vh - 200px));
+  box-shadow:0 16px 48px rgba(0,0,0,.45);
+}
+.ux-mock-game .mock-canvas{
+  flex:1;
+  min-height:140px;
+}
+.ux-mock-game .mock-crop-frame{
+  width:min(94%,min(64vh,440px));
+  max-height:min(50vh,400px);
+}
+.ux-mock-game .preview-crop-note{
+  flex-shrink:0;
+  padding:8px 12px 12px;
+  margin:0;
+}
+.ux-mock-win{
+  width:100%;
+  max-width:min(520px,100%);
+  min-height:min(320px,42vh);
+  max-height:min(62vh,calc(100vh - 200px));
+  border-radius:18px;
+}
+.ux-mock-win .preview-win-headline{
+  font-size:clamp(1.1rem,4.2vw,1.75rem);
+}
+.ux-mock-win .mock-win-fake-btns .mock-fake{
+  font-size:.82rem!important;
+  padding:10px 18px!important;
+}
+.ux-walk-end-card{
+  background:#16213e;
+  border-radius:20px;
+  padding:28px 24px;
+  width:100%;
+  max-width:420px;
+  border:1px solid rgba(168,85,247,.22);
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  text-align:center;
+}
+.ux-walk-end-card .field-hint{margin-bottom:18px;line-height:1.5}
+.ux-walk-end-mock-btns{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  pointer-events:none;
+}
+.ux-walk-end-mock-btns .mock-fake{
+  font-size:.9rem!important;
+  padding:12px 18px!important;
+  cursor:default;
+}
 .guided-float-head{
   margin-bottom:12px;
   padding-bottom:10px;
@@ -875,6 +1113,70 @@ kbd{
   <p class="guided-step-hint" id="guidedModeStepHint" hidden></p>
 
   <div class="setup-layout">
+    <div id="uxWalkShell" class="ux-walk-shell" hidden aria-hidden="true">
+      <button type="button" class="ux-walk-side-nav ux-walk-side-nav--prev" id="btnUxWalkPrev" aria-label="Étape précédente" hidden>‹</button>
+      <div class="ux-walk-stage-wrap" id="uxWalkStageWrap">
+        <div class="ux-walk-stage ux-walk-stage--gate" data-ux-stages="0">
+          <div class="share-gate-card" style="max-width:440px;width:100%">
+            <p class="step-lbl preview-click-edit" id="uxWalkGateTitle" tabindex="0" role="button" data-edit-target="inputShareGateTitle" style="margin-bottom:10px;text-align:center">Puzzle partagé</p>
+            <p class="ux-walk-gate-body preview-click-edit" id="uxWalkGateBody" tabindex="0" role="button" data-edit-target="textareaShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
+            <span class="wp-btn p ux-walk-fake-start">Commencer</span>
+          </div>
+        </div>
+        <div class="ux-walk-stage ux-walk-stage--photo" data-ux-stages="1">
+          <p class="step-lbl ux-walk-photo-caption">Image au centre pendant le jeu</p>
+          <div class="ux-walk-photo-frame preview-click-edit" id="uxWalkPhotoFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
+            <img class="ux-walk-photo-img" id="uxWalkPhotoImg" alt="" hidden>
+            <div class="mock-grid-overlay" id="uxWalkPhotoGrid" aria-hidden="true"></div>
+            <div class="ux-walk-photo-ph" id="uxWalkPhotoPh">Ajoute une image via le panneau en bas.</div>
+          </div>
+          <p class="ux-walk-crop-note preview-click-edit" id="uxWalkPhotoCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
+        </div>
+        <div class="ux-walk-stage ux-walk-stage--game" data-ux-stages="2,3">
+          <p class="ux-walk-live-hint" id="uxWalkLiveHint" hidden></p>
+          <div class="ux-mock-game">
+            <div class="mock-toolbar">
+              <span class="mock-grid-dims preview-click-edit" id="uxWalkGridDims" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Modifier la grille">3×3</span>
+              <span class="mock-hint">Molette · Glisser · 2 clics</span>
+            </div>
+            <p class="mock-game-banner preview-click-edit preview-game-banner-hit" id="uxWalkGameBanner" tabindex="0" role="button" data-edit-target="inputToolTitle" aria-label="Modifier le titre au-dessus du puzzle">Puzzle</p>
+            <div class="mock-canvas">
+              <div class="mock-crop-frame preview-click-edit" id="uxWalkGameFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
+                <img class="mock-crop-img" id="uxWalkGameBoardImg" alt="" hidden>
+                <div class="mock-grid-overlay" id="uxWalkGameGridOverlay" aria-hidden="true"></div>
+                <div class="mock-board-placeholder" id="uxWalkGamePh">Ajoute une image à droite pour voir la zone utilisée et la grille.</div>
+              </div>
+            </div>
+            <p class="preview-crop-note field-hint preview-click-edit" id="uxWalkGameCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
+          </div>
+        </div>
+        <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="4">
+          <div class="mock-win ux-mock-win" id="uxWalkWinRoot">
+            <div class="mock-win-inner">
+              <div class="preview-win-headline preview-click-edit" id="uxWalkWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
+              <span class="preview-win-meta-edit preview-click-edit" tabindex="0" role="button" data-edit-target="selectWinFont" aria-label="Modifier la police du message de victoire">Police &amp; couleur du texte</span>
+              <div class="mock-win-fake-btns">
+                <span class="wp-btn p mock-fake">↺ Rejouer</span>
+                <span class="wp-btn s mock-fake">➕ Nouveau puzzle</span>
+              </div>
+            </div>
+            <div class="mock-win-bg preview-effect-fireworks preview-click-edit" id="uxWalkWinBg" tabindex="0" role="button" data-edit-target="selectWinEffect" aria-label="Modifier l’effet d’arrière-plan"></div>
+          </div>
+        </div>
+        <div class="ux-walk-stage ux-walk-stage--end" data-ux-stages="5">
+          <div class="ux-walk-end-card">
+            <p class="step-lbl" style="margin-bottom:12px">Lancer ou partager</p>
+            <p class="field-hint">Comme après le parcours invité : tu testes en local ou tu génères le lien. Utilise le panneau en bas.</p>
+            <div class="ux-walk-end-mock-btns">
+              <span class="wp-btn p mock-fake">Lancer le puzzle</span>
+              <span class="wp-btn s mock-fake">Générer le lien de partage</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="ux-walk-side-nav ux-walk-side-nav--next" id="btnUxWalkNext" aria-label="Étape suivante" hidden>›</button>
+    </div>
+
     <aside class="setup-previews" aria-label="Aperçus des écrans" id="setupPreviewsColumn">
       <div class="setup-previews-inner">
       <p class="preview-col-title">Aperçu en direct</p>
@@ -1034,7 +1336,7 @@ kbd{
     <div class="guided-float-head">
       <div class="guided-float-head-nav">
         <button type="button" class="guided-nav-btn guided-nav-btn--prev" id="btnGuidedPrev" aria-label="Étape précédente" hidden>‹</button>
-        <div class="guided-float-head-main">
+        <div class="guided-float-head-main guided-float-drag-handle" id="guidedFloatDragHandle" title="Glisser pour déplacer · double-clic : replacer sous l’aperçu">
           <span class="guided-float-badge" id="guidedFloatBadge"></span>
           <span class="guided-float-title" id="guidedFloatTitle"></span>
         </div>
@@ -1112,6 +1414,9 @@ let previewObjectUrl = null;
 let shareLoadId = null;
 let creationMode = 'classic';
 let guidedStepIndex = 0;
+let guidedPanelUserPos = null;
+let guidedPanelDragging = false;
+let guidedPanelDragPtr = null;
 const BUILDER_STEP_COUNT = 6;
 const GUIDED_FLOAT_TITLES = [
   'Accueil du lien partagé',
@@ -1276,6 +1581,101 @@ function getPreviewCropNote(gc, gr, prevEl) {
   return s + 'Ta photo est plus haute que la grille : les bandes en haut et en bas sont enlevées (on garde le centre).';
 }
 
+function syncUxWalkPreviews(state) {
+  const {
+    sgTitleShow,
+    sgBodyShow,
+    titleShown,
+    gc,
+    gr,
+    prev,
+    winText,
+    effect,
+    fontKey,
+    color,
+    gradient
+  } = state;
+  const ugt = document.getElementById('uxWalkGateTitle');
+  const ugb = document.getElementById('uxWalkGateBody');
+  if (ugt) ugt.textContent = sgTitleShow;
+  if (ugb) setWinHeadlineContent(ugb, sgBodyShow);
+
+  const uDims = document.getElementById('uxWalkGridDims');
+  if (uDims) uDims.textContent = gc + '×' + gr;
+
+  const uGameFrame = document.getElementById('uxWalkGameFrame');
+  if (uGameFrame) uGameFrame.style.aspectRatio = gc + ' / ' + gr;
+  const uPhotoFrame = document.getElementById('uxWalkPhotoFrame');
+  if (uPhotoFrame) uPhotoFrame.style.aspectRatio = gc + ' / ' + gr;
+
+  function fillOverlay(id) {
+    const overlay = document.getElementById(id);
+    if (!overlay) return;
+    overlay.innerHTML = '';
+    overlay.style.gridTemplateColumns = 'repeat(' + gc + ', 1fr)';
+    overlay.style.gridTemplateRows = 'repeat(' + gr + ', 1fr)';
+    for (let k = 0; k < gc * gr; k++) overlay.appendChild(document.createElement('span'));
+  }
+  fillOverlay('uxWalkGameGridOverlay');
+  fillOverlay('uxWalkPhotoGrid');
+
+  const boardImg = document.getElementById('uxWalkGameBoardImg');
+  const ph = document.getElementById('uxWalkGamePh');
+  const pimg = document.getElementById('uxWalkPhotoImg');
+  const pph = document.getElementById('uxWalkPhotoPh');
+  if (prev && boardImg && ph) {
+    if (!prev.hidden && prev.getAttribute('src')) {
+      boardImg.src = prev.src;
+      boardImg.hidden = false;
+      ph.hidden = true;
+    } else {
+      boardImg.removeAttribute('src');
+      boardImg.hidden = true;
+      ph.hidden = false;
+    }
+  }
+  if (prev && pimg && pph) {
+    if (!prev.hidden && prev.getAttribute('src')) {
+      pimg.src = prev.src;
+      pimg.hidden = false;
+      pph.hidden = true;
+    } else {
+      pimg.removeAttribute('src');
+      pimg.hidden = true;
+      pph.hidden = false;
+    }
+  }
+
+  const note = getPreviewCropNote(gc, gr, prev);
+  const uc1 = document.getElementById('uxWalkPhotoCropNote');
+  const uc2 = document.getElementById('uxWalkGameCropNote');
+  if (uc1) uc1.textContent = note;
+  if (uc2) uc2.textContent = note;
+
+  const uban = document.getElementById('uxWalkGameBanner');
+  if (uban) uban.textContent = titleShown;
+
+  const winBg = document.getElementById('uxWalkWinBg');
+  if (winBg) {
+    const eff = ['fireworks', 'confetti', 'minimal'].includes(effect) ? effect : 'fireworks';
+    winBg.className = 'mock-win-bg preview-effect-' + eff + ' preview-click-edit';
+  }
+
+  const h = document.getElementById('uxWalkWinHeadline');
+  if (h) {
+    setWinHeadlineContent(h, winText);
+    h.style.fontFamily = FONT_MAP[fontKey].stack;
+    h.style.setProperty('--pv-win-color', color);
+    if (gradient) {
+      h.classList.remove('plain');
+      h.style.color = '';
+    } else {
+      h.classList.add('plain');
+      h.style.color = color;
+    }
+  }
+}
+
 function updateBuilderPreviews() {
   const sgTitleIn = document.getElementById('inputShareGateTitle');
   const sgBodyIn = document.getElementById('textareaShareGateBody');
@@ -1371,7 +1771,21 @@ function updateBuilderPreviews() {
 
   ensureGoogleFont(fontKey);
 
-  if (creationMode === 'guided')
+  syncUxWalkPreviews({
+    sgTitleShow,
+    sgBodyShow,
+    titleShown,
+    gc,
+    gr,
+    prev,
+    winText,
+    effect,
+    fontKey,
+    color,
+    gradient
+  });
+
+  if (creationMode === 'guided' || creationMode === 'uxwalk')
     requestAnimationFrame(() => positionGuidedFloatingPanel());
 }
 
@@ -1384,17 +1798,115 @@ function reorderAllBuilderStepsToMount() {
   }
 }
 
-function getGuidedAnchorEl() {
-  if (guidedStepIndex <= 0)
-    return document.querySelector('.preview-block[data-preview-stage="gate"]');
-  if (guidedStepIndex <= 3)
-    return document.querySelector('.preview-block[data-preview-stage="game"]');
-  if (guidedStepIndex === 4)
-    return document.querySelector('.preview-block[data-preview-stage="win"]');
-  return document.getElementById('setupPreviewsColumn');
+function getShowcaseAvoidRect(pad) {
+  const p = pad == null ? 10 : pad;
+  const col = document.getElementById('setupPreviewsColumn');
+  if (!col) return { left: 0, top: 0, right: 0, bottom: 0 };
+  const r = col.getBoundingClientRect();
+  return {
+    left: r.left - p,
+    top: r.top - p,
+    right: r.right + p,
+    bottom: r.bottom + p
+  };
+}
+
+function rectsIntersect(a, b) {
+  return !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
+}
+
+function panelRectAt(left, top, w, h) {
+  return { left, top, right: left + w, bottom: top + h };
+}
+
+function clampGuidedPanelPosition(left, top, w, h) {
+  const m = 12;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const avoid = getShowcaseAvoidRect(m);
+  left = Math.max(m, Math.min(left, vw - w - m));
+  top = Math.max(m, Math.min(top, vh - h - m));
+  const pr = panelRectAt(left, top, w, h);
+  if (!rectsIntersect(pr, avoid)) return { left, top };
+
+  const candidates = [];
+  const push = (l0, t0) => {
+    const l = Math.max(m, Math.min(l0, vw - w - m));
+    const t = Math.max(m, Math.min(t0, vh - h - m));
+    const r = panelRectAt(l, t, w, h);
+    if (!rectsIntersect(r, avoid)) candidates.push({ left: l, top: t });
+  };
+
+  push((vw - w) / 2, avoid.bottom + m);
+  push(m, avoid.bottom + m);
+  push(vw - w - m, avoid.bottom + m);
+  push(avoid.right + m, avoid.top);
+  push(avoid.right + m, Math.max(m, (vh - h) / 2));
+  push(avoid.right + m, vh - h - m);
+  push(avoid.left - m - w, avoid.top);
+  push(avoid.left - m - w, Math.max(m, (vh - h) / 2));
+  push((vw - w) / 2, avoid.top - m - h);
+  push(m, m);
+  push(vw - w - m, m);
+  push(m, vh - h - m);
+  push(vw - w - m, vh - h - m);
+
+  if (candidates.length) return candidates[0];
+
+  const t = Math.min(Math.max(m, avoid.bottom + m), vh - h - m);
+  return {
+    left: Math.max(m, Math.min((vw - w) / 2, vw - w - m)),
+    top: t
+  };
+}
+
+function computeAutoGuidedPanelPosition(panel) {
+  const w = panel.offsetWidth || 380;
+  const h = panel.offsetHeight || 300;
+  const m = 12;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const avoid = getShowcaseAvoidRect(m);
+
+  const tryPos = (l, t) => {
+    const left = Math.max(m, Math.min(l, vw - w - m));
+    const top = Math.max(m, Math.min(t, vh - h - m));
+    const pr = panelRectAt(left, top, w, h);
+    if (!rectsIntersect(pr, avoid)) return { left, top };
+    return null;
+  };
+
+  const tries = [
+    [(vw - w) / 2, avoid.bottom + m],
+    [m, avoid.bottom + m],
+    [vw - w - m, avoid.bottom + m],
+    [avoid.right + m, avoid.top],
+    [avoid.right + m, Math.max(m, (vh - h) / 2)],
+    [avoid.left - m - w, avoid.top],
+    [avoid.left - m - w, Math.max(m, (vh - h) / 2)],
+    [(vw - w) / 2, avoid.top - m - h],
+    [m, m],
+    [vw - w - m, vh - h - m]
+  ];
+
+  for (let i = 0; i < tries.length; i++) {
+    const r = tryPos(tries[i][0], tries[i][1]);
+    if (r) return r;
+  }
+
+  return clampGuidedPanelPosition((vw - w) / 2, avoid.bottom + m, w, h);
+}
+
+function applyGuidedPanelPixelPos(panel, pos) {
+  panel.style.left = pos.left + 'px';
+  panel.style.top = pos.top + 'px';
+  panel.style.right = 'auto';
+  panel.style.bottom = 'auto';
+  panel.style.transform = '';
 }
 
 function applyGuidedPreviewFocus() {
+  if (creationMode === 'uxwalk') return;
   document.querySelectorAll('.preview-block[data-preview-stage]').forEach((b) => {
     b.classList.remove('preview-block--dim', 'preview-block--focus');
   });
@@ -1412,39 +1924,34 @@ function applyGuidedPreviewFocus() {
 }
 
 function positionGuidedFloatingPanel() {
-  if (creationMode !== 'guided') return;
   const panel = document.getElementById('guidedFloatingPanel');
   const setup = document.getElementById('setup');
   if (!panel || !setup) return;
   if (getComputedStyle(setup).display === 'none') return;
 
-  const anchor = getGuidedAnchorEl();
-  if (!anchor) return;
-
-  const pr = anchor.getBoundingClientRect();
-  const m = 12;
-  const w = panel.offsetWidth || 360;
-  const h = panel.offsetHeight || 320;
-
-  let left;
-  let top;
-  const roomRight = pr.right + m + w <= window.innerWidth - m;
-
-  if (roomRight && window.innerWidth >= 560) {
-    left = pr.right + m;
-    top = pr.top;
-  } else {
-    left = (window.innerWidth - w) / 2;
-    top = pr.bottom + m;
+  if (creationMode === 'uxwalk') {
+    const m = 12;
+    panel.style.left = '50%';
+    panel.style.right = 'auto';
+    panel.style.top = 'auto';
+    panel.style.bottom = m + 'px';
+    panel.style.transform = 'translateX(-50%)';
+    return;
   }
 
-  top = Math.max(m, Math.min(top, window.innerHeight - h - m));
-  left = Math.max(m, Math.min(left, window.innerWidth - w - m));
+  if (creationMode !== 'guided') return;
+  if (guidedPanelDragging) return;
 
-  panel.style.left = left + 'px';
-  panel.style.top = top + 'px';
-  panel.style.right = 'auto';
-  panel.style.bottom = 'auto';
+  const w = panel.offsetWidth || 360;
+  const h = panel.offsetHeight || 320;
+  let pos;
+  if (guidedPanelUserPos) {
+    pos = clampGuidedPanelPosition(guidedPanelUserPos.left, guidedPanelUserPos.top, w, h);
+    guidedPanelUserPos = pos;
+  } else {
+    pos = computeAutoGuidedPanelPosition(panel);
+  }
+  applyGuidedPanelPixelPos(panel, pos);
 }
 
 function getGuidedStepForField(focusId) {
@@ -1500,38 +2007,125 @@ function openFieldFromPreview(focusId) {
     }
   };
 
-  if (creationMode === 'guided' && step != null) {
+  if ((creationMode === 'guided' || creationMode === 'uxwalk') && step != null) {
     setGuidedStep(step, runFocus);
   } else {
     runFocus();
   }
 }
 
-function initPreviewClickToEdit() {
-  const col = document.getElementById('setupPreviewsColumn');
-  if (!col) return;
+function bindPreviewClickToEdit(container) {
+  if (!container) return;
 
-  col.addEventListener('click', (e) => {
-    if (e.target.closest('.guided-nav-btn')) return;
+  container.addEventListener('click', (e) => {
+    if (e.target.closest('.guided-nav-btn') || e.target.closest('.ux-walk-side-nav')) return;
     const host = e.target.closest('[data-edit-target]');
-    if (!host || !col.contains(host)) return;
+    if (!host || !container.contains(host)) return;
     const id = host.getAttribute('data-edit-target');
     if (!id) return;
     e.preventDefault();
     openFieldFromPreview(id);
   });
 
-  col.addEventListener('keydown', (e) => {
+  container.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    if (e.target.closest('.guided-nav-btn')) return;
+    if (e.target.closest('.guided-nav-btn') || e.target.closest('.ux-walk-side-nav')) return;
     const host = e.target.closest('[data-edit-target]');
-    if (!host || !col.contains(host)) return;
+    if (!host || !container.contains(host)) return;
     if (document.activeElement !== host) return;
     const id = host.getAttribute('data-edit-target');
     if (!id) return;
     e.preventDefault();
     openFieldFromPreview(id);
   });
+}
+
+function initGuidedPanelDrag() {
+  const handle = document.getElementById('guidedFloatDragHandle');
+  const panel = document.getElementById('guidedFloatingPanel');
+  if (!handle || !panel) return;
+
+  handle.addEventListener('dblclick', (e) => {
+    if (creationMode !== 'guided') return;
+    e.preventDefault();
+    guidedPanelUserPos = null;
+    positionGuidedFloatingPanel();
+  });
+
+  handle.addEventListener('pointerdown', (e) => {
+    if (creationMode !== 'guided') return;
+    if (e.button !== 0) return;
+    if (e.target.closest('button')) return;
+    e.preventDefault();
+    const r = panel.getBoundingClientRect();
+    guidedPanelDragPtr = {
+      id: e.pointerId,
+      ox: e.clientX - r.left,
+      oy: e.clientY - r.top
+    };
+    guidedPanelDragging = true;
+    panel.classList.add('guided-floating-panel--dragging');
+    try {
+      panel.setPointerCapture(e.pointerId);
+    } catch (err) {}
+
+    const move = (ev) => {
+      if (!guidedPanelDragPtr || ev.pointerId !== guidedPanelDragPtr.id) return;
+      const left = ev.clientX - guidedPanelDragPtr.ox;
+      const top = ev.clientY - guidedPanelDragPtr.oy;
+      const pos = clampGuidedPanelPosition(left, top, panel.offsetWidth, panel.offsetHeight);
+      applyGuidedPanelPixelPos(panel, pos);
+      guidedPanelUserPos = pos;
+    };
+
+    const end = (ev) => {
+      if (!guidedPanelDragPtr || ev.pointerId !== guidedPanelDragPtr.id) return;
+      try {
+        panel.releasePointerCapture(ev.pointerId);
+      } catch (err2) {}
+      guidedPanelDragPtr = null;
+      guidedPanelDragging = false;
+      panel.classList.remove('guided-floating-panel--dragging');
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
+    };
+
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+  });
+}
+
+function initPreviewClickToEdit() {
+  bindPreviewClickToEdit(document.getElementById('setupPreviewsColumn'));
+  bindPreviewClickToEdit(document.getElementById('uxWalkShell'));
+}
+
+function setUxWalkStageVisibility(i) {
+  if (creationMode !== 'uxwalk') return;
+  const shell = document.getElementById('uxWalkShell');
+  if (!shell) return;
+  shell.querySelectorAll('[data-ux-stages]').forEach((el) => {
+    const raw = el.getAttribute('data-ux-stages') || '';
+    const stages = raw
+      .split(',')
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n));
+    el.hidden = !stages.includes(i);
+  });
+}
+
+function updateUxWalkLiveHint(i) {
+  const el = document.getElementById('uxWalkLiveHint');
+  if (!el) return;
+  if (i === 2 || i === 3) {
+    el.textContent = GUIDED_STEP_HINTS[i] || '';
+    el.hidden = false;
+  } else {
+    el.textContent = '';
+    el.hidden = true;
+  }
 }
 
 function setGuidedStep(i, onDone) {
@@ -1555,14 +2149,43 @@ function setGuidedStep(i, onDone) {
   const prev = document.getElementById('btnGuidedPrev');
   const next = document.getElementById('btnGuidedNext');
   if (prev) {
-    prev.disabled = i === 0;
-    prev.hidden = false;
+    if (creationMode === 'guided') {
+      prev.disabled = i === 0;
+      prev.hidden = false;
+    } else {
+      prev.hidden = true;
+    }
   }
   if (next) {
-    next.disabled = i >= BUILDER_STEP_COUNT - 1;
-    next.hidden = false;
+    if (creationMode === 'guided') {
+      next.disabled = i >= BUILDER_STEP_COUNT - 1;
+      next.hidden = false;
+    } else {
+      next.hidden = true;
+    }
   }
 
+  const uxPrev = document.getElementById('btnUxWalkPrev');
+  const uxNext = document.getElementById('btnUxWalkNext');
+  if (uxPrev) {
+    if (creationMode === 'uxwalk') {
+      uxPrev.disabled = i === 0;
+      uxPrev.hidden = false;
+    } else {
+      uxPrev.hidden = true;
+    }
+  }
+  if (uxNext) {
+    if (creationMode === 'uxwalk') {
+      uxNext.disabled = i >= BUILDER_STEP_COUNT - 1;
+      uxNext.hidden = false;
+    } else {
+      uxNext.hidden = true;
+    }
+  }
+
+  setUxWalkStageVisibility(i);
+  updateUxWalkLiveHint(i);
   applyGuidedPreviewFocus();
   readFormToScenario();
   updateBuilderPreviews();
@@ -1582,21 +2205,32 @@ function setCreationMode(mode) {
   const prev = document.getElementById('btnGuidedPrev');
   const next = document.getElementById('btnGuidedNext');
   const hint = document.getElementById('guidedModeStepHint');
+  const shell = document.getElementById('uxWalkShell');
 
-  const nextMode = mode === 'guided' ? 'guided' : 'classic';
+  const allowed = ['classic', 'guided', 'uxwalk'];
+  const nextMode = allowed.includes(mode) ? mode : 'classic';
   creationMode = nextMode;
 
   if (setup) {
     setup.dataset.creationMode = nextMode;
     setup.classList.toggle('creation-guided', nextMode === 'guided');
+    setup.classList.toggle('creation-uxwalk', nextMode === 'uxwalk');
   }
   if (btn) {
-    btn.textContent =
-      nextMode === 'guided' ? 'Vue complète (toutes les étapes)' : 'Mode parcours guidé';
-    btn.setAttribute('aria-pressed', nextMode === 'guided' ? 'true' : 'false');
+    const goNext = {
+      classic: 'Mode parcours guidé',
+      guided: 'Parcours invité plein écran',
+      uxwalk: 'Vue complète (toutes les étapes)'
+    };
+    btn.textContent = goNext[nextMode];
+    btn.setAttribute('aria-pressed', nextMode !== 'classic' ? 'true' : 'false');
   }
 
   if (nextMode === 'classic') {
+    guidedPanelUserPos = null;
+    guidedPanelDragging = false;
+    guidedPanelDragPtr = null;
+    if (panel) panel.classList.remove('guided-floating-panel--dragging');
     reorderAllBuilderStepsToMount();
     if (panel) panel.setAttribute('aria-hidden', 'true');
     if (prev) {
@@ -1611,15 +2245,42 @@ function setCreationMode(mode) {
       hint.hidden = true;
       hint.textContent = '';
     }
+    if (shell) {
+      shell.hidden = true;
+      shell.setAttribute('aria-hidden', 'true');
+    }
+    const uxPrev = document.getElementById('btnUxWalkPrev');
+    const uxNext = document.getElementById('btnUxWalkNext');
+    if (uxPrev) uxPrev.hidden = true;
+    if (uxNext) uxNext.hidden = true;
+    document.body.style.overflow = '';
     document.querySelectorAll('.preview-block').forEach((b) => {
       b.classList.remove('preview-block--dim', 'preview-block--focus');
     });
     window.removeEventListener('scroll', positionGuidedFloatingPanel, true);
     window.removeEventListener('resize', positionGuidedFloatingPanel);
   } else {
+    if (nextMode === 'guided') guidedPanelUserPos = null;
     if (panel) panel.setAttribute('aria-hidden', 'false');
     window.addEventListener('scroll', positionGuidedFloatingPanel, true);
     window.addEventListener('resize', positionGuidedFloatingPanel);
+    if (nextMode === 'uxwalk') {
+      document.body.style.overflow = 'hidden';
+      if (shell) {
+        shell.hidden = false;
+        shell.setAttribute('aria-hidden', 'false');
+      }
+    } else {
+      document.body.style.overflow = '';
+      if (shell) {
+        shell.hidden = true;
+        shell.setAttribute('aria-hidden', 'true');
+      }
+      const uxPrev = document.getElementById('btnUxWalkPrev');
+      const uxNext = document.getElementById('btnUxWalkNext');
+      if (uxPrev) uxPrev.hidden = true;
+      if (uxNext) uxNext.hidden = true;
+    }
     setGuidedStep(guidedStepIndex);
   }
 }
@@ -2718,7 +3379,7 @@ function newPuzzle() {
     }
   }
   updateBuilderPreviews();
-  if (creationMode === 'guided')
+  if (creationMode === 'guided' || creationMode === 'uxwalk')
     requestAnimationFrame(() => positionGuidedFloatingPanel());
 }
 
@@ -2874,7 +3535,7 @@ function backToBuilderFromShareError(message) {
   const setup = document.getElementById('setup');
   if (setup) setup.style.display = 'flex';
   setSetupError(message || '');
-  if (creationMode === 'guided')
+  if (creationMode === 'guided' || creationMode === 'uxwalk')
     requestAnimationFrame(() => setGuidedStep(guidedStepIndex));
 }
 
@@ -2927,7 +3588,9 @@ document.getElementById('btnShareStart').addEventListener('click', onShareStartC
 const btnToggleCreation = document.getElementById('btnToggleCreationMode');
 if (btnToggleCreation) {
   btnToggleCreation.addEventListener('click', () => {
-    setCreationMode(creationMode === 'classic' ? 'guided' : 'classic');
+    const order = ['classic', 'guided', 'uxwalk'];
+    const i = order.indexOf(creationMode);
+    setCreationMode(order[(Math.max(0, i) + 1) % order.length]);
   });
 }
 const btnGuidedPrev = document.getElementById('btnGuidedPrev');
@@ -2942,7 +3605,7 @@ if (btnGuidedNext)
   });
 
 document.addEventListener('keydown', (e) => {
-  if (creationMode !== 'guided') return;
+  if (creationMode !== 'guided' && creationMode !== 'uxwalk') return;
   const setup = document.getElementById('setup');
   if (!setup || getComputedStyle(setup).display === 'none') return;
   const t = e.target;
@@ -2957,10 +3620,22 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+const btnUxWalkPrev = document.getElementById('btnUxWalkPrev');
+const btnUxWalkNext = document.getElementById('btnUxWalkNext');
+if (btnUxWalkPrev)
+  btnUxWalkPrev.addEventListener('click', () => {
+    if (guidedStepIndex > 0) setGuidedStep(guidedStepIndex - 1);
+  });
+if (btnUxWalkNext)
+  btnUxWalkNext.addEventListener('click', () => {
+    if (guidedStepIndex < BUILDER_STEP_COUNT - 1) setGuidedStep(guidedStepIndex + 1);
+  });
+
 syncFormFromScenario();
 ensureGoogleFont('system');
 initBuilderPreviewListeners();
 initPreviewClickToEdit();
+initGuidedPanelDrag();
 initDropZone();
 const previewImgEl = document.getElementById('preview');
 if (previewImgEl) previewImgEl.addEventListener('load', updateBuilderPreviews);
