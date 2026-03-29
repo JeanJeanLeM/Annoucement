@@ -18,6 +18,63 @@ body{
   justify-content:center;
 }
 
+/* Scrollbars harmonisees avec la palette UI */
+:root{
+  --ui-scrollbar-track:#121b34;
+  --ui-scrollbar-track-border:rgba(168,85,247,.16);
+  --ui-scrollbar-thumb-top:#b56aff;
+  --ui-scrollbar-thumb-bottom:#7358ff;
+  --ui-scrollbar-thumb-border:#1a2242;
+}
+.guided-floating-panel,
+#setup.creation-guided,
+.ux-walk-stage-wrap,
+.ux-walk-editor-body,
+.ux-walk-viewport-screen > .ux-walk-stage{
+  scrollbar-width:thin;
+  scrollbar-color:rgba(168,85,247,.82) var(--ui-scrollbar-track);
+}
+.guided-floating-panel::-webkit-scrollbar,
+#setup.creation-guided::-webkit-scrollbar,
+.ux-walk-stage-wrap::-webkit-scrollbar,
+.ux-walk-editor-body::-webkit-scrollbar,
+.ux-walk-viewport-screen > .ux-walk-stage::-webkit-scrollbar{
+  width:11px;
+  height:11px;
+}
+.guided-floating-panel::-webkit-scrollbar-track,
+#setup.creation-guided::-webkit-scrollbar-track,
+.ux-walk-stage-wrap::-webkit-scrollbar-track,
+.ux-walk-editor-body::-webkit-scrollbar-track,
+.ux-walk-viewport-screen > .ux-walk-stage::-webkit-scrollbar-track{
+  background:var(--ui-scrollbar-track);
+  border-radius:999px;
+  box-shadow:inset 0 0 0 1px var(--ui-scrollbar-track-border);
+}
+.guided-floating-panel::-webkit-scrollbar-thumb,
+#setup.creation-guided::-webkit-scrollbar-thumb,
+.ux-walk-stage-wrap::-webkit-scrollbar-thumb,
+.ux-walk-editor-body::-webkit-scrollbar-thumb,
+.ux-walk-viewport-screen > .ux-walk-stage::-webkit-scrollbar-thumb{
+  background:linear-gradient(180deg,var(--ui-scrollbar-thumb-top),var(--ui-scrollbar-thumb-bottom));
+  border-radius:999px;
+  border:2px solid var(--ui-scrollbar-thumb-border);
+}
+.guided-floating-panel::-webkit-scrollbar-thumb:hover,
+#setup.creation-guided::-webkit-scrollbar-thumb:hover,
+.ux-walk-stage-wrap::-webkit-scrollbar-thumb:hover,
+.ux-walk-editor-body::-webkit-scrollbar-thumb:hover,
+.ux-walk-viewport-screen > .ux-walk-stage::-webkit-scrollbar-thumb:hover{
+  background:linear-gradient(180deg,#c48dff,#8268ff);
+}
+.guided-floating-panel::-webkit-scrollbar-corner,
+#setup.creation-guided::-webkit-scrollbar-corner,
+.ux-walk-stage-wrap::-webkit-scrollbar-corner,
+.ux-walk-editor-body::-webkit-scrollbar-corner,
+.ux-walk-viewport-screen > .ux-walk-stage::-webkit-scrollbar-corner{
+  background:var(--ui-scrollbar-track);
+}
+
 /* ── Partage chargé : écran d’accueil minimal ─────────── */
 #shareGate{
   display:none;
@@ -371,6 +428,15 @@ body{
   line-height:1.4;
   max-width:min(560px,96%);
 }
+.ux-walk-outside-hint{
+  margin:0;
+  font-size:.72rem;
+  color:#9a9ac2;
+  text-align:center;
+  line-height:1.42;
+  max-width:min(560px,96%);
+}
+.ux-walk-outside-hint:empty{display:none}
 .ux-walk-creator-only-zone{
   width:100%;
   max-width:620px;
@@ -433,18 +499,25 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:10px;
+  gap:12px;
   padding:26px 22px;
 }
 .ux-walk-stage--gate .ux-walk-gate-card .step-lbl{
   margin-bottom:0!important;
 }
 .ux-walk-stage--gate .ux-walk-gate-body{
+  width:100%;
   max-width:34ch;
   text-align:center;
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 .ux-walk-stage--gate .ux-walk-fake-start{
+  width:auto;
+  min-width:170px;
   max-width:220px;
+  margin-top:2px;
+  align-self:center;
 }
 .ux-walk-fake-start{
   width:100%;
@@ -1420,20 +1493,17 @@ kbd{
                     <div class="share-gate-card ux-walk-gate-card">
                       <p class="step-lbl preview-click-edit" id="uxWalkGateTitle" tabindex="0" role="button" data-edit-target="inputShareGateTitle" style="margin-bottom:10px;text-align:center">Puzzle partagé</p>
                       <p class="ux-walk-gate-body preview-click-edit" id="uxWalkGateBody" tabindex="0" role="button" data-edit-target="textareaShareGateBody">Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.</p>
-                      <span class="wp-btn p ux-walk-fake-start">Commencer</span>
                     </div>
+                    <span class="wp-btn p ux-walk-fake-start">Commencer</span>
                   </div>
                   <div class="ux-walk-stage ux-walk-stage--photo" data-ux-stages="1">
-                    <p class="step-lbl ux-walk-photo-caption">Même zone que pendant le jeu (invité)</p>
                     <div class="ux-walk-photo-frame preview-click-edit" id="uxWalkPhotoFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
                       <img class="ux-walk-photo-img" id="uxWalkPhotoImg" alt="" hidden>
                       <div class="mock-grid-overlay" id="uxWalkPhotoGrid" aria-hidden="true"></div>
-                      <div class="ux-walk-photo-ph" id="uxWalkPhotoPh">Ajoute une image via le panneau de modification.</div>
+                      <div class="ux-walk-photo-ph" id="uxWalkPhotoPh" aria-hidden="true"></div>
                     </div>
-                    <p class="ux-walk-crop-note preview-click-edit" id="uxWalkPhotoCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
                   </div>
                   <div class="ux-walk-stage ux-walk-stage--game" data-ux-stages="2,3">
-                    <p class="ux-walk-live-hint" id="uxWalkLiveHint" hidden></p>
                     <div class="ux-mock-game">
                       <div class="mock-toolbar">
                         <span class="mock-grid-dims preview-click-edit" id="uxWalkGridDims" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Modifier la grille">3×3</span>
@@ -1444,17 +1514,15 @@ kbd{
                         <div class="mock-crop-frame preview-click-edit" id="uxWalkGameFrame" tabindex="0" role="button" data-edit-target="dropZone" aria-label="Choisir ou changer l’image du puzzle">
                           <img class="mock-crop-img" id="uxWalkGameBoardImg" alt="" hidden>
                           <div class="mock-grid-overlay" id="uxWalkGameGridOverlay" aria-hidden="true"></div>
-                          <div class="mock-board-placeholder" id="uxWalkGamePh">Ajoute une image à droite pour voir la zone utilisée et la grille.</div>
+                          <div class="mock-board-placeholder" id="uxWalkGamePh" aria-hidden="true"></div>
                         </div>
                       </div>
-                      <p class="preview-crop-note field-hint preview-click-edit" id="uxWalkGameCropNote" tabindex="0" role="button" data-edit-target="inputGridCols" aria-label="Ajuster la grille"></p>
                     </div>
                   </div>
                   <div class="ux-walk-stage ux-walk-stage--win" data-ux-stages="4">
                     <div class="mock-win ux-mock-win" id="uxWalkWinRoot">
                       <div class="mock-win-inner">
                         <div class="preview-win-headline preview-click-edit" id="uxWalkWinHeadline" tabindex="0" role="button" data-edit-target="textareaWinText" aria-label="Modifier le message de victoire">Bravo !</div>
-                        <span class="preview-win-meta-edit preview-click-edit" tabindex="0" role="button" data-edit-target="selectWinFont" aria-label="Modifier la police du message de victoire">Police &amp; couleur du texte</span>
                         <div class="mock-win-fake-btns">
                           <span class="wp-btn p mock-fake">↺ Rejouer</span>
                           <span class="wp-btn s mock-fake">➕ Nouveau puzzle</span>
@@ -1466,6 +1534,7 @@ kbd{
                 </div>
               </div>
               <p class="ux-walk-viewport-foot" id="uxWalkViewportFoot">Le cadre représente la fenêtre de la personne qui ouvre ton lien.</p>
+              <p class="ux-walk-outside-hint" id="uxWalkOutsideHint"></p>
             </div>
             <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="5" hidden>
               <p class="ux-walk-creator-only-banner">Pas sur le lien — étape créateur uniquement</p>
@@ -1737,6 +1806,7 @@ let shareLoadId = null;
 let creationMode = 'classic';
 let guidedStepIndex = 0;
 let uxWalkDevice = 'phone';
+let uxWalkCropHint = '';
 let guidedPanelUserPos = null;
 let guidedPanelDragging = false;
 let guidedPanelDragPtr = null;
@@ -1969,11 +2039,7 @@ function syncUxWalkPreviews(state) {
     }
   }
 
-  const note = getPreviewCropNote(gc, gr, prev);
-  const uc1 = document.getElementById('uxWalkPhotoCropNote');
-  const uc2 = document.getElementById('uxWalkGameCropNote');
-  if (uc1) uc1.textContent = note;
-  if (uc2) uc2.textContent = note;
+  uxWalkCropHint = getPreviewCropNote(gc, gr, prev);
 
   const uban = document.getElementById('uxWalkGameBanner');
   if (uban) uban.textContent = titleShown;
@@ -2500,15 +2566,29 @@ function setUxWalkStageVisibility(i) {
 }
 
 function updateUxWalkLiveHint(i) {
-  const el = document.getElementById('uxWalkLiveHint');
+  const el = document.getElementById('uxWalkOutsideHint');
   if (!el) return;
-  if (i === 2 || i === 3) {
-    el.textContent = GUIDED_STEP_HINTS[i] || '';
-    el.hidden = false;
-  } else {
-    el.textContent = '';
-    el.hidden = true;
+  if (i === 0) {
+    el.textContent = 'Vue réelle de l’invite avant le clic sur « Commencer ».';
+    return;
   }
+  if (i === 1) {
+    el.textContent = uxWalkCropHint || 'Zone image visible pendant la partie.';
+    return;
+  }
+  if (i === 2) {
+    el.textContent = uxWalkCropHint || GUIDED_STEP_HINTS[i] || '';
+    return;
+  }
+  if (i === 3) {
+    el.textContent = GUIDED_STEP_HINTS[i] || '';
+    return;
+  }
+  if (i === 4) {
+    el.textContent = 'Ecran de victoire reel de l’invite.';
+    return;
+  }
+  el.textContent = '';
 }
 
 function getBuilderStepHostForMode() {
