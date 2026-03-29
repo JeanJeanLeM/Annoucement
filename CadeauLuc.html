@@ -528,6 +528,11 @@ body{
 }
 .ux-walk-fake-start{
   width:100%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-sizing:border-box;
   margin-top:10px;
   pointer-events:none;
   cursor:default;
@@ -1282,8 +1287,80 @@ body{
 }
 .builder-row textarea{min-height:72px;resize:vertical}
 .builder-row-inline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.builder-row-inline input[type="color"]{
-  width:44px;height:36px;padding:2px;cursor:pointer;border-radius:8px;border:1px solid rgba(168,85,247,.35);
+.color-picker{
+  width:52px;
+  height:36px;
+  padding:3px;
+  cursor:pointer;
+  border-radius:10px;
+  border:1px solid rgba(168,85,247,.35);
+  background:#0b0b17;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.color-picker::-webkit-color-swatch-wrapper{padding:0}
+.color-picker::-webkit-color-swatch{
+  border:none;
+  border-radius:7px;
+}
+.color-picker::-moz-color-swatch{
+  border:none;
+  border-radius:7px;
+}
+.switch-control{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  cursor:pointer;
+  user-select:none;
+  color:#8f8fb4;
+}
+.switch-input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+.switch-slider{
+  position:relative;
+  width:42px;
+  height:24px;
+  border-radius:999px;
+  border:1px solid rgba(168,85,247,.34);
+  background:#1a2348;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.35);
+  transition:background .2s,border-color .2s,box-shadow .2s;
+}
+.switch-slider::after{
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#d9d9ef;
+  box-shadow:0 1px 6px rgba(0,0,0,.45);
+  transition:transform .2s,background .2s;
+}
+.switch-input:checked + .switch-slider{
+  background:linear-gradient(135deg,#a855f7,#e94560);
+  border-color:rgba(233,69,96,.55);
+}
+.switch-input:checked + .switch-slider::after{
+  transform:translateX(18px);
+  background:#fff;
+}
+.switch-input:focus-visible + .switch-slider{
+  box-shadow:0 0 0 2px rgba(168,85,247,.45), inset 0 2px 6px rgba(0,0,0,.35);
+}
+.switch-text{
+  font-size:.78rem;
+  color:#9d9dc2;
 }
 .occasion-caps{
   display:flex;
@@ -1589,7 +1666,6 @@ kbd{
               <p class="ux-walk-outside-hint" id="uxWalkOutsideHint"></p>
             </div>
             <div class="ux-walk-creator-only-zone" id="uxWalkCreatorOnlyZone" data-ux-stages="4" hidden>
-              <p class="ux-walk-creator-only-banner">Actions créateur uniquement (hors vue invitée)</p>
               <div class="ux-walk-stage ux-walk-stage--end" style="max-width:460px">
                 <div class="ux-walk-end-card">
                   <p class="step-lbl" style="margin-bottom:12px">Finalisation créateur</p>
@@ -1672,6 +1748,7 @@ kbd{
           <button type="button" class="occasion-chip" data-occasion="anniversaire" aria-pressed="false">Anniversaire</button>
           <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
           <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
+          <button type="button" class="occasion-chip" data-occasion="soiree" aria-pressed="false">Invitation à une soirée</button>
           <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
           <button type="button" class="occasion-chip" data-occasion="surprise" aria-pressed="false">Surprise</button>
           <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
@@ -1723,6 +1800,7 @@ kbd{
           <button type="button" class="occasion-chip" data-occasion="anniversaire" aria-pressed="false">Anniversaire</button>
           <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
           <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
+          <button type="button" class="occasion-chip" data-occasion="soiree" aria-pressed="false">Invitation à une soirée</button>
           <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
           <button type="button" class="occasion-chip" data-occasion="surprise" aria-pressed="false">Surprise</button>
           <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
@@ -1741,6 +1819,7 @@ kbd{
           <button type="button" class="occasion-chip" data-occasion="anniversaire" aria-pressed="false">Anniversaire</button>
           <button type="button" class="occasion-chip" data-occasion="naissance" aria-pressed="false">Naissance</button>
           <button type="button" class="occasion-chip" data-occasion="mariage" aria-pressed="false">Mariage</button>
+          <button type="button" class="occasion-chip" data-occasion="soiree" aria-pressed="false">Invitation à une soirée</button>
           <button type="button" class="occasion-chip" data-occasion="cadeau" aria-pressed="false">Cadeau</button>
           <button type="button" class="occasion-chip" data-occasion="surprise" aria-pressed="false">Surprise</button>
           <button type="button" class="occasion-chip" data-occasion="vacances" aria-pressed="false">Vacances</button>
@@ -1757,8 +1836,10 @@ kbd{
             <option value="confetti">Confettis</option>
             <option value="minimal">Minimal (sobre)</option>
           </select>
-          <label class="field-hint" style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-top:8px">
-            <input type="checkbox" id="checkWinEffectEnabled" checked> Effet ON / OFF
+          <label class="switch-control" style="margin-top:8px" for="checkWinEffectEnabled">
+            <input type="checkbox" id="checkWinEffectEnabled" class="switch-input" checked>
+            <span class="switch-slider" aria-hidden="true"></span>
+            <span class="switch-text">Effet ON / OFF</span>
           </label>
         </div>
         <div class="builder-row" style="margin-top:10px">
@@ -1774,9 +1855,11 @@ kbd{
         </div>
         <div class="builder-row-inline" style="margin-top:10px">
           <label class="field-hint" for="inputWinColor">Couleur du texte</label>
-          <input type="color" id="inputWinColor" value="#e8e8f0" title="Couleur du texte">
-          <label class="field-hint" style="display:flex;align-items:center;gap:6px;cursor:pointer">
-            <input type="checkbox" id="checkWinGradient" checked> Dégradé animé (arc-en-ciel)
+          <input type="color" id="inputWinColor" class="color-picker" value="#e8e8f0" title="Couleur du texte">
+          <label class="switch-control" for="checkWinGradient">
+            <input type="checkbox" id="checkWinGradient" class="switch-input" checked>
+            <span class="switch-slider" aria-hidden="true"></span>
+            <span class="switch-text">Dégradé animé (arc-en-ciel)</span>
           </label>
         </div>
       </div>
@@ -1910,6 +1993,12 @@ const OCCASION_PRESETS = {
     step3Title: 'Grande annonce',
     step4Win: 'Surprise : on se marie !\nOn est heureux de te l\'annoncer.'
   },
+  soiree: {
+    step1Title: 'Invitation a une soiree',
+    step1Body: 'On te reserve une soiree surprise. Clique sur « Commencer » pour decouvrir l\'invitation.',
+    step3Title: 'Invitation a une soiree',
+    step4Win: 'Soiree en vue !\nOn t\'attend pour faire la fete.'
+  },
   cadeau: {
     step1Title: 'Une surprise pour toi',
     step1Body: 'Un cadeau t\'attend derriere ce puzzle. Clique sur « Commencer ».',
@@ -2018,6 +2107,7 @@ function detectOccasionFromText() {
     ['anniversaire', ['anniversaire', 'birthday']],
     ['naissance', ['naissance', 'bebe', 'baby', 'bienvenue']],
     ['mariage', ['mariage', 'marie', 'wedding', 'union']],
+    ['soiree', ['soiree', 'soirée', 'party', 'fete', 'fête', 'invitation']],
     ['surprise', ['il y a une surprise pour toi', 'surprise pour toi']],
     ['vacances', ['vacances', 'voyage', 'plage', 'ete', 'souvenir']],
     ['cadeau', ['cadeau', 'surprise', 'present', 'gift']]
@@ -2805,13 +2895,8 @@ function setUxWalkStageVisibility(i) {
   if (pkg) pkg.hidden = false;
   const band = document.getElementById('uxWalkChromeBand');
   if (band) {
-    if (i === 4) {
-      band.innerHTML =
-        '<strong>Vue invitée figée sur la dernière étape</strong> · actions créateur affichées séparément.';
-    } else {
-      band.innerHTML =
-        '<strong>Ce cadre = vue invitée</strong> · la zone de modification est séparée à droite.';
-    }
+    band.innerHTML =
+      '<strong>Ce cadre = vue invitée</strong> · la zone de modification est séparée à droite.';
   }
 }
 
@@ -2856,7 +2941,7 @@ function updateUxWalkLiveHint(i) {
     return;
   }
   if (i === 4) {
-    el.textContent = 'Cette partie est côté créateur uniquement : l’invité reste sur son écran de victoire.';
+    el.textContent = '';
     return;
   }
   el.textContent = '';
