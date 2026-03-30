@@ -1653,20 +1653,47 @@ kbd{
   box-sizing:border-box;
 }
 .p2p-ad-setup-wrap[hidden]{display:none!important}
-.p2p-game-ad-bar{
-  flex-shrink:0;
+.p2p-game-body{
+  flex:1;
   display:flex;
-  justify-content:center;
+  flex-direction:row;
+  min-height:0;
+  min-width:0;
+  width:100%;
+}
+.p2p-game-ad-rail{
+  flex-shrink:0;
+  width:min(168px,22vw);
+  max-width:200px;
+  display:flex;
+  flex-direction:column;
   align-items:center;
+  justify-content:flex-start;
+  padding:8px 4px;
+  box-sizing:border-box;
+  background:#12122a;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+#gameAdBarLeft{border-right:1px solid rgba(168,85,247,.12)}
+#gameAdBarRight{border-left:1px solid rgba(168,85,247,.12)}
+.p2p-game-ad-rail[hidden]{display:none!important}
+.p2p-game-stage{
+  flex:1;
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+.p2p-game-stage #canvas{
+  flex:1;
   width:100%;
   min-height:0;
-  background:#12122a;
-  border-bottom:1px solid rgba(168,85,247,.12);
-  padding:6px 8px;
-  box-sizing:border-box;
 }
-.p2p-game-ad-bar[hidden]{display:none!important}
-#gameAdBar:not([hidden]){min-height:50px}
+@media (max-width:720px){
+  .p2p-game-body .p2p-game-ad-rail{display:none!important}
+}
 .p2p-consent-bar{
   position:fixed;
   left:0;right:0;bottom:0;
@@ -2015,10 +2042,17 @@ kbd{
     <span id="piece-count"></span>
     <button id="btnRestart" data-i18n="game.btnRestart"></button>
   </div>
-  <div id="gameAdBar" class="p2p-game-ad-bar" hidden>
-    <ins class="adsbygoogle" id="p2pAdGameIns" style="display:block;margin:0 auto"></ins>
+  <div id="gameBody" class="p2p-game-body">
+    <aside id="gameAdBarLeft" class="p2p-game-ad-rail" hidden aria-label="Publicité">
+      <ins class="adsbygoogle" id="p2pAdGameInsLeft" style="display:block;margin:0 auto"></ins>
+    </aside>
+    <div id="gameStage" class="p2p-game-stage">
+      <canvas id="canvas"></canvas>
+    </div>
+    <aside id="gameAdBarRight" class="p2p-game-ad-rail" hidden aria-label="Publicité">
+      <ins class="adsbygoogle" id="p2pAdGameInsRight" style="display:block;margin:0 auto"></ins>
+    </aside>
   </div>
-  <canvas id="canvas"></canvas>
 </div>
 
 <!-- ── Victoire : feux d’artifice + message ───────────── -->
@@ -4358,15 +4392,22 @@ function scatter() {
 // ═══════════════════════════════════════════════════════════
 function p2pGameViewportChromeHeight() {
   const tb = document.getElementById('toolbar');
-  const adBar = document.getElementById('gameAdBar');
-  let h = tb ? tb.offsetHeight : 0;
-  if (adBar && !adBar.hasAttribute('hidden')) h += adBar.offsetHeight;
-  return h;
+  return tb ? tb.offsetHeight : 0;
+}
+function p2pGameStageResize() {
+  if (!canvas) return;
+  const stage = document.getElementById('gameStage');
+  if (stage) {
+    W = canvas.width = Math.max(1, stage.clientWidth);
+    H = canvas.height = Math.max(1, stage.clientHeight);
+  } else {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = Math.max(1, window.innerHeight - p2pGameViewportChromeHeight());
+  }
 }
 window.p2pNotifyGameLayout = function () {
   if (!canvas) return;
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight - p2pGameViewportChromeHeight();
+  p2pGameStageResize();
   const gameEl = document.getElementById('game');
   if (gameEl && gameEl.style.display === 'flex' && tiles.length) {
     applyPieceSizeFromViewport(true);
@@ -4383,8 +4424,7 @@ function startGame() {
   ctx    = canvas.getContext('2d');
 
   function resizeCanvas() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight - p2pGameViewportChromeHeight();
+    p2pGameStageResize();
   }
 
   function onWindowResize() {
@@ -4443,10 +4483,7 @@ function restartGame() {
   const cel = document.getElementById('winCelebration');
   cel.classList.remove('on', 'win-effect-minimal', 'win-effect-off');
   cel.setAttribute('aria-hidden', 'true');
-  if (canvas) {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight - p2pGameViewportChromeHeight();
-  }
+  if (canvas) p2pGameStageResize();
   syncGridFromScenario();
   applyPieceSizeFromViewport(false);
   buildTiles();

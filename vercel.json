@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/CadeauLuc.html" }
+    { "source": "/", "destination": "/puzzle.html" }
   ],
   "headers": [
     {

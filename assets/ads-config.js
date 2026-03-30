@@ -5,16 +5,20 @@
  */
 window.P2P_ADSENSE = {
   client: 'ca-pub-8944795420097131',
-  /** Unité « horizontal » ou responsive sous le titre du créateur */
-  slotSetup: 'XXXXXXXXXX',
-  /** Unité sous la barre d’outils en mode jeu */
-  slotGame: 'XXXXXXXXXX'
+  /** Unité « Picture2puzzle - setup » (code affichage classique, pas AMP) */
+  slotSetup: '2892011000',
+  /** Unité « picture2puzzle - vertical » : colonnes gauche et droite en mode jeu */
+  slotGameVertical: '1578929332'
 };
 
 function p2pAdsenseConfigured() {
   const c = window.P2P_ADSENSE;
-  if (!c || !c.client || !c.slotSetup || !c.slotGame) return false;
-  if (/X{4,}/.test(c.client) || /X{4,}/.test(String(c.slotSetup)) || /X{4,}/.test(String(c.slotGame)))
+  if (!c || !c.client || !c.slotSetup || !c.slotGameVertical) return false;
+  if (
+    /X{4,}/.test(c.client) ||
+    /X{4,}/.test(String(c.slotSetup)) ||
+    /X{4,}/.test(String(c.slotGameVertical))
+  )
     return false;
   if (c.client.indexOf('0000000000000000') !== -1) return false;
   return true;

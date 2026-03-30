@@ -4,7 +4,7 @@ Outil de puzzle dans le navigateur : tu choisis une image, personnalises le text
 
 ## Lancer en local
 
-- **Interface seule** : ouvre [`CadeauLuc.html`](CadeauLuc.html) (double-clic). Tu peux préparer un puzzle et jouer **sans** serveur, mais les routes `/api/*` ne répondront pas : **pas de lien de partage** tant qu’un backend n’est pas servi.
+- **Interface seule** : ouvre [`puzzle.html`](puzzle.html) (double-clic). Tu peux préparer un puzzle et jouer **sans** serveur, mais les routes `/api/*` ne répondront pas : **pas de lien de partage** tant qu’un backend n’est pas servi.
 - **Avec API et Blob** : à la racine du projet, `npm install`, configure le token (voir ci-dessous), puis `npx vercel dev` et ouvre l’URL indiquée (souvent `http://localhost:3000`).
 
 ## Créer le store Blob sur Vercel
@@ -33,7 +33,7 @@ La doc détaillée : [Using Vercel Blob](https://vercel.com/docs/storage/vercel-
 2. Vérifie que `BLOB_READ_WRITE_TOKEN` est bien définie pour l’environnement cible.
 3. Vercel installe les dépendances (`package.json`) et déploie les fonctions dans `api/`.
 
-Les liens de partage ont la forme `https://<ton-domaine>/CadeauLuc.html?s=<uuid>` (bouton « Générer le lien de partage » après upload).
+Les liens de partage ont la forme `https://<ton-domaine>/puzzle.html?s=<uuid>` (bouton « Générer le lien de partage » après upload).
 
 Quotas et tarification : [documentation Blob](https://vercel.com/docs/storage/vercel-blob) (limites selon le plan).
 
@@ -48,11 +48,11 @@ Dans l’onglet **Network** du navigateur, ouvre la requête `create-scenario` �
 
 ## Fichiers utiles
 
-- **`CadeauLuc.html`** — créateur de scénario, jeu, écran de victoire, chargement `?s=`
+- **`puzzle.html`** — créateur de scénario, jeu, écran de victoire, chargement `?s=`
 - **`assets/game-config.js`** — overrides optionnels (`window.GAME_ASSETS`)
 - **`api/create-scenario.js`** — `POST` multipart : champ `meta` (JSON) + fichier `image`
 - **`api/scenario/[id].js`** — `GET` : renvoie le JSON du scénario (dont `imageUrl`)
-- **`vercel.json`** — réécriture `/` → `CadeauLuc.html`, cache des assets
+- **`vercel.json`** — réécriture `/` → `puzzle.html`, cache des assets
 
 ## Limites
 

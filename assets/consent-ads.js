@@ -27,12 +27,14 @@
   function applyInsAttributes(npa) {
     var cfg = window.P2P_ADSENSE || {};
     var setup = document.getElementById('p2pAdSetupIns');
-    var game = document.getElementById('p2pAdGameIns');
-    [setup, game].forEach(function (el) {
+    var left = document.getElementById('p2pAdGameInsLeft');
+    var right = document.getElementById('p2pAdGameInsRight');
+    [setup, left, right].forEach(function (el) {
       if (!el) return;
       el.setAttribute('data-ad-client', cfg.client);
       if (el.id === 'p2pAdSetupIns') el.setAttribute('data-ad-slot', cfg.slotSetup);
-      if (el.id === 'p2pAdGameIns') el.setAttribute('data-ad-slot', cfg.slotGame);
+      if (el.id === 'p2pAdGameInsLeft' || el.id === 'p2pAdGameInsRight')
+        el.setAttribute('data-ad-slot', cfg.slotGameVertical);
       el.setAttribute('data-ad-format', 'auto');
       el.setAttribute('data-full-width-responsive', 'true');
       if (npa) el.setAttribute('data-npa', 'true');
@@ -100,7 +102,7 @@
     });
   };
 
-  /** Appelé après affichage du mode jeu : bannière sous la toolbar + push du bloc jeu. */
+  /** Après affichage du mode jeu : rails verticaux gauche/droite (masqués sur petit écran). */
   window.p2pTryFillGameAd = function () {
     if (!window.p2pAdsenseConfigured || !window.p2pAdsenseConfigured()) return;
     var consented = null;
@@ -110,19 +112,28 @@
     if (consented !== 'full' && consented !== 'essential') return;
 
     var g = document.getElementById('game');
-    var bar = document.getElementById('gameAdBar');
-    var ins = document.getElementById('p2pAdGameIns');
-    if (!g || !bar || !ins || g.style.display !== 'flex') return;
-    if (ins.getAttribute('data-p2p-filled')) return;
+    var railL = document.getElementById('gameAdBarLeft');
+    var railR = document.getElementById('gameAdBarRight');
+    if (!g || !railL || !railR || g.style.display !== 'flex') return;
+    if (typeof window.innerWidth === 'number' && window.innerWidth <= 720) return;
 
-    bar.removeAttribute('hidden');
+    var insL = document.getElementById('p2pAdGameInsLeft');
+    var insR = document.getElementById('p2pAdGameInsRight');
+    if (insL && insR && insL.getAttribute('data-p2p-filled') && insR.getAttribute('data-p2p-filled'))
+      return;
+
+    railL.removeAttribute('hidden');
+    railR.removeAttribute('hidden');
 
     function pushGame() {
-      if (ins.getAttribute('data-p2p-filled')) return;
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        ins.setAttribute('data-p2p-filled', '1');
-      } catch (e) {}
+      ['p2pAdGameInsLeft', 'p2pAdGameInsRight'].forEach(function (id) {
+        var ins = document.getElementById(id);
+        if (!ins || ins.getAttribute('data-p2p-filled')) return;
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          ins.setAttribute('data-p2p-filled', '1');
+        } catch (e) {}
+      });
       notifyGameLayout();
       setTimeout(notifyGameLayout, 400);
     }
