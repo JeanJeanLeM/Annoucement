@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "pageTitle": "Custom photo puzzle"
+  },
+  "lang": {
+    "aria": "Interface language",
+    "fr": "FR",
+    "en": "EN"
+  },
+  "defaults": {
+    "shareGateTitle": "Shared puzzle",
+    "shareGateBody": "When you’re ready, start the puzzle with the photo and messages prepared for you.",
+    "winText": "Well done!",
+    "puzzleTitle": "Puzzle"
+  },
+  "shareGate": {
+    "start": "Start",
+    "loading": "Loading shared puzzle…"
+  },
+  "setup": {
+    "appTitle": "🧩 Custom photo puzzle",
+    "previewLive": "Live preview",
+    "previewBeforeOpen": "Before opening (shared link)",
+    "previewDuringGame": "During play",
+    "previewWin": "Win screen",
+    "previewGamePlaceholder": "Add an image on the right to see the crop area and grid.",
+    "previewWinMeta": "Font & text color",
+    "step1Title": "1 — Welcome (shared link)",
+    "step1OccasionHint": "Occasion (editable preset phrases)",
+    "step1LabelTitle": "Title (screen before “Start”)",
+    "step1PlaceholderTitle": "e.g. Shared puzzle",
+    "step1LabelBody": "Invitation text (multiple lines allowed)",
+    "step1PlaceholderBody": "When you’re ready…",
+    "step2Title": "2 — Image + puzzle grid",
+    "dropZoneHint": "<strong>Drop an image here</strong> or click to browse (JPG, PNG, WebP, GIF — max 8&nbsp;MB).",
+    "browse": "Browse…",
+    "step2GridTitle": "Puzzle grid",
+    "labelCols": "Columns",
+    "labelRows": "Rows",
+    "step3Title": "3 — Message above the puzzle",
+    "step3OccasionHint": "Occasion (pre-selected from step 1, editable)",
+    "step3LabelToolTitle": "Shown above the play area during the game (optional)",
+    "step3PlaceholderToolTitle": "e.g. Happy birthday — leave empty for “Puzzle”",
+    "step4Title": "4 — Win screen",
+    "step4OccasionHint": "Occasion (same idea as step 3, editable)",
+    "step4LabelWin": "Message (multiple lines allowed)",
+    "step4LabelEffect": "Background effect",
+    "step4SwitchEffect": "Effect ON / OFF",
+    "step4LabelFont": "Message font",
+    "fontSystem": "System (Segoe UI)",
+    "step4LabelColor": "Text color",
+    "step4SwitchGradient": "Animated gradient (rainbow)",
+    "step5Title": "5 — Play or share",
+    "step5Hint": "You’ve walked through the same flow as your guest: welcome → play → win. Here you can play locally or generate the link.",
+    "btnStartGame": "Start puzzle",
+    "btnShareLink": "Generate share link",
+    "shareGenerating": "Generating link…",
+    "shareLinkHint": "Permanent link (image + settings stored):",
+    "btnCopyLink": "Copy link",
+    "previewAlt": "Puzzle preview",
+    "privacyLink": "Privacy"
+  },
+  "effects": {
+    "fireworks": "Fireworks",
+    "confetti": "Confetti",
+    "minimal": "Minimal (subtle)"
+  },
+  "mock": {
+    "hintToolbar": "Wheel · Drag · Double-click",
+    "replay": "↺ Play again",
+    "newPuzzle": "➕ New puzzle"
+  },
+  "uxWalk": {
+    "deviceSwitchAria": "Guest view device type",
+    "devicePhone": "Phone view",
+    "deviceDesktop": "Desktop view",
+    "navPrev": "Previous step",
+    "navNext": "Next step",
+    "chromeBandHtml": "<strong>This frame = guest view</strong> · editing is in the separate panel on the right.",
+    "viewportBezelAria": "Guest screen frame",
+    "footDefault": "The frame shows the window of the person opening your link.",
+    "footDesktop": "Desktop screen simulation: the guest sees a wider area (desktop proportions).",
+    "footPhone": "Phone screen simulation: the guest sees a compact vertical frame.",
+    "editorPanelAria": "Edit mode",
+    "editorTitle": "Edit mode",
+    "editorSub": "Outside guest view",
+    "outsideHint0": "What the guest sees before tapping “Start”."
+  },
+  "previewsColumnAria": "Screen previews",
+  "game": {
+    "hintWheel": "Rotate",
+    "hintWheelLabel": "Wheel",
+    "hint2Tap": "Rotate (mobile)",
+    "hint2TapLabel": "2 taps",
+    "hintDrag": "Move",
+    "hintDragLabel": "Drag",
+    "hint2Click": "Connect",
+    "hint2ClickLabel": "Double-click",
+    "hintDblClick": "Photo orientation",
+    "hintDblClickLabel": "Double-click",
+    "btnRestart": "↩ Restart"
+  },
+  "a11y": {
+    "chooseOrChangeImage": "Choose or change puzzle image",
+    "editGrid": "Edit grid",
+    "editGridColsRows": "Edit grid (columns and rows)",
+    "editTitleAbovePuzzle": "Edit title above the puzzle",
+    "editWinMessage": "Edit win message",
+    "editWinEffect": "Edit background effect",
+    "editWinEffectVictory": "Edit background effect (win screen)",
+    "editShareTitle": "Edit welcome title (before Start)",
+    "editInvitation": "Edit invitation text",
+    "adjustGridCrop": "Adjust grid (columns × rows)",
+    "editWinFont": "Edit win message font",
+    "dropZone": "Choose an image: drag and drop or click",
+    "gridInfo": "About the puzzle grid",
+    "shareLinkInput": "Share link",
+    "occasionWelcome": "Occasion — welcome",
+    "occasionGameTitle": "Occasion — game title",
+    "occasionWin": "Occasion — win screen"
+  },
+  "gridHelpHtml": "e.g. <strong>4×3</strong> = 12 pieces. Maximum <strong>64</strong> pieces (columns × rows). The photo uses <strong>cover</strong> mode: it fills the grid and overflow is <strong>cropped from the center</strong> (left/right if the photo is too wide, top/bottom if too tall).",
+  "guided": {
+    "titles": [
+      "Shared link welcome",
+      "Photo + puzzle grid",
+      "Title above the game",
+      "Win screen",
+      "Creator finish (outside guest view)"
+    ],
+    "hints": [
+      "Like your guest: they see this card first, then tap “Start”.",
+      "Pick the image and grid: that’s what gets sliced during play.",
+      "This text appears above the puzzle area during the game (optional).",
+      "Message, effect, font, and colors after winning.",
+      "This last step isn’t shown to the guest — it’s for you as the creator."
+    ]
+  },
+  "previewCrop": {
+    "intro": "Grid {cols}×{rows} ({n} pieces). Display area {cols}∶{rows} (width∶height). ",
+    "noImage": "Add an image: we’ll show which edges will be cropped.",
+    "loadingImage": "Loading image…",
+    "ratioMatch": "Your photo almost matches the grid ratio: barely any crop.",
+    "cropSides": "Your photo is wider than the grid: left and right are cropped (center kept).",
+    "cropTopBottom": "Your photo is taller than the grid: top and bottom are cropped (center kept)."
+  },
+  "errors": {
+    "imageType": "Choose an image file (JPG, PNG, WebP, GIF).",
+    "imageSize": "Image too large (max 8 MB).",
+    "imageRead": "Couldn’t read this image.",
+    "imageMissingUrl": "Puzzle image not found.",
+    "needImage": "Add an image first (drag-and-drop or Browse).",
+    "needLocalImage": "To create a link, choose an image from your device (local file).",
+    "shareFailed": "Upload failed.",
+    "network": "Network or server unavailable. For local dev run Vercel dev or deploy to Vercel.",
+    "scenarioGone": "This puzzle doesn’t exist or was removed.",
+    "scenarioNoImage": "Invalid scenario (no image).",
+    "scenarioNetwork": "Couldn’t reach the server (API / network)."
+  },
+  "apiErrors": {
+    "METHOD_NOT_ALLOWED": "Method not allowed.",
+    "BODY_TOO_LARGE": "Request body too large.",
+    "READ_BODY_FAILED": "Couldn’t read request body.",
+    "EMPTY_BODY": "Empty request body.",
+    "INVALID_MULTIPART_CONTENT_TYPE": "Invalid multipart request (Content-Type).",
+    "INVALID_MULTIPART_BODY": "Invalid multipart body.",
+    "IMAGE_TOO_LARGE": "Image too large.",
+    "MISSING_META": "Missing meta field.",
+    "INVALID_META_JSON": "Invalid meta JSON.",
+    "MISSING_IMAGE_FILE": "Missing image file.",
+    "MISSING_BLOB_TOKEN": "BLOB_READ_WRITE_TOKEN is missing or empty on this deployment. Check the exact name in Vercel (all caps) and redeploy.",
+    "BLOB_STORE_PRIVATE": "The Blob store is private: this project needs public access for shared images. Make the store public on Vercel or update the token.",
+    "BLOB_UPLOAD_FAILED": "Upload failed. Try again later.",
+    "RATE_LIMIT_EXCEEDED": "Too many puzzle creations. Try again later.",
+    "INVALID_SCENARIO_ID": "Invalid puzzle id.",
+    "STORAGE_NOT_CONFIGURED": "Storage not configured on the server.",
+    "SCENARIO_NOT_FOUND": "Puzzle not found or removed.",
+    "SCENARIO_FETCH_FAILED": "Couldn’t load the puzzle from storage.",
+    "SERVER_ERROR": "Server error.",
+    "UNKNOWN": "Something went wrong."
+  },
+  "share": {
+    "generatingBtn": "Generating…"
+  },
+  "consent": {
+    "aria": "Cookies and ads",
+    "bodyHtml": "This site may show ads through Google and use cookies for measurement and personalization. See our <a href=\"privacy.html\">privacy policy</a>. You can accept personalization or decline it (less targeted ads).",
+    "accept": "Accept all",
+    "reject": "Decline personalization"
+  },
+  "occasions": {
+    "labels": {
+      "anniversaire": "Birthday",
+      "naissance": "New baby",
+      "mariage": "Wedding",
+      "soiree": "Party invite",
+      "cadeau": "Gift",
+      "surprise": "Surprise",
+      "vacances": "Vacation",
+      "saint-valentin": "Valentine’s Day"
+    },
+    "anniversaire": {
+      "step1Title": "Birthday invitation",
+      "step1Body": "A surprise puzzle awaits for a birthday. Tap “Start” to discover it.",
+      "step3Title": "Happy birthday!",
+      "step4Win": "Happy birthday!\nEnjoy this special day."
+    },
+    "naissance": {
+      "step1Title": "News for you",
+      "step1Body": "We have a surprise to share in this puzzle. Tap “Start”.",
+      "step3Title": "Exciting news",
+      "step4Win": "Surprise: a baby is on the way!\nThanks for sharing our joy."
+    },
+    "mariage": {
+      "step1Title": "News for you",
+      "step1Body": "We have big news to share in this puzzle. Tap “Start”.",
+      "step3Title": "Big announcement",
+      "step4Win": "Surprise: we’re getting married!\nWe’re so happy to tell you."
+    },
+    "soiree": {
+      "step1Title": "Party invitation",
+      "step1Body": "We’ve planned a surprise evening. Tap “Start” to see the invite.",
+      "step3Title": "Party invitation",
+      "step4Win": "Party time!\nWe can’t wait to celebrate with you."
+    },
+    "cadeau": {
+      "step1Title": "A surprise for you",
+      "step1Body": "A gift is waiting behind this puzzle. Tap “Start”.",
+      "step3Title": "Discover your surprise",
+      "step4Win": "Surprise unlocked!\nHope you love this gift."
+    },
+    "surprise": {
+      "step1Title": "There’s a surprise for you",
+      "step1Body": "A surprise message hides behind this puzzle. Tap “Start”.",
+      "step3Title": "There’s a surprise for you",
+      "step4Win": "Surprise!\nThanks for playing."
+    },
+    "vacances": {
+      "step1Title": "Vacation memory",
+      "step1Body": "A vacation-themed puzzle is ready. Tap “Start”.",
+      "step3Title": "Off on vacation",
+      "step4Win": "Happy holidays!\nHope this memory makes you smile."
+    },
+    "saint-valentin": {
+      "step1Title": "Valentine’s message",
+      "step1Body": "A love-filled puzzle awaits. Tap “Start”.",
+      "step3Title": "Happy Valentine’s Day",
+      "step4Win": "Happy Valentine’s Day!\nWith all my love."
+    }
+  }
+}

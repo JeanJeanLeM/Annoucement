@@ -1,10 +1,13 @@
 const Busboy = require('busboy');
 const { put } = require('@vercel/blob');
 const { randomUUID } = require('crypto');
+const rateLimit = require('./_rate-limit');
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 /** Multipart overhead + meta JSON; keep below typical platform limits where possible */
 const MAX_BODY_BYTES = Math.min(MAX_IMAGE_BYTES + 2 * 1024 * 1024, 12 * 1024 * 1024);
+
+const checkLimit = rateLimit({ windowMs: 60 * 60 * 1000, max: 5 });
 
 async function readRequestBody(req) {
   const chunks = [];
@@ -24,8 +27,10 @@ async function readRequestBody(req) {
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ code: 'METHOD_NOT_ALLOWED', error: 'Method not allowed' });
   }
+
+  if (!checkLimit(req, res)) return;
 
   const rawToken = process.env.BLOB_READ_WRITE_TOKEN;
   if (!rawToken || !String(rawToken).trim()) {
@@ -43,14 +48,14 @@ module.exports = async (req, res) => {
     rawBody = await readRequestBody(req);
   } catch (e) {
     if (e.code === 'BODY_TOO_LARGE') {
-      return res.status(413).json({ error: 'Payload too large' });
+      return res.status(413).json({ code: 'BODY_TOO_LARGE', error: 'Payload too large' });
     }
     console.error('readRequestBody', e);
-    return res.status(400).json({ error: 'Could not read request body' });
+    return res.status(400).json({ code: 'READ_BODY_FAILED', error: 'Could not read request body' });
   }
 
   if (!rawBody.length) {
-    return res.status(400).json({ error: 'Empty body' });
+    return res.status(400).json({ code: 'EMPTY_BODY', error: 'Empty body' });
   }
 
   let bb;
@@ -61,7 +66,10 @@ module.exports = async (req, res) => {
     });
   } catch (e) {
     console.error('Busboy', e);
-    return res.status(400).json({ error: 'Invalid multipart request (Content-Type)' });
+    return res.status(400).json({
+      code: 'INVALID_MULTIPART_CONTENT_TYPE',
+      error: 'Invalid multipart request (Content-Type)',
+    });
   }
 
   return new Promise((resolve) => {
@@ -96,14 +104,14 @@ module.exports = async (req, res) => {
       }
       file.on('data', (d) => chunks.push(d));
       file.on('limit', () => {
-        if (!res.headersSent) res.status(413).json({ error: 'Image too large' });
+        if (!res.headersSent) res.status(413).json({ code: 'IMAGE_TOO_LARGE', error: 'Image too large' });
         done();
       });
     });
 
     bb.on('error', (err) => {
       console.error(err);
-      if (!res.headersSent) res.status(400).json({ error: 'Invalid multipart body' });
+      if (!res.headersSent) res.status(400).json({ code: 'INVALID_MULTIPART_BODY', error: 'Invalid multipart body' });
       done();
     });
 
@@ -114,23 +122,23 @@ module.exports = async (req, res) => {
       }
       try {
         if (!metaJson) {
-          res.status(400).json({ error: 'Missing meta field' });
+          res.status(400).json({ code: 'MISSING_META', error: 'Missing meta field' });
           return done();
         }
         let meta;
         try {
           meta = JSON.parse(metaJson);
         } catch {
-          res.status(400).json({ error: 'Invalid meta JSON' });
+          res.status(400).json({ code: 'INVALID_META_JSON', error: 'Invalid meta JSON' });
           return done();
         }
         const buf = Buffer.concat(chunks);
         if (!buf.length) {
-          res.status(400).json({ error: 'Missing image file' });
+          res.status(400).json({ code: 'MISSING_IMAGE_FILE', error: 'Missing image file' });
           return done();
         }
         if (buf.length > MAX_IMAGE_BYTES) {
-          res.status(413).json({ error: 'Image too large' });
+          res.status(413).json({ code: 'IMAGE_TOO_LARGE', error: 'Image too large' });
           return done();
         }
 

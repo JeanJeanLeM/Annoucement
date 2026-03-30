@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Politique de confidentialité — Puzzle personnalisable</title>
+<link rel="icon" href="assets/cadeau.avif" type="image/avif">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:#0f0f1a;
+  color:#c8c8e0;
+  line-height:1.6;
+  padding:28px 20px 48px;
+  max-width:42rem;
+  margin:0 auto;
+}
+h1{font-size:1.35rem;color:#e8e8f0;margin-bottom:14px}
+h2{font-size:1.05rem;color:#e0e0f0;margin:22px 0 10px}
+p{margin:10px 0}
+ul{margin:10px 0 10px 1.25rem}
+a{color:#d8b4fe}
+.back{display:inline-block;margin-bottom:22px;font-size:.88rem;color:#9f9fc0}
+.back:hover{color:#e8e8f0}
+.note{font-size:.85rem;color:#8b8baa;margin-top:18px}
+button{
+  margin-top:18px;
+  padding:10px 18px;
+  border-radius:10px;
+  border:1px solid rgba(168,85,247,.35);
+  background:rgba(168,85,247,.14);
+  color:#e8e8f0;
+  font-size:.85rem;
+  cursor:pointer;
+  font-family:inherit;
+}
+button:hover{background:rgba(168,85,247,.24)}
+</style>
+</head>
+<body>
+<a class="back" href="CadeauLuc.html">← Retour au puzzle</a>
+<h1>Politique de confidentialité</h1>
+<p>Dernière mise à jour : mars 2026. Ce texte décrit comment le site « Puzzle personnalisable » (Picture2puzzle) traite les données lorsque tu l’utilises.</p>
+
+<h2>Responsable</h2>
+<p>Le site est hébergé et exploité par son éditeur (toi ou l’entité qui déploie le projet). Adapte cette section avec tes coordonnées de contact si tu publies à titre professionnel.</p>
+
+<h2>Données que tu fournis</h2>
+<ul>
+  <li><strong>Image et réglages du puzzle</strong> : lorsque tu génères un lien de partage, l’image et le scénario (textes, grille, etc.) peuvent être stockés chez le fournisseur d’hébergement de fichiers utilisé par l’application (par ex. Vercel Blob), afin de produire une URL publique lisible par les destinataires du lien.</li>
+  <li><strong>Données techniques</strong> : comme pour la plupart des sites, le serveur ou le CDN peut enregistrer des journaux techniques (adresse IP approximative, date, URL demandée) pour la sécurité et le fonctionnement du service.</li>
+</ul>
+
+<h2>Publicités (Google AdSense)</h2>
+<p>Si les annonces sont activées, Google peut déposer des cookies ou utiliser des identifiants similaires pour diffuser et mesurer des publicités, y compris des publicités personnalisées si tu y consentes via le bandeau du site. Les partenaires publicitaires peuvent traiter des données conformément à leurs propres politiques.</p>
+<p>Tu peux consulter la politique de confidentialité de Google : <a href="https://policies.google.com/privacy" rel="noopener noreferrer" target="_blank">policies.google.com/privacy</a>.</p>
+<p>Pour l’espace économique européen et le Royaume-Uni, des règles supplémentaires s’appliquent aux publicités personnalisées. Le site propose un choix (accepter la personnalisation ou la refuser). Pour une conformité complète avec le cadre IAB TCF, il peut être nécessaire d’intégrer une <strong>plateforme de gestion du consentement (CMP) certifiée</strong> en complément.</p>
+
+<h2>Choix cookies (bandeau)</h2>
+<p>Ton choix est enregistré localement dans le navigateur (<code>localStorage</code>, clé <code>p2p_ad_consent</code>). Tu peux le effacer à tout moment avec le bouton ci-dessous, puis rouvrir l’application pour voir à nouveau le bandeau.</p>
+<button type="button" id="p2pRevokeCookies">Effacer mon choix de cookies</button>
+
+<h2>Tes droits</h2>
+<p>Selon ta juridiction (notamment RGPD), tu peux disposer d’un droit d’accès, de rectification, d’effacement, d’opposition ou de limitation. Pour exercer ces droits, contacte l’éditeur du site.</p>
+
+<p class="note">Ce texte est fourni à titre informatif et ne remplace pas un conseil juridique. Adapte-le à ta situation réelle (personne physique, association, entreprise, pays d’accueil des visiteurs).</p>
+
+<script>
+document.getElementById('p2pRevokeCookies').addEventListener('click', function () {
+  try { localStorage.removeItem('p2p_ad_consent'); } catch (e) {}
+  window.location.href = 'CadeauLuc.html';
+});
+</script>
+</body>
+</html>

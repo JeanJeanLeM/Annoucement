@@ -1,0 +1,251 @@
+{
+  "meta": {
+    "pageTitle": "Puzzle personnalisable"
+  },
+  "lang": {
+    "aria": "Langue de l’interface",
+    "fr": "FR",
+    "en": "EN"
+  },
+  "defaults": {
+    "shareGateTitle": "Puzzle partagé",
+    "shareGateBody": "Quand tu es prêt, lance le puzzle avec la photo et les messages prévus.",
+    "winText": "Bravo !",
+    "puzzleTitle": "Puzzle"
+  },
+  "shareGate": {
+    "start": "Commencer",
+    "loading": "Chargement du puzzle partagé…"
+  },
+  "setup": {
+    "appTitle": "🧩 Puzzle personnalisable",
+    "previewLive": "Aperçu en direct",
+    "previewBeforeOpen": "Avant d’ouvrir (lien partagé)",
+    "previewDuringGame": "Pendant le jeu",
+    "previewWin": "Écran de victoire",
+    "previewGamePlaceholder": "Ajoute une image à droite pour voir la zone utilisée et la grille.",
+    "previewWinMeta": "Police & couleur du texte",
+    "step1Title": "1 — Accueil (lien partagé)",
+    "step1OccasionHint": "Occasion (phrases préécrites modifiables)",
+    "step1LabelTitle": "Titre (écran avant « Commencer »)",
+    "step1PlaceholderTitle": "Ex. Puzzle partagé",
+    "step1LabelBody": "Texte d’invitation (plusieurs lignes possibles)",
+    "step1PlaceholderBody": "Quand tu es prêt…",
+    "step2Title": "2 — Image + grille du puzzle",
+    "dropZoneHint": "<strong>Dépose une image ici</strong> ou clique pour parcourir (JPG, PNG, WebP, GIF — max 8&nbsp;Mo).",
+    "browse": "Parcourir…",
+    "step2GridTitle": "Grille du puzzle",
+    "labelCols": "Colonnes",
+    "labelRows": "Lignes",
+    "step3Title": "3 — Message au-dessus du puzzle",
+    "step3OccasionHint": "Occasion (présélection depuis l’étape 1, modifiable)",
+    "step3LabelToolTitle": "Affiché au-dessus de la zone de jeu pendant la partie (optionnel)",
+    "step3PlaceholderToolTitle": "Ex. Joyeux anniversaire — laisse vide pour « Puzzle »",
+    "step4Title": "4 — Écran de victoire",
+    "step4OccasionHint": "Occasion (même logique que l’étape 3, modifiable)",
+    "step4LabelWin": "Message (plusieurs lignes possibles)",
+    "step4LabelEffect": "Effet d’arrière-plan",
+    "step4SwitchEffect": "Effet ON / OFF",
+    "step4LabelFont": "Police du message",
+    "fontSystem": "Système (Segoe UI)",
+    "step4LabelColor": "Couleur du texte",
+    "step4SwitchGradient": "Dégradé animé (arc-en-ciel)",
+    "step5Title": "5 — Lancer ou partager",
+    "step5Hint": "Tu as parcouru le même chemin que ton invité : accueil → jeu → victoire. Ici tu lances la partie en local ou tu génères le lien.",
+    "btnStartGame": "Lancer le puzzle",
+    "btnShareLink": "Générer le lien de partage",
+    "shareGenerating": "Génération du lien en cours…",
+    "shareLinkHint": "Lien permanent (image + réglages conservés sur le stockage) :",
+    "btnCopyLink": "Copier le lien",
+    "previewAlt": "Aperçu du puzzle",
+    "privacyLink": "Confidentialité"
+  },
+  "effects": {
+    "fireworks": "Feux d’artifice",
+    "confetti": "Confettis",
+    "minimal": "Minimal (sobre)"
+  },
+  "mock": {
+    "hintToolbar": "Molette · Glisser · 2 clics",
+    "replay": "↺ Rejouer",
+    "newPuzzle": "➕ Nouveau puzzle"
+  },
+  "uxWalk": {
+    "deviceSwitchAria": "Type de vue invité",
+    "devicePhone": "Vue téléphone",
+    "deviceDesktop": "Vue ordinateur",
+    "navPrev": "Étape précédente",
+    "navNext": "Étape suivante",
+    "chromeBandHtml": "<strong>Ce cadre = vue invitée</strong> · la zone de modification est séparée à droite.",
+    "viewportBezelAria": "Cadre écran invité",
+    "footDefault": "Le cadre représente la fenêtre de la personne qui ouvre ton lien.",
+    "footDesktop": "Simulation écran ordinateur : l’invité voit une zone plus large (proportions desktop).",
+    "footPhone": "Simulation écran téléphone : l’invité voit un cadre vertical compact.",
+    "editorPanelAria": "Mode modification",
+    "editorTitle": "Mode modification",
+    "editorSub": "Hors vue invité",
+    "outsideHint0": "Vue réelle de l’invité avant le clic sur « Commencer »."
+  },
+  "previewsColumnAria": "Aperçus des écrans",
+  "game": {
+    "hintWheel": "Rotation",
+    "hintWheelLabel": "Molette",
+    "hint2Tap": "Rotation mobile",
+    "hint2TapLabel": "2 taps",
+    "hintDrag": "Déplacer",
+    "hintDragLabel": "Glisser",
+    "hint2Click": "Connecter",
+    "hint2ClickLabel": "2 clics",
+    "hintDblClick": "Sens de la photo",
+    "hintDblClickLabel": "Dbl-clic",
+    "btnRestart": "↩ Recommencer"
+  },
+  "a11y": {
+    "chooseOrChangeImage": "Choisir ou changer l’image du puzzle",
+    "editGrid": "Modifier la grille",
+    "editGridColsRows": "Modifier la grille (colonnes et lignes)",
+    "editTitleAbovePuzzle": "Modifier le titre au-dessus du puzzle",
+    "editWinMessage": "Modifier le message de victoire",
+    "editWinEffect": "Modifier l’effet d’arrière-plan",
+    "editWinEffectVictory": "Modifier l’effet d’arrière-plan (victoire)",
+    "editShareTitle": "Modifier le titre d’accueil (avant Commencer)",
+    "editInvitation": "Modifier le texte d’invitation",
+    "adjustGridCrop": "Ajuster la grille (colonnes × lignes)",
+    "editWinFont": "Modifier la police du message de victoire",
+    "dropZone": "Choisir une image : glisser-déposer ou cliquer",
+    "gridInfo": "Informations sur la grille du puzzle",
+    "shareLinkInput": "Lien de partage",
+    "occasionWelcome": "Occasion accueil",
+    "occasionGameTitle": "Occasion titre jeu",
+    "occasionWin": "Occasion victoire"
+  },
+  "gridHelpHtml": "Ex. <strong>4×3</strong> = 12 pièces. Maximum <strong>64</strong> pièces (colonnes × lignes). La photo est affichée en <strong>« remplissage »</strong> : elle couvre toute la grille puis les bandes qui dépassent sont <strong>coupées au centre</strong> (à gauche et à droite si la photo est trop large, en haut et en bas si elle est trop haute).",
+  "guided": {
+    "titles": [
+      "Accueil du lien partagé",
+      "Photo + grille du puzzle",
+      "Titre au-dessus du jeu",
+      "Écran de victoire",
+      "Finalisation créateur (hors vue invitée)"
+    ],
+    "hints": [
+      "Comme ton invité : il voit d’abord cette carte, puis appuie sur « Commencer ».",
+      "Choisis l’image puis la grille : c’est ce qui sera découpé pendant la partie.",
+      "Ce texte apparaît au-dessus de la zone de puzzle pendant le jeu (optionnel).",
+      "Message, effet, police et couleurs après la victoire.",
+      "Cette dernière étape n’apparaît pas chez l’invité : elle sert uniquement au créateur."
+    ]
+  },
+  "previewCrop": {
+    "intro": "Grille {cols}×{rows} ({n} pièces). Zone affichée en {cols}∶{rows} (largeur∶hauteur). ",
+    "noImage": "Charge une image : on indique ici quels bords seront rognés.",
+    "loadingImage": "Chargement de l’image…",
+    "ratioMatch": "Ta photo a presque les mêmes proportions : rognage quasi nul.",
+    "cropSides": "Ta photo est plus large que la grille : les bandes à gauche et à droite sont enlevées (on garde le centre).",
+    "cropTopBottom": "Ta photo est plus haute que la grille : les bandes en haut et en bas sont enlevées (on garde le centre)."
+  },
+  "errors": {
+    "imageType": "Choisis un fichier image (JPG, PNG, WebP, GIF).",
+    "imageSize": "Image trop volumineuse (max 8 Mo).",
+    "imageRead": "Impossible de lire cette image.",
+    "imageMissingUrl": "Image du puzzle introuvable.",
+    "needImage": "Ajoute d’abord une image (glisser-déposer ou Parcourir).",
+    "needLocalImage": "Pour créer un lien, choisis une image sur ton appareil (fichier local).",
+    "shareFailed": "Échec de l’envoi.",
+    "network": "Réseau ou serveur indisponible. En local, lance avec Vercel dev ou déploie sur Vercel.",
+    "scenarioGone": "Ce puzzle n’existe pas ou a été supprimé.",
+    "scenarioNoImage": "Scénario invalide (pas d’image).",
+    "scenarioNetwork": "Impossible de joindre le serveur (API / réseau)."
+  },
+  "apiErrors": {
+    "METHOD_NOT_ALLOWED": "Méthode non autorisée.",
+    "BODY_TOO_LARGE": "Requête trop volumineuse.",
+    "READ_BODY_FAILED": "Impossible de lire la requête.",
+    "EMPTY_BODY": "Corps de requête vide.",
+    "INVALID_MULTIPART_CONTENT_TYPE": "Requête multipart invalide (Content-Type).",
+    "INVALID_MULTIPART_BODY": "Corps multipart invalide.",
+    "IMAGE_TOO_LARGE": "Image trop volumineuse.",
+    "MISSING_META": "Champ meta manquant.",
+    "INVALID_META_JSON": "JSON meta invalide.",
+    "MISSING_IMAGE_FILE": "Fichier image manquant.",
+    "MISSING_BLOB_TOKEN": "Variable d’environnement BLOB_READ_WRITE_TOKEN absente ou vide sur ce déploiement. Vérifie sur Vercel le nom exact (tout en majuscules) et redéploie.",
+    "BLOB_STORE_PRIVATE": "Le stockage Blob est privé : ce projet exige un accès public pour les images partagées. Passe le store en public sur Vercel ou mets à jour le token.",
+    "BLOB_UPLOAD_FAILED": "Échec du téléversement. Réessaie plus tard.",
+    "RATE_LIMIT_EXCEEDED": "Trop de créations de puzzles. Réessaie plus tard.",
+    "INVALID_SCENARIO_ID": "Identifiant de puzzle invalide.",
+    "STORAGE_NOT_CONFIGURED": "Stockage non configuré sur le serveur.",
+    "SCENARIO_NOT_FOUND": "Puzzle introuvable ou supprimé.",
+    "SCENARIO_FETCH_FAILED": "Impossible de charger le puzzle depuis le stockage.",
+    "SERVER_ERROR": "Erreur serveur.",
+    "UNKNOWN": "Une erreur s’est produite."
+  },
+  "share": {
+    "generatingBtn": "Génération en cours…"
+  },
+  "consent": {
+    "aria": "Cookies et publicité",
+    "bodyHtml": "Ce site peut afficher des annonces via Google et utiliser des cookies pour la mesure et la personnalisation. Consulte la <a href=\"privacy.html\">politique de confidentialité</a>. Tu peux accepter la personnalisation ou refuser celle-ci (annonces moins ciblées).",
+    "accept": "Tout accepter",
+    "reject": "Refuser la personnalisation"
+  },
+  "occasions": {
+    "labels": {
+      "anniversaire": "Anniversaire",
+      "naissance": "Naissance",
+      "mariage": "Mariage",
+      "soiree": "Invitation à une soirée",
+      "cadeau": "Cadeau",
+      "surprise": "Surprise",
+      "vacances": "Vacances",
+      "saint-valentin": "Saint-Valentin"
+    },
+    "anniversaire": {
+      "step1Title": "Invitation anniversaire",
+      "step1Body": "Un puzzle surprise t'attend pour un anniversaire. Clique sur « Commencer » pour le découvrir.",
+      "step3Title": "Joyeux anniversaire !",
+      "step4Win": "Joyeux anniversaire !\nProfite à fond de cette belle journée."
+    },
+    "naissance": {
+      "step1Title": "Une annonce à te faire",
+      "step1Body": "On a une surprise à t'annoncer avec ce puzzle. Clique sur « Commencer ».",
+      "step3Title": "Une belle annonce",
+      "step4Win": "Surprise : un bébé arrive !\nMerci de partager ce bonheur avec nous."
+    },
+    "mariage": {
+      "step1Title": "Une annonce à te faire",
+      "step1Body": "On a une grande surprise à t'annoncer avec ce puzzle. Clique sur « Commencer ».",
+      "step3Title": "Grande annonce",
+      "step4Win": "Surprise : on se marie !\nOn est heureux de te l'annoncer."
+    },
+    "soiree": {
+      "step1Title": "Invitation à une soirée",
+      "step1Body": "On te réserve une soirée surprise. Clique sur « Commencer » pour découvrir l'invitation.",
+      "step3Title": "Invitation à une soirée",
+      "step4Win": "Soirée en vue !\nOn t'attend pour faire la fête."
+    },
+    "cadeau": {
+      "step1Title": "Une surprise pour toi",
+      "step1Body": "Un cadeau t'attend derrière ce puzzle. Clique sur « Commencer ».",
+      "step3Title": "Découvre ta surprise",
+      "step4Win": "Surprise débloquée !\nJ'espère que ce cadeau te fait plaisir."
+    },
+    "surprise": {
+      "step1Title": "Il y a une surprise pour toi",
+      "step1Body": "Un message surprise t'attend derrière ce puzzle. Clique sur « Commencer ».",
+      "step3Title": "Il y a une surprise pour toi",
+      "step4Win": "Surprise pour toi !\nMerci d'avoir joué ce puzzle."
+    },
+    "vacances": {
+      "step1Title": "Souvenir de vacances",
+      "step1Body": "Un puzzle souvenir de vacances t'attend. Clique sur « Commencer ».",
+      "step3Title": "Cap sur les vacances",
+      "step4Win": "Bonnes vacances !\nQue ce souvenir te fasse sourire."
+    },
+    "saint-valentin": {
+      "step1Title": "Message de Saint-Valentin",
+      "step1Body": "Un puzzle plein d'amour t'attend. Clique sur « Commencer ».",
+      "step3Title": "Bonne Saint-Valentin",
+      "step4Win": "Bonne Saint-Valentin !\nAvec tout mon amour."
+    }
+  }
+}
