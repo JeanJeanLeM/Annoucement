@@ -5,6 +5,8 @@
 (function () {
   var STORAGE_KEY = 'p2p_ad_consent';
   var BAR_ID = 'p2pConsentBar';
+  /** Si localStorage est indisponible, garde le choix en mémoire pour la session (rails jeu). */
+  var consentMemory = null;
 
   window.dataLayer = window.dataLayer || [];
   function gtag() {
@@ -74,6 +76,7 @@
 
   window.p2pApplyAdConsent = function (mode) {
     var personalized = mode === 'full';
+    consentMemory = mode;
     try {
       localStorage.setItem(STORAGE_KEY, mode);
     } catch (e) {}
@@ -105,16 +108,25 @@
   /** Après affichage du mode jeu : rails verticaux gauche/droite (masqués sur petit écran). */
   window.p2pTryFillGameAd = function () {
     if (!window.p2pAdsenseConfigured || !window.p2pAdsenseConfigured()) return;
-    var consented = null;
-    try {
-      consented = localStorage.getItem(STORAGE_KEY);
-    } catch (e) {}
+    var consented = consentMemory;
+    if (consented !== 'full' && consented !== 'essential') {
+      try {
+        consented = localStorage.getItem(STORAGE_KEY);
+      } catch (e) {}
+    }
     if (consented !== 'full' && consented !== 'essential') return;
 
     var g = document.getElementById('game');
     var railL = document.getElementById('gameAdBarLeft');
     var railR = document.getElementById('gameAdBarRight');
-    if (!g || !railL || !railR || g.style.display !== 'flex') return;
+    if (!g || !railL || !railR) return;
+    var gameShown = false;
+    try {
+      gameShown = window.getComputedStyle(g).display !== 'none';
+    } catch (e) {
+      gameShown = g.style.display === 'flex' || g.style.display === '';
+    }
+    if (!gameShown) return;
     if (typeof window.innerWidth === 'number' && window.innerWidth <= 720) return;
 
     var insL = document.getElementById('p2pAdGameInsLeft');
@@ -162,6 +174,7 @@
     } catch (e) {}
 
     if (saved === 'full' || saved === 'essential') {
+      consentMemory = saved;
       window.p2pApplyAdConsent(saved);
       return;
     }
